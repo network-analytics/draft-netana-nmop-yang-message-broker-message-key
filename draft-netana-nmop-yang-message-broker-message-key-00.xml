@@ -432,7 +432,7 @@ project.enviroment.states.yang.*
     <section>
       <name>Message Broker Implementations</name>
 
-      <t>Topic, partioning and Message Keying are generic concepts of
+      <t>Topic, Partioning and Message Keying are generic concepts of
 			Message Brokers. There are two known Message Broker
 			implementations supporting all features described in this
 			document.</t>

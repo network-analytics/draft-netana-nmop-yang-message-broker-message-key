@@ -431,7 +431,7 @@ Internet-Draft             YANG Message Keying               August 2025
 
 5.  Message Broker Implementations
 
-   Topic, partioning and Message Keying are generic concepts of Message
+   Topic, Partioning and Message Keying are generic concepts of Message
    Brokers.  There are two known Message Broker implementations
    supporting all features described in this document.
 
