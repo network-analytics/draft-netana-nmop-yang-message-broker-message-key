@@ -431,15 +431,15 @@ Internet-Draft             YANG Message Keying               August 2025
 
 5.  Message Broker Implementations
 
-   Text
+   Topic, partioning and Message Keying are generic concepts of Message
+   Brokers.  There are two known Message Broker implementations
+   supporting all features described in this document.
 
 5.1.  Apache Kafka
 
    Apache Kafka supports Message Keying, Partitioning and Log
    Compaction.  The topic names are constrained to 249 character length
    and the following characters: "a-z", "A-Z", "0-9", ".", "_" and "-".
-
-
 
 
 
