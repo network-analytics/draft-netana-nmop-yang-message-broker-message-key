@@ -181,10 +181,14 @@
         </ul>
 
         <t>The following terms are used as defined in <xref
-        target="Kaf11">Apache Kafka Message Broker</xref>:</t>
+        target="Kaf11">Apache Kafka</xref> and <xref
+				target="Pul16">Apache Pulsar</xref> Message Broker:</t>
 
         <ul>
           <li>Topic</li>
+
+          <li>Topic Compaction as used with Apache Pulsar. Apache Kafka
+					uses the term Log Compacton with identical meaning.</li>
 
           <li>Partition</li>
           
@@ -273,9 +277,9 @@
 			Keyes facilitate Message ordering.</t>
 
       <t>The Message Key not only used for Message indexing at the
-      Message Producer but also at the Message Broker for log
-      compaction if enabled on a topic. Log compaction is the act of
-      compressing messages in a topic to the latest state.</t>
+      Message Producer but also at the Message Broker for topic
+      compaction. Topic compaction is the act of compressing messages in
+			a topic to the latest state.</t>
 
       <section>
         <name>YANG Message Broker Producer</name>
@@ -413,9 +417,8 @@ project.enviroment.statistics.yang.ietf-interfaces.interfaces_interface
         <t>For example, if YANG states should be consumed and indexed in
         Time Series database or stream processor than below topic Name
         could be used and the YANG data could be ingested into tables
-        according to topic names and indexed per Message Key. If log
-        compaction is enabled on the topic, only current state is
-        consumed.</t>
+        according to topic names and indexed per Message Key. If Topic
+        Compaction is enabled, only current state is consumed.</t>
 
 <figure anchor="yang-push-topic-wildcard-name-example"
 title="YANG-Push Wildcard Topic Name Example">        
@@ -443,7 +446,9 @@ project.enviroment.states.yang.*
       <section>
         <name>Apache Pulsar</name>
 
-        <t>TBD</t>
+        <t>Apache Pulsar supports Message Keying, Partitioning and Topic
+        Compaction. The topic names allow all characters except: "/".
+				</t>
       </section>
     </section>
 
@@ -457,6 +462,26 @@ project.enviroment.states.yang.*
       <name>Security Considerations</name>
       <t>This document should not affect the security of the Internet.
       </t>
+    </section>
+
+    <section anchor="Operational">
+      <name>Operational Considerations</name>
+			<t>The YANG Message Broker Producer of a YANG-Push receiver SHOULD
+			have three config knobs facilitate the features described in this
+			document as optional:</t>
+
+        <ul>
+          <li>Topic Distribution: Select between "topic" and "subject"
+					distribution. Default is subject to remain backward
+					compatibility to <xref
+			    target="I-D.ietf-nmop-yang-message-broker-integration"/>.</li>
+
+          <li>Distribution Type: Select between "none" and
+					"YANG-Push subscription type".</li>
+          
+          <li>YANG Message Key: Select between "enable" and "disable".
+					</li>
+        </ul>
     </section>
   </middle>
 
@@ -552,7 +577,14 @@ project.enviroment.states.yang.*
     
     <section anchor="Contributors" numbered="false">
       <name>Contributors</name>
-      <t>Thanks to</t>
+      <t>We like to thank Victor Lopez for the initial idea on the
+			network controller use case. Ashley Woods, Sivakumar
+			Sundaravadivel and Rafael Julio for the idea of grouping topics by
+			YANG-Push subscription type and insisting that Topic Compaction
+			is a key enabler for inventory metrics and YANG data consumer
+			integration and should be supported day 1. And Nigel Davis for
+			confirming that Topic Compaction simpifies indeed data processing
+			system architecture.</t>
     </section>
     
  </back>

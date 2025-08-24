@@ -74,12 +74,13 @@ Table of Contents
      5.2.  Apache Pulsar . . . . . . . . . . . . . . . . . . . . . .   8
    6.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .   8
    7.  Security Considerations . . . . . . . . . . . . . . . . . . .   8
-   8.  References  . . . . . . . . . . . . . . . . . . . . . . . . .   8
-     8.1.  Normative References  . . . . . . . . . . . . . . . . . .   8
-     8.2.  Informative References  . . . . . . . . . . . . . . . . .  10
+   8.  Operational Considerations  . . . . . . . . . . . . . . . . .   8
+   9.  References  . . . . . . . . . . . . . . . . . . . . . . . . .   9
+     9.1.  Normative References  . . . . . . . . . . . . . . . . . .   9
+     9.2.  Informative References  . . . . . . . . . . . . . . . . .  10
    Acknowledgements  . . . . . . . . . . . . . . . . . . . . . . . .  10
-   Contributors  . . . . . . . . . . . . . . . . . . . . . . . . . .  10
-   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  10
+   Contributors  . . . . . . . . . . . . . . . . . . . . . . . . . .  11
+   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  11
 
 1.  Introduction
 
@@ -103,7 +104,6 @@ Table of Contents
    for online analytical processing (OLAP) and data warehouses.  YANG
    [RFC7950] as a data modelling language facilitates the modelling of
    dimensional data.
-
 
 
 
@@ -192,10 +192,13 @@ Internet-Draft             YANG Message Keying               August 2025
 
    *  YANG Message Broker Consumer
 
-   The following terms are used as defined in Apache Kafka Message
-   Broker [Kaf11]:
+   The following terms are used as defined in Apache Kafka [Kaf11] and
+   Apache Pulsar [Pul16] Message Broker:
 
    *  Topic
+
+   *  Topic Compaction as used with Apache Pulsar.  Apache Kafka uses
+      the term Log Compacton with identical meaning.
 
    *  Partition
 
@@ -216,15 +219,14 @@ Internet-Draft             YANG Message Keying               August 2025
 
    *  On-Change
 
-   *  Sync-On-Start
-
-
 
 
 Graf & Elhassany        Expires 25 February 2026                [Page 4]
 
 Internet-Draft             YANG Message Keying               August 2025
 
+
+   *  Sync-On-Start
 
    *  Xpath Filter
 
@@ -268,11 +270,9 @@ Internet-Draft             YANG Message Keying               August 2025
    Message ordering.
 
    The Message Key not only used for Message indexing at the Message
-   Producer but also at the Message Broker for log compaction if enabled
-   on a topic.  Log compaction is the act of compressing messages in a
-   topic to the latest state.
-
-
+   Producer but also at the Message Broker for topic compaction.  Topic
+   compaction is the act of compressing messages in a topic to the
+   latest state.
 
 
 
@@ -404,8 +404,8 @@ Internet-Draft             YANG Message Keying               August 2025
    For example, if YANG states should be consumed and indexed in Time
    Series database or stream processor than below topic Name could be
    used and the YANG data could be ingested into tables according to
-   topic names and indexed per Message Key. If log compaction is enabled
-   on the topic, only current state is consumed.
+   topic names and indexed per Message Key. If Topic Compaction is
+   enabled, only current state is consumed.
 
    project.enviroment.states.yang.*
 
@@ -423,7 +423,8 @@ Internet-Draft             YANG Message Keying               August 2025
 
 5.2.  Apache Pulsar
 
-   TBD
+   Apache Pulsar supports Message Keying, Partitioning and Topic
+   Compaction.  The topic names allow all characters except: "/".
 
 6.  IANA Considerations
 
@@ -433,14 +434,13 @@ Internet-Draft             YANG Message Keying               August 2025
 
    This document should not affect the security of the Internet.
 
-8.  References
+8.  Operational Considerations
 
-8.1.  Normative References
+   The YANG Message Broker Producer of a YANG-Push receiver SHOULD have
+   three config knobs facilitate the features described in this document
+   as optional:
 
-   [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
-              Requirement Levels", BCP 14, RFC 2119,
-              DOI 10.17487/RFC2119, March 1997,
-              <https://www.rfc-editor.org/info/rfc2119>.
+
 
 
 
@@ -449,6 +449,24 @@ Graf & Elhassany        Expires 25 February 2026                [Page 8]
 
 Internet-Draft             YANG Message Keying               August 2025
 
+
+   *  Topic Distribution: Select between "topic" and "subject"
+      distribution.  Default is subject to remain backward compatibility
+      to [I-D.ietf-nmop-yang-message-broker-integration].
+
+   *  Distribution Type: Select between "none" and "YANG-Push
+      subscription type".
+
+   *  YANG Message Key: Select between "enable" and "disable".
+
+9.  References
+
+9.1.  Normative References
+
+   [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
+              Requirement Levels", BCP 14, RFC 2119,
+              DOI 10.17487/RFC2119, March 1997,
+              <https://www.rfc-editor.org/info/rfc2119>.
 
    [RFC7950]  Bjorklund, M., Ed., "The YANG 1.1 Data Modeling Language",
               RFC 7950, DOI 10.17487/RFC7950, August 2016,
@@ -481,6 +499,13 @@ Internet-Draft             YANG Message Keying               August 2025
               <https://datatracker.ietf.org/doc/html/draft-ietf-nmop-
               terminology-23>.
 
+
+
+Graf & Elhassany        Expires 25 February 2026                [Page 9]
+
+Internet-Draft             YANG Message Keying               August 2025
+
+
    [I-D.ietf-nmop-yang-message-broker-integration]
               Graf, T. and A. Elhassany, "An Architecture for YANG-Push
               to Message Broker Integration", Work in Progress,
@@ -496,16 +521,6 @@ Internet-Draft             YANG Message Keying               August 2025
               01, 2 July 2025, <https://datatracker.ietf.org/doc/html/
               draft-ietf-nmop-message-broker-telemetry-message-01>.
 
-
-
-
-
-
-Graf & Elhassany        Expires 25 February 2026                [Page 9]
-
-Internet-Draft             YANG Message Keying               August 2025
-
-
    [I-D.ietf-netconf-notif-envelope]
               Feng, A. H., Francois, P., Graf, T., and B. Claise,
               "Extensible YANG Model for YANG-Push Notifications", Work
@@ -514,7 +529,7 @@ Internet-Draft             YANG Message Keying               August 2025
               <https://datatracker.ietf.org/doc/html/draft-ietf-netconf-
               notif-envelope-02>.
 
-8.2.  Informative References
+9.2.  Informative References
 
    [Deh22]    Dehghani, Z., "Data Mesh", O'Reilly Media,
               ISBN 9781492092391, March 2022,
@@ -537,9 +552,25 @@ Acknowledgements
 
    Thanks to
 
+
+
+
+
+
+Graf & Elhassany        Expires 25 February 2026               [Page 10]
+
+Internet-Draft             YANG Message Keying               August 2025
+
+
 Contributors
 
-   Thanks to
+   We like to thank Victor Lopez for the initial idea on the network
+   controller use case.  Ashley Woods, Sivakumar Sundaravadivel and
+   Rafael Julio for the idea of grouping topics by YANG-Push
+   subscription type and insisting that Topic Compaction is a key
+   enabler for inventory metrics and YANG data consumer integration and
+   should be supported day 1.  And Nigel Davis for confirming that Topic
+   Compaction simpifies indeed data processing system architecture.
 
 Authors' Addresses
 
@@ -551,43 +582,12 @@ Authors' Addresses
    Email: thomas.graf@swisscom.com
 
 
-
-
-
-
-
-
-Graf & Elhassany        Expires 25 February 2026               [Page 10]
-
-Internet-Draft             YANG Message Keying               August 2025
-
-
    Ahmed Elhassany (editor)
    Swisscom
    Binzring 17
    CH-8045 Zurich
    Switzerland
    Email: ahmed.elhassany@swisscom.com
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
