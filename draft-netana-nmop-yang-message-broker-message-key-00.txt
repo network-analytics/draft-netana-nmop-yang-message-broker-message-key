@@ -1,0 +1,616 @@
+
+
+
+
+NMOP                                                       TG. Graf, Ed.
+Internet-Draft                                        AE. Elhassany, Ed.
+Intended status: Informational                                  Swisscom
+Expires: 25 February 2026                                 24 August 2025
+
+
+           YANG Message Keying for Message Broker Integration
+          draft-netana-nmop-yang-message-broker-message-key-00
+
+Abstract
+
+   This document describes a mechanism to define a unique message key
+   for a YANG to message broker integration and a topic addressing
+   scheme based on YANG-Push subscription type and YANG schema name.
+   This enables a Message Broker to serve from a single partition,
+   compress to current state in case of YANG state metrics and YANG data
+   consumer to consume for a specific YANG node identifier.
+
+Status of This Memo
+
+   This Internet-Draft is submitted in full conformance with the
+   provisions of BCP 78 and BCP 79.
+
+   Internet-Drafts are working documents of the Internet Engineering
+   Task Force (IETF).  Note that other groups may also distribute
+   working documents as Internet-Drafts.  The list of current Internet-
+   Drafts is at https://datatracker.ietf.org/drafts/current/.
+
+   Internet-Drafts are draft documents valid for a maximum of six months
+   and may be updated, replaced, or obsoleted by other documents at any
+   time.  It is inappropriate to use Internet-Drafts as reference
+   material or to cite them other than as "work in progress."
+
+   This Internet-Draft will expire on 25 February 2026.
+
+Copyright Notice
+
+   Copyright (c) 2025 IETF Trust and the persons identified as the
+   document authors.  All rights reserved.
+
+   This document is subject to BCP 78 and the IETF Trust's Legal
+   Provisions Relating to IETF Documents (https://trustee.ietf.org/
+   license-info) in effect on the date of publication of this document.
+   Please review these documents carefully, as they describe your rights
+   and restrictions with respect to this document.  Code Components
+   extracted from this document must include Revised BSD License text as
+   described in Section 4.e of the Trust Legal Provisions and are
+   provided without warranty as described in the Revised BSD License.
+
+
+
+Graf & Elhassany        Expires 25 February 2026                [Page 1]
+
+Internet-Draft             YANG Message Keying               August 2025
+
+
+Table of Contents
+
+   1.  Introduction  . . . . . . . . . . . . . . . . . . . . . . . .   2
+   2.  Conventions and Definitions . . . . . . . . . . . . . . . . .   3
+     2.1.  Terminology . . . . . . . . . . . . . . . . . . . . . . .   4
+   3.  YANG Message Keying and Indexing  . . . . . . . . . . . . . .   5
+     3.1.  YANG Message Broker Producer  . . . . . . . . . . . . . .   6
+     3.2.  YANG Message Broker Consumer  . . . . . . . . . . . . . .   7
+   4.  YANG-Push Message Broker Topic Naming . . . . . . . . . . . .   7
+     4.1.  YANG Message Broker Producer  . . . . . . . . . . . . . .   7
+     4.2.  YANG Message Broker Consumer  . . . . . . . . . . . . . .   8
+   5.  Message Broker Implementations  . . . . . . . . . . . . . . .   8
+     5.1.  Apache Kafka  . . . . . . . . . . . . . . . . . . . . . .   8
+     5.2.  Apache Pulsar . . . . . . . . . . . . . . . . . . . . . .   8
+   6.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .   8
+   7.  Security Considerations . . . . . . . . . . . . . . . . . . .   8
+   8.  References  . . . . . . . . . . . . . . . . . . . . . . . . .   8
+     8.1.  Normative References  . . . . . . . . . . . . . . . . . .   8
+     8.2.  Informative References  . . . . . . . . . . . . . . . . .  10
+   Acknowledgements  . . . . . . . . . . . . . . . . . . . . . . . .  10
+   Contributors  . . . . . . . . . . . . . . . . . . . . . . . . . .  10
+   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  10
+
+1.  Introduction
+
+   Nowadays network operators are using machine and human readable YANG
+   [RFC7950] to model their configurations and obtain YANG modelled
+   operational data from their networks.
+
+   Network operators organize their data in a Data Mesh [Deh22] where a
+   Message Broker such as Apache Kafka [Kaf11] or Apache Pulsar [Pul16]
+   facilitates the exchange of messages among data processing
+   components.  Typically, data is being stored in Message Brokers for
+   several hours or days to facilitate resilience in the data processing
+   chain.  Enabling a data consumer to re-consume previously consumed
+   data again if previously lost.
+
+   Dimensional data is structured information in a data warehouse.  It
+   uses a model of dimension tables to organize business metrics and
+   their descriptive context.  This model, developed by Ralph Kimball,
+   simplifies data analysis and reporting by creating denormalized,
+   easy-to-understand structures for quick querying.  It is optimized
+   for online analytical processing (OLAP) and data warehouses.  YANG
+   [RFC7950] as a data modelling language facilitates the modelling of
+   dimensional data.
+
+
+
+
+
+
+Graf & Elhassany        Expires 25 February 2026                [Page 2]
+
+Internet-Draft             YANG Message Keying               August 2025
+
+
+   YANG data can be used for several network analytic use cases.
+   Depending on use case, only a subset of the subscribed data might be
+   necessary.  This subset could be the current network state instead of
+   state changes over a period of time, or instead of consuming data for
+   all network nodes maybe only for a particular network node or network
+   node component of a YANG subscription.
+
+   Most network analytic use cases require real-time data and deliver
+   near real-time analytical, actionable insights.  This requires high
+   scalability, resilience and low overhead in the data processing
+   pipeline.  Accessing the right data for the right use case with
+   minimal overhead and in the shortest period of time is therefore
+   crucial.
+
+   An Architecture for YANG-Push to Message Broker Integration
+   [I-D.ietf-nmop-yang-message-broker-integration] defined an
+   architecture for integrating YANG-Push with Message Brokers for a
+   Data Mesh architecture.  How the notification messages at a YANG-Push
+   Receiver is being transformed to the Message Broker is being
+   described in Section 4.5 of
+   [I-D.ietf-nmop-yang-message-broker-integration] and to which message
+   schema in Section 3 of
+   [I-D.ietf-nmop-message-broker-telemetry-message], however how
+   messages should be indexed best for dimensional YANG data is left
+   unspecified.
+
+   This document defines how YANG messages should be indexed and
+   organized in Message Broker topics by leveraging the network node
+   hostname, YANG datastore name and YANG item identifier for indexing
+   and YANG-Push subscription type and YANG schema name for a Message
+   Broker topic naming scheme.
+
+   Network node hostname, YANG datastore name and subtree and xpath
+   filters are part of "ietf-yang-push-telemetry-message" structured
+   YANG data defined in Section 3 of
+   [I-D.ietf-nmop-message-broker-telemetry-message].  YANG item
+   identifier are derived from subtree and xpath filters respectively
+   from their YANG schema tree.
+
+2.  Conventions and Definitions
+
+   The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+   "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and
+   "OPTIONAL" in this document are to be interpreted as described in BCP
+   14 [RFC2119] [RFC8174] when, and only when, they appear in all
+   capitals, as shown here.
+
+
+
+
+
+Graf & Elhassany        Expires 25 February 2026                [Page 3]
+
+Internet-Draft             YANG Message Keying               August 2025
+
+
+2.1.  Terminology
+
+   The following terms are used as defined in
+   [I-D.ietf-nmop-terminology]:
+
+   *  Network Telemetry
+
+   *  Network Analytics
+
+   *  State
+
+   *  Change
+
+   The following terms are used as defined in
+   [I-D.ietf-nmop-yang-message-broker-integration]:
+
+   *  Message Broker
+
+   *  YANG Message Broker Producer
+
+   *  YANG Message Broker Consumer
+
+   The following terms are used as defined in Apache Kafka Message
+   Broker [Kaf11]:
+
+   *  Topic
+
+   *  Partition
+
+   *  Message
+
+   *  Message Key
+
+   The following terms are used as defined in Confluent Schema Registry
+   Documentation [ConDoc18]:
+
+   *  Schema
+
+   *  Schema ID
+
+   The following terms are used as defined in [RFC8641]:
+
+   *  Periodical
+
+   *  On-Change
+
+   *  Sync-On-Start
+
+
+
+
+Graf & Elhassany        Expires 25 February 2026                [Page 4]
+
+Internet-Draft             YANG Message Keying               August 2025
+
+
+   *  Xpath Filter
+
+   *  Subtree Filter
+
+   The following terms are used as defined in
+   [I-D.ietf-netconf-notif-envelope]:
+
+   *  Hostname
+
+   The following terms are used as defined in [RFC8342]:
+
+   *  Datastore
+
+   The following terms are used as defined in [RFC7950]:
+
+   *  Schema Node Identifier
+
+   *  Schema Tree
+
+   The following terms are used as defined in [RFC9254]:
+
+   *  YANG item identifiers
+
+   This document defines the following term:
+
+   *  YANG index: Is a subset of YANG item identifiers containing only
+      schema node identifiers.  Different to an absolute schema node
+      identifier it includes the YANG module name and is therefore
+      globally unique.  When the schema node identifier points to a YANG
+      list, then the key of that list is included.
+
+3.  YANG Message Keying and Indexing
+
+   A Message Broker uses a Message Key to index the message and a value
+   to carry the Message content.  If no Message Key is defined then the
+   Messages are distributed in a round robin fashion across partitions.
+   If a Message Key is defined, then the value of the Message Key is
+   being used as input for the Message Broker Producer hash function to
+   distribute across Partitions.  Therefore, Message Keyes facilitate
+   Message ordering.
+
+   The Message Key not only used for Message indexing at the Message
+   Producer but also at the Message Broker for log compaction if enabled
+   on a topic.  Log compaction is the act of compressing messages in a
+   topic to the latest state.
+
+
+
+
+
+
+Graf & Elhassany        Expires 25 February 2026                [Page 5]
+
+Internet-Draft             YANG Message Keying               August 2025
+
+
+3.1.  YANG Message Broker Producer
+
+   YANG data nodes are uniquely identifiable.  Section 6.5 of [RFC7950]
+   defines with "absolute-schema-nodeid" how absolute YANG schema node
+   identifiers are being crafted locally unique to the YANG module.
+
+   Section 3.3 of [RFC9254] defines how globally unique YANG item
+   identifiers are defined as text strings.
+
+   Section 3.6 of [RFC8641] defines how YANG data nodes can be
+   subscribed with subtree and xpath selection filters.  A YANG-Push
+   publisher publishes with "subscription-started" state notifications
+   for each subscription which filter and filter type is being used to
+   the YANG-Push receiver.
+
+   To calculate the YANG Index of the Message Key, the YANG item
+   identifier needs to be extracted from the used YANG-Push subtree or
+   xpath subscription filter.  If the YANG item identifier is a YANG
+   list as defined in Section 7.8 of [RFC7950] the YANG list key defined
+   in Section 7.8.2 of [RFC7950] statement is suffixed with a "/" to the
+   YANG item identifier.
+
+   For example, if the following xpath filter is being used, the YANG
+   item identifier is "ietf-interface:interfaces/interface".  Interface
+   is a YANG list with name as key.  Therefore, the YANG Index of the
+   Message Key is "ietf-interface:interfaces/interface/name".
+
+   ietf-interface:interfaces/interface[type='ianaift:ethernetCsmacd']
+
+          Figure 1: YANG-Push ietf-interface Xpath Filter Example
+
+   For example, if the following subtree filter is being used, the YANG
+   item identifier is "ietf-hardware:hardware/component/state".
+   Therefore, the YANG Index of the Message Key is "ietf-
+   hardware:hardware/component/state".
+
+   <get>
+     <filter type="subtree">
+       <hardware xmlns="urn:ietf:params:xml:ns:yang:ietf-hardware">
+         <component>
+           <state/>
+         </component>
+       </hardware>
+     </filter>
+   </get>
+
+          Figure 2: YANG-Push ietf-hardware Subtree Filter Example
+
+
+
+
+Graf & Elhassany        Expires 25 February 2026                [Page 6]
+
+Internet-Draft             YANG Message Keying               August 2025
+
+
+   When the Message is being produced to the Message Broker, the Network
+   node hostname and YANG datastore name is used from the structured
+   YANG data defined in "ietf-yang-push-telemetry-message" Section 3 of
+   [I-D.ietf-nmop-message-broker-telemetry-message] where the YANG Index
+   is derived from subtree and xpath filters, respectively from their
+   YANG schema tree.
+
+3.2.  YANG Message Broker Consumer
+
+   The consumer hashes the Message Key and applies modulo with the
+   number of partitions to determine the partition it needs to consume
+   from to obtain Messages with desired Message Key.
+
+4.  YANG-Push Message Broker Topic Naming
+
+   YANG can be subscribed periodically, on-change or on-change with
+   sync-on-start.  Periodical subscriptions are used for obtaining
+   statistical metrics.  On-Change subscriptions are used for obtaining
+   State Changes and on-change with sync-on-start for obtaining States.
+
+   Message Brokers topics are addressed with a unique name.  Usually
+   topics are named hierarchically similar to the DNS namespace where
+   "." deliminates hierarchies.
+
+   This document proposes to include "statistics", "states" and "state-
+   changes" in the topic name as the first part to denote the types of
+   data.  Followed by "yang" to denote YANG data.  Followed by the YANG
+   module names subscribed, and followed by the YANG Schema Node
+   Identifier where "/" is substituted by "_".
+
+   For example, if the "ietf-interface:interfaces/interface" xpath
+   filter is being used, the Message Broker topic name would be as
+   following.  In the example the project name and enviroment (prod,
+   dev, test etc.) is prefixed.
+
+   project.enviroment.statistics.yang.ietf-interfaces.interfaces_interface
+
+           Figure 3: YANG-Push ietf-interface Topic Name Example
+
+4.1.  YANG Message Broker Producer
+
+   For the Message Broker topic creation, the "periodic", "on-change"
+   and "sync-on-start" contained data in "update-trigger" from "ietf-
+   subscribed-notifications", YANG module defined in Section 4.1 of
+   [RFC8641], subscription state notifications are being used to derive
+   wherever subscribed YANG data is "statistics", "states" or "state-
+   changes".  The YANG Index is derived from subtree and xpath filter
+   data of subscription state notifications, respectively from their
+
+
+
+Graf & Elhassany        Expires 25 February 2026                [Page 7]
+
+Internet-Draft             YANG Message Keying               August 2025
+
+
+   YANG schema tree.
+
+4.2.  YANG Message Broker Consumer
+
+   The consumer has the ability to consume with a wildcard denoted with
+   "*" in the topic name to consume from more than one topic.
+
+   For example, if YANG states should be consumed and indexed in Time
+   Series database or stream processor than below topic Name could be
+   used and the YANG data could be ingested into tables according to
+   topic names and indexed per Message Key. If log compaction is enabled
+   on the topic, only current state is consumed.
+
+   project.enviroment.states.yang.*
+
+              Figure 4: YANG-Push Wildcard Topic Name Example
+
+5.  Message Broker Implementations
+
+   Text
+
+5.1.  Apache Kafka
+
+   Apache Kafka supports Message Keying, Partitioning and Log
+   Compaction.  The topic names are constrained to 249 character length
+   and the following characters: "a-z", "A-Z", "0-9", ".", "_" and "-".
+
+5.2.  Apache Pulsar
+
+   TBD
+
+6.  IANA Considerations
+
+   This document includes no request to IANA.
+
+7.  Security Considerations
+
+   This document should not affect the security of the Internet.
+
+8.  References
+
+8.1.  Normative References
+
+   [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
+              Requirement Levels", BCP 14, RFC 2119,
+              DOI 10.17487/RFC2119, March 1997,
+              <https://www.rfc-editor.org/info/rfc2119>.
+
+
+
+
+Graf & Elhassany        Expires 25 February 2026                [Page 8]
+
+Internet-Draft             YANG Message Keying               August 2025
+
+
+   [RFC7950]  Bjorklund, M., Ed., "The YANG 1.1 Data Modeling Language",
+              RFC 7950, DOI 10.17487/RFC7950, August 2016,
+              <https://www.rfc-editor.org/info/rfc7950>.
+
+   [RFC8174]  Leiba, B., "Ambiguity of Uppercase vs Lowercase in RFC
+              2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
+              May 2017, <https://www.rfc-editor.org/info/rfc8174>.
+
+   [RFC8342]  Bjorklund, M., Schoenwaelder, J., Shafer, P., Watsen, K.,
+              and R. Wilton, "Network Management Datastore Architecture
+              (NMDA)", RFC 8342, DOI 10.17487/RFC8342, March 2018,
+              <https://www.rfc-editor.org/info/rfc8342>.
+
+   [RFC8641]  Clemm, A. and E. Voit, "Subscription to YANG Notifications
+              for Datastore Updates", RFC 8641, DOI 10.17487/RFC8641,
+              September 2019, <https://www.rfc-editor.org/info/rfc8641>.
+
+   [RFC9254]  Veillette, M., Ed., Petrov, I., Ed., Pelov, A., Bormann,
+              C., and M. Richardson, "Encoding of Data Modeled with YANG
+              in the Concise Binary Object Representation (CBOR)",
+              RFC 9254, DOI 10.17487/RFC9254, July 2022,
+              <https://www.rfc-editor.org/info/rfc9254>.
+
+   [I-D.ietf-nmop-terminology]
+              Davis, N., Farrel, A., Graf, T., Wu, Q., and C. Yu, "Some
+              Key Terms for Network Fault and Problem Management", Work
+              in Progress, Internet-Draft, draft-ietf-nmop-terminology-
+              23, 18 August 2025,
+              <https://datatracker.ietf.org/doc/html/draft-ietf-nmop-
+              terminology-23>.
+
+   [I-D.ietf-nmop-yang-message-broker-integration]
+              Graf, T. and A. Elhassany, "An Architecture for YANG-Push
+              to Message Broker Integration", Work in Progress,
+              Internet-Draft, draft-ietf-nmop-yang-message-broker-
+              integration-08, 7 July 2025,
+              <https://datatracker.ietf.org/doc/html/draft-ietf-nmop-
+              yang-message-broker-integration-08>.
+
+   [I-D.ietf-nmop-message-broker-telemetry-message]
+              Elhassany, A. and T. Graf, "Extensible YANG Model for
+              Network Telemetry Messages", Work in Progress, Internet-
+              Draft, draft-ietf-nmop-message-broker-telemetry-message-
+              01, 2 July 2025, <https://datatracker.ietf.org/doc/html/
+              draft-ietf-nmop-message-broker-telemetry-message-01>.
+
+
+
+
+
+
+Graf & Elhassany        Expires 25 February 2026                [Page 9]
+
+Internet-Draft             YANG Message Keying               August 2025
+
+
+   [I-D.ietf-netconf-notif-envelope]
+              Feng, A. H., Francois, P., Graf, T., and B. Claise,
+              "Extensible YANG Model for YANG-Push Notifications", Work
+              in Progress, Internet-Draft, draft-ietf-netconf-notif-
+              envelope-02, 17 June 2025,
+              <https://datatracker.ietf.org/doc/html/draft-ietf-netconf-
+              notif-envelope-02>.
+
+8.2.  Informative References
+
+   [Deh22]    Dehghani, Z., "Data Mesh", O'Reilly Media,
+              ISBN 9781492092391, March 2022,
+              <https://www.oreilly.com/library/view/data-
+              mesh/9781492092384/>.
+
+   [Kaf11]    Narkhede, N., "Apache Kafka", Apache Software Foundation,
+              January 2011, <https://kafka.apache.org/>.
+
+   [Pul16]    Guo, S. and M. Merli, "Apache Pulsar", Apache Software
+              Foundation, January 2016, <https://pulsar.apache.org/>.
+
+   [ConDoc18] Yokota, R., "Confluent Schema Registry Documentation",
+              Confluent Community and Apache Software Foundation,
+              December 2018,
+              <https://docs.confluent.io/platform/current/schema-
+              registry/>.
+
+Acknowledgements
+
+   Thanks to
+
+Contributors
+
+   Thanks to
+
+Authors' Addresses
+
+   Thomas Graf (editor)
+   Swisscom
+   Binzring 17
+   CH-8045 Zurich
+   Switzerland
+   Email: thomas.graf@swisscom.com
+
+
+
+
+
+
+
+
+Graf & Elhassany        Expires 25 February 2026               [Page 10]
+
+Internet-Draft             YANG Message Keying               August 2025
+
+
+   Ahmed Elhassany (editor)
+   Swisscom
+   Binzring 17
+   CH-8045 Zurich
+   Switzerland
+   Email: ahmed.elhassany@swisscom.com
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Graf & Elhassany        Expires 25 February 2026               [Page 11]
