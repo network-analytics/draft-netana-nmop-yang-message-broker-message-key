@@ -327,9 +327,9 @@ Internet-Draft              YANG Message Keys                August 2025
    The Message Key not only used for Message indexing at the Message
    Producer but also at the Message Broker for topic compaction.
 
-
-
-
+   For YANG, the network node hostname, from which YANG datastore the
+   YANG metrics are published from and the YANG index is used to
+   generate the Message Key.
 
 
 
@@ -458,9 +458,9 @@ Internet-Draft              YANG Message Keys                August 2025
    "*" in the topic name to consume from more than one topic.
 
    For example, if YANG states should be consumed and indexed in Time
-   Series database or stream processor than below topic Name could be
+   Series database or stream processor than below Topic Name could be
    used and the YANG data could be ingested into tables according to
-   topic names and indexed per Message Key. If Topic Compaction is
+   topic names and indexed per Message Key.  If Topic Compaction is
    enabled, only current state is consumed.
 
    project.enviroment.states.yang.*

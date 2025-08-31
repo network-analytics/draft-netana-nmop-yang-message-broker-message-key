@@ -351,6 +351,10 @@
         <t>The Message Key not only used for Message indexing at the
         Message Producer but also at the Message Broker for topic
         compaction.</t>
+
+        <t>For YANG, the network node hostname, from which YANG
+				datastore the YANG metrics are published from and the YANG
+				index is used to generate the Message Key.</t>
   
         <section>
           <name>YANG Message Broker Producer</name>
@@ -418,9 +422,9 @@ title="YANG-Push ietf-hardware Subtree Filter Example">
 					the structured YANG data defined in
           "ietf-yang-push-telemetry-message" <xref section="3"
           sectionFormat="of"
-          target="I-D.ietf-nmop-message-broker-telemetry-message"/> where
-          the YANG Index is derived from subtree and xpath filters, 
-          respectively from their YANG schema tree.</t>
+          target="I-D.ietf-nmop-message-broker-telemetry-message"/>
+					where the YANG Index is derived from subtree and xpath
+					filters, respectively from their YANG schema tree.</t>
         </section>
   
         <section>
@@ -448,14 +452,15 @@ title="YANG-Push ietf-hardware Subtree Filter Example">
         namespace where "." deliminates hierarchies.</t>
         
         <t>This document proposes to include "statistics", "states" and
-        "state-changes" in the topic name as the first part to denote the
-        types of data. Followed by "yang" to denote YANG data. Followed by
-        the YANG module names subscribed, and followed by the YANG Schema
-        Node Identifier where "/" is substituted by "_".</t> 
+        "state-changes" in the topic name as the first part to denote
+				the types of data. Followed by "yang" to denote YANG data.
+				Followed by the YANG module names subscribed, and followed by
+				the YANG Schema Node Identifier where "/" is substituted by
+				"_".</t> 
   
-        <t>For example, if the "ietf-interface:interfaces/interface" xpath
-        filter is being used, the Message Broker topic name would be as
-        following. In the example the project name and enviroment
+        <t>For example, if the "ietf-interface:interfaces/interface"
+				xpath filter is being used, the Message Broker topic name would
+				be as following. In the example the project name and enviroment
         (prod, dev, test etc.) is prefixed.</t>
 
 <figure anchor="yang-push-topic-name-example"
@@ -482,14 +487,15 @@ project.enviroment.statistics.yang.ietf-interfaces.interfaces_interface
           <name>YANG Message Broker Consumer</name>
   
           <t>The consumer has the ability to consume with a wildcard
-          denoted with "*" in the topic name to consume from more than one
-          topic.</t>
+          denoted with "*" in the topic name to consume from more than
+					one topic.</t>
   
-          <t>For example, if YANG states should be consumed and indexed in
-          Time Series database or stream processor than below topic Name
-          could be used and the YANG data could be ingested into tables
-          according to topic names and indexed per Message Key. If Topic
-          Compaction is enabled, only current state is consumed.</t>
+          <t>For example, if YANG states should be consumed and indexed
+					in Time Series database or stream processor than below Topic
+					Name could be used and the YANG data could be ingested into
+					tables according to topic names and indexed per Message Key.
+					If Topic Compaction is enabled, only current state is
+					consumed.</t>
 
 <figure anchor="yang-push-topic-wildcard-name-example"
 title="YANG-Push Wildcard Topic Name Example">        
