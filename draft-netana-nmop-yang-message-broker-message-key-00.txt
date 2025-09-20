@@ -5,10 +5,10 @@
 NMOP                                                            TG. Graf
 Internet-Draft                                             AE. Elhassany
 Intended status: Informational                                  Swisscom
-Expires: 4 March 2026                                    AHF. Huang Feng
+Expires: 24 March 2026                                   AHF. Huang Feng
                                                                INSA-Lyon
                                                               BC. Claise
-                                                          31 August 2025
+                                                       20 September 2025
 
 
             YANG Message Keys for Message Broker Integration
@@ -39,7 +39,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 4 March 2026.
+   This Internet-Draft will expire on 24 March 2026.
 
 Copyright Notice
 
@@ -53,9 +53,9 @@ Copyright Notice
 
 
 
-Graf, et al.              Expires 4 March 2026                  [Page 1]
+Graf, et al.              Expires 24 March 2026                 [Page 1]
 
-Internet-Draft              YANG Message Keys                August 2025
+Internet-Draft              YANG Message Keys             September 2025
 
 
    and restrictions with respect to this document.  Code Components
@@ -86,7 +86,7 @@ Table of Contents
      8.2.  Informative References  . . . . . . . . . . . . . . . . .  11
    Acknowledgements  . . . . . . . . . . . . . . . . . . . . . . . .  12
    Contributors  . . . . . . . . . . . . . . . . . . . . . . . . . .  12
-   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  13
+   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  12
 
 1.  Introduction
 
@@ -109,9 +109,9 @@ Table of Contents
 
 
 
-Graf, et al.              Expires 4 March 2026                  [Page 2]
+Graf, et al.              Expires 24 March 2026                 [Page 2]
 
-Internet-Draft              YANG Message Keys                August 2025
+Internet-Draft              YANG Message Keys             September 2025
 
 
    Most network analytic use cases require real-time data and deliver
@@ -128,8 +128,8 @@ Internet-Draft              YANG Message Keys                August 2025
    data is being stored in Message Broker topics for several hours or
    days to facilitate resilience in the data processing chain and
    addressed in subjects depending on schema.  Enabling a data consumer
-   to adress and re-consume previously consumed data again if previously
-   lost.
+   to address and re-consume previously consumed data again if
+   previously lost.
 
    An Architecture for YANG-Push to Message Broker Integration
    [I-D.ietf-nmop-yang-message-broker-integration] defined an
@@ -145,7 +145,7 @@ Internet-Draft              YANG Message Keys                August 2025
 
    Due to the missing dimensional indexing for Message Broker stored
    YANG data, all YANG data is stored in one single Topic, distributed
-   round robin accross multiple Partitions and each YANG schema id is a
+   round robin across multiple Partitions and each YANG schema id is a
    subject within that topic.  Therefore, the entire Topic from all
    Partitions needs to be consumed first before data selection can be
    applied.  This leads to avoidable data processing overhead which in
@@ -165,9 +165,9 @@ Internet-Draft              YANG Message Keys                August 2025
 
 
 
-Graf, et al.              Expires 4 March 2026                  [Page 3]
+Graf, et al.              Expires 24 March 2026                 [Page 3]
 
-Internet-Draft              YANG Message Keys                August 2025
+Internet-Draft              YANG Message Keys             September 2025
 
 
    This document defines how YANG messages should be indexed and
@@ -221,9 +221,9 @@ Internet-Draft              YANG Message Keys                August 2025
 
 
 
-Graf, et al.              Expires 4 March 2026                  [Page 4]
+Graf, et al.              Expires 24 March 2026                 [Page 4]
 
-Internet-Draft              YANG Message Keys                August 2025
+Internet-Draft              YANG Message Keys             September 2025
 
 
    *  Subject: A named communication channel where a schema id is
@@ -277,9 +277,9 @@ Internet-Draft              YANG Message Keys                August 2025
 
 
 
-Graf, et al.              Expires 4 March 2026                  [Page 5]
+Graf, et al.              Expires 24 March 2026                 [Page 5]
 
-Internet-Draft              YANG Message Keys                August 2025
+Internet-Draft              YANG Message Keys             September 2025
 
 
    The following terms are used as defined in [RFC7950]:
@@ -298,7 +298,7 @@ Internet-Draft              YANG Message Keys                August 2025
       schema node identifiers.  Different to an absolute schema node
       identifier it includes the YANG module name and is therefore
       globally unique.  When the schema node identifier points to a YANG
-      list, then the key of that list is included.
+      list, then the key to that list is included.
 
 3.  Solution Design
 
@@ -333,9 +333,9 @@ Internet-Draft              YANG Message Keys                August 2025
 
 
 
-Graf, et al.              Expires 4 March 2026                  [Page 6]
+Graf, et al.              Expires 24 March 2026                 [Page 6]
 
-Internet-Draft              YANG Message Keys                August 2025
+Internet-Draft              YANG Message Keys             September 2025
 
 
 3.1.1.  YANG Message Broker Producer
@@ -389,9 +389,9 @@ Internet-Draft              YANG Message Keys                August 2025
 
 
 
-Graf, et al.              Expires 4 March 2026                  [Page 7]
+Graf, et al.              Expires 24 March 2026                 [Page 7]
 
-Internet-Draft              YANG Message Keys                August 2025
+Internet-Draft              YANG Message Keys             September 2025
 
 
    When the Message is being produced to the Message Broker, the Network
@@ -426,7 +426,7 @@ Internet-Draft              YANG Message Keys                August 2025
 
    For example, if the "ietf-interface:interfaces/interface" xpath
    filter is being used, the Message Broker topic name would be as
-   following.  In the example the project name and enviroment (prod,
+   following.  In the example the project name and environment (prod,
    dev, test etc.) is prefixed.
 
    project.enviroment.statistics.yang.ietf-interfaces.interfaces_interface
@@ -445,9 +445,9 @@ Internet-Draft              YANG Message Keys                August 2025
 
 
 
-Graf, et al.              Expires 4 March 2026                  [Page 8]
+Graf, et al.              Expires 24 March 2026                 [Page 8]
 
-Internet-Draft              YANG Message Keys                August 2025
+Internet-Draft              YANG Message Keys             September 2025
 
 
    YANG schema tree.
@@ -459,7 +459,7 @@ Internet-Draft              YANG Message Keys                August 2025
 
    For example, if YANG states should be consumed and indexed in Time
    Series database or stream processor than below Topic Name could be
-   used and the YANG data could be ingested into tables according to
+   used, and the YANG data could be ingested into tables according to
    topic names and indexed per Message Key.  If Topic Compaction is
    enabled, only current state is consumed.
 
@@ -469,8 +469,8 @@ Internet-Draft              YANG Message Keys                August 2025
 
 4.  Message Broker Implementations
 
-   Topic, Partioning and Message Keying are generic concepts of Message
-   Brokers.  There are two known Message Broker implementations
+   Topic, Partitioning and Message Keying are generic concepts of
+   Message Brokers.  There are two known Message Broker implementations
    supporting all features described in this document.
 
 4.1.  Apache Kafka
@@ -501,9 +501,9 @@ Internet-Draft              YANG Message Keys                August 2025
 
 
 
-Graf, et al.              Expires 4 March 2026                  [Page 9]
+Graf, et al.              Expires 24 March 2026                 [Page 9]
 
-Internet-Draft              YANG Message Keys                August 2025
+Internet-Draft              YANG Message Keys             September 2025
 
 
    *  Topic Distribution: Select between "topic" and "subject"
@@ -515,14 +515,13 @@ Internet-Draft              YANG Message Keys                August 2025
 
    *  YANG Message Key: Select between "enable" and "disable".
 
-   To accommondate for potential date loss throughout the data
-   processing pipeline, periodical update of the current State for State
-   metrics is RECOMMENDED.  This can be accomondated with YANG-Push as
-   defined in [RFC8641] by complementing "on-change sync on start"
-   subscriptions with periodical subscriptions.  Alternatively, in YANG-
-   Push Lite defined in Section 7.6 of
-   [I-D.wilton-netconf-yang-push-lite] this simplified in one
-   subscription.
+   To accommodate for potential date loss throughout the data processing
+   pipeline, periodical update of the current State for State metrics is
+   RECOMMENDED.  This can be accommodated with YANG-Push as defined in
+   [RFC8641] by complementing "on-change sync on start" subscriptions
+   with periodical subscriptions.  Alternatively, in YANG-Push Lite
+   defined in Section 7.6 of [I-D.wilton-netconf-yang-push-lite] this
+   simplified in one subscription.
 
 8.  References
 
@@ -550,23 +549,18 @@ Internet-Draft              YANG Message Keys                August 2025
               for Datastore Updates", RFC 8641, DOI 10.17487/RFC8641,
               September 2019, <https://www.rfc-editor.org/info/rfc8641>.
 
-
-
-
-
-
-
-
-Graf, et al.              Expires 4 March 2026                 [Page 10]
-
-Internet-Draft              YANG Message Keys                August 2025
-
-
    [RFC9254]  Veillette, M., Ed., Petrov, I., Ed., Pelov, A., Bormann,
               C., and M. Richardson, "Encoding of Data Modeled with YANG
               in the Concise Binary Object Representation (CBOR)",
               RFC 9254, DOI 10.17487/RFC9254, July 2022,
               <https://www.rfc-editor.org/info/rfc9254>.
+
+
+
+Graf, et al.              Expires 24 March 2026                [Page 10]
+
+Internet-Draft              YANG Message Keys             September 2025
+
 
    [I-D.ietf-nmop-terminology]
               Davis, N., Farrel, A., Graf, T., Wu, Q., and C. Yu, "Some
@@ -588,8 +582,9 @@ Internet-Draft              YANG Message Keys                August 2025
               Elhassany, A. and T. Graf, "Extensible YANG Model for
               Network Telemetry Messages", Work in Progress, Internet-
               Draft, draft-ietf-nmop-message-broker-telemetry-message-
-              01, 2 July 2025, <https://datatracker.ietf.org/doc/html/
-              draft-ietf-nmop-message-broker-telemetry-message-01>.
+              02, 5 September 2025,
+              <https://datatracker.ietf.org/doc/html/draft-ietf-nmop-
+              message-broker-telemetry-message-02>.
 
    [I-D.ietf-netconf-notif-envelope]
               Feng, A. H., Francois, P., Graf, T., and B. Claise,
@@ -609,20 +604,19 @@ Internet-Draft              YANG Message Keys                August 2025
               <https://datatracker.ietf.org/doc/html/draft-wilton-
               netconf-yang-push-lite-01>.
 
-
-
-
-
-Graf, et al.              Expires 4 March 2026                 [Page 11]
-
-Internet-Draft              YANG Message Keys                August 2025
-
-
    [Mar24]    Martinez-Casanueva, I. D., Gonzalez-Sanchez, D., Bellido,
               L., Fernandez, D., and D. R. Lopez, "Toward Building a
               Semantic Network Inventory for Model-Driven Telemetry",
               IEEE, DOI 10.1109/MCOM.001.2200222, February 2024,
               <https://arxiv.org/html/2402.06511v1>.
+
+
+
+
+Graf, et al.              Expires 24 March 2026                [Page 11]
+
+Internet-Draft              YANG Message Keys             September 2025
+
 
    [Bod24]    Bode, J., Kühl, N., Kreuzberger, D., and C. Holtmann,
               "Toward Avoiding the Data Mess: Industry Insights From
@@ -664,17 +658,21 @@ Contributors
    subscription type and insisting that Topic Compaction is a key
    enabler for inventory metrics and YANG data consumer integration and
    should be supported day 1.  And Nigel Davis for confirming that Topic
-   Compaction simpifies indeed data processing system architecture.
-
-
-
-
-Graf, et al.              Expires 4 March 2026                 [Page 12]
-
-Internet-Draft              YANG Message Keys                August 2025
-
+   Compaction simplifies indeed data processing system architecture.
 
 Authors' Addresses
+
+
+
+
+
+
+
+
+Graf, et al.              Expires 24 March 2026                [Page 12]
+
+Internet-Draft              YANG Message Keys             September 2025
+
 
    Thomas Graf
    Swisscom
@@ -725,4 +723,6 @@ Authors' Addresses
 
 
 
-Graf, et al.              Expires 4 March 2026                 [Page 13]
+
+
+Graf, et al.              Expires 24 March 2026                [Page 13]

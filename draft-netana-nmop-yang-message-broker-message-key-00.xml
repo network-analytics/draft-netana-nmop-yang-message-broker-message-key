@@ -77,7 +77,7 @@
       </address>
     </author>
    
-    <date day="31" month="August" year="2025"/>
+    <date day="20" month="September" year="2025"/>
 
     <area>General</area>
     <workgroup>NMOP</workgroup>
@@ -89,11 +89,11 @@
     <abstract>
       <t>This document describes a mechanism to define a unique message
       key for a YANG to message broker integration and a topic
-			addressing scheme based on YANG-Push subscription type and a YANG
-			index defined in this document. This enables a Message Broker to
-			serve from a single partition, compress to current state in case
-			of YANG state metrics and YANG data consumer to consume for a
-			specific YANG node identifier of a network node YANG datastore.</t>
+      addressing scheme based on YANG-Push subscription type and a YANG
+      index defined in this document. This enables a Message Broker to
+      serve from a single partition, compress to current state in case
+      of YANG state metrics and YANG data consumer to consume for a
+      specific YANG node identifier of a network node YANG datastore.</t>
     </abstract>
  
   </front>
@@ -124,15 +124,15 @@
     
       <t>Network operators organize their data in a <xref
       target="Deh22">Data Mesh</xref> according to <xref
-			target="Bod24"/> where a Message Broker such as <xref
-			target="Kaf11">Apache Kafka</xref> or <xref target="Pul16">Apache
-			Pulsar</xref> facilitates the exchange of messages among data
-			processing components in topics and subjects. Typically, data is
-			being stored in Message Broker topics for several hours or days
-			to facilitate resilience in the data processing chain and
-			addressed in subjects depending on schema. Enabling a data
-			consumer to adress and re-consume previously consumed data again
-			if previously lost.</t>
+      target="Bod24"/> where a Message Broker such as <xref
+      target="Kaf11">Apache Kafka</xref> or <xref target="Pul16">Apache
+      Pulsar</xref> facilitates the exchange of messages among data
+      processing components in topics and subjects. Typically, data is
+      being stored in Message Broker topics for several hours or days
+      to facilitate resilience in the data processing chain and
+      addressed in subjects depending on schema. Enabling a data
+      consumer to address and re-consume previously consumed data again
+      if previously lost.</t>
 
       <t><xref target="I-D.ietf-nmop-yang-message-broker-integration">An
       Architecture for YANG-Push to Message Broker Integration</xref>
@@ -148,28 +148,28 @@
       left unspecified.</t>
 
       <t>Due to the missing dimensional indexing for Message Broker
-			stored YANG data, all YANG data is stored in one single Topic,
-			distributed round robin accross multiple Partitions and each YANG
-			schema id is a subject within that topic. Therefore, the entire
-			Topic from all Partitions needs to be consumed first before data
-			selection can be applied. This leads to avoidable data processing
-			overhead which in turn impairs scalability and real-time
-			capabilities which are requirements for certain Network Analytics
-			use cases.</t>
+      stored YANG data, all YANG data is stored in one single Topic,
+      distributed round robin across multiple Partitions and each YANG
+      schema id is a subject within that topic. Therefore, the entire
+      Topic from all Partitions needs to be consumed first before data
+      selection can be applied. This leads to avoidable data processing
+      overhead which in turn impairs scalability and real-time
+      capabilities which are requirements for certain Network Analytics
+      use cases.</t>
 
       <t>Dimensional data is structured information in a data warehouse.
       It uses a model of dimension tables to organize business metrics
       and their descriptive context. This model, developed by <xref
-			target="Kim96">Ralph Kimball</xref>, simplifies data analysis and
-			reporting by creating denormalized, easy-to-understand structures
-			for quick querying. It is optimized for online analytical
-			processing (OLAP) and data warehouses. <xref
-			target="RFC7950">YANG</xref> as a data modelling language
-			facilitates the modelling of dimensional data.</t>
+      target="Kim96">Ralph Kimball</xref>, simplifies data analysis and
+      reporting by creating denormalized, easy-to-understand structures
+      for quick querying. It is optimized for online analytical
+      processing (OLAP) and data warehouses. <xref
+      target="RFC7950">YANG</xref> as a data modelling language
+      facilitates the modelling of dimensional data.</t>
        
       <t>This document defines how YANG messages should be indexed and
       organized in Message Broker topics by leveraging the network node
-      hostname, YANG datastore name and  YANG item identifier for
+      hostname, YANG datastore name and YANG item identifier for
       indexing and YANG-Push subscription type and YANG schema name for
       a Message Broker topic naming scheme.</t>
 
@@ -223,31 +223,31 @@
 
         <t>The following terms are used as defined in <xref
         target="Kaf11">Apache Kafka</xref> and <xref
-				target="Pul16">Apache Pulsar</xref> Message Broker:</t>
+        target="Pul16">Apache Pulsar</xref> Message Broker:</t>
 
         <ul>
           <li>Subject: A named communication channel where a schema
-					id is associated.</li>
+          id is associated.</li>
 
           <li>Topic: A communication channel for publishing and
-					subscribing messages with one or more subjects.</li>
+          subscribing messages with one or more subjects.</li>
 
           <li>Topic Compaction: The act of compressing messages in a
-					topic to the latest state. As used with Apache Pulsar. Apache
-					Kafka uses the term Log Compaction with identical meaning.
-					</li>
+          topic to the latest state. As used with Apache Pulsar. Apache
+          Kafka uses the term Log Compaction with identical meaning.
+          </li>
 
           <li>Partition: Messages in a topic are spread over hash
-					buckets where a hash bucket refers to a partition.
-					
-					</li>
+          buckets where a hash bucket refers to a partition.
+          
+          </li>
           
           <li>Message: A piece of structured data sent between data
-					processing components to facilitate communication in a
-					distributed system</li>
+          processing components to facilitate communication in a
+          distributed system</li>
 
           <li>Message Key: Metadata associated with a message to
-					facilitate deterministic hash bucketing.</li>
+          facilitate deterministic hash bucketing.</li>
         </ul>
 
         <t>The following terms are used as defined in <xref
@@ -256,10 +256,10 @@
 
         <ul>
           <li>Schema: A formalized, documented structure that defines
-					the shape and content of the messages exchange.</li>
+          the shape and content of the messages exchange.</li>
 
           <li>Schema ID: A unique identifier of a schema associated to a
-					Message broker subject.</li>
+          Message broker subject.</li>
         </ul>
 
         <t>The following terms are used as defined in <xref
@@ -314,7 +314,7 @@
           containing only schema node identifiers. Different to an
           absolute schema node identifier it includes the YANG module
           name and is therefore globally unique. When the schema node
-          identifier points to a YANG list, then the key of that list is
+          identifier points to a YANG list, then the key to that list is
           included.</li>
         </ul>
       </section>
@@ -324,46 +324,46 @@
       <name>Solution Design</name>
 
       <t>In order to identify which YANG node identifier of a network
-			node YANG datastore is produced in which Message broker Topic and
-			Partition for which Subject, <xref
-			target="yang_message_keys_indexes_solution">YANG Message Keys and
-			Indexes</xref> are being introduced.</t>
+      node YANG datastore is produced in which Message broker Topic and
+      Partition for which Subject, <xref
+      target="yang_message_keys_indexes_solution">YANG Message Keys and
+      Indexes</xref> are being introduced.</t>
 
       <t>In order to facilitate Message Broker Topic Compaction, a
-			<xref	target="yang-push_message_broker_topic-naming_solution">
-			YANG-Push subscription type based topic	nameing scheme</xref> is
-			proposed. This segregates statistical (Value), State and State
-			change YANG metrics and facilitates a YANG Message Broker Consumer
-			to use the Topic wild card consumption method to select based on
-			YANG-Push subscription type.</t>
-			
+      <xref  target="yang-push_message_broker_topic-naming_solution">
+      YANG-Push subscription type based topic  nameing scheme</xref> is
+      proposed. This segregates statistical (Value), State and State
+      change YANG metrics and facilitates a YANG Message Broker Consumer
+      to use the Topic wild card consumption method to select based on
+      YANG-Push subscription type.</t>
+      
       <section anchor="yang_message_keys_indexes_solution">
         <name>YANG Message Keys and Indexes</name>
   
         <t>A Message Broker uses a Message Key to index the message and
-				a value to carry the Message content. If no Message Key is
-				defined then the Messages are distributed in a round robin
-				fashion across partitions. If a Message Key is defined, then the
-				value of the Message Key is being used as input for the Message
-				Broker Producer hash function to distribute across Partitions.
-				Therefore, Message Keys facilitate Message ordering.</t>
+        a value to carry the Message content. If no Message Key is
+        defined then the Messages are distributed in a round robin
+        fashion across partitions. If a Message Key is defined, then the
+        value of the Message Key is being used as input for the Message
+        Broker Producer hash function to distribute across Partitions.
+        Therefore, Message Keys facilitate Message ordering.</t>
   
         <t>The Message Key not only used for Message indexing at the
         Message Producer but also at the Message Broker for topic
         compaction.</t>
 
         <t>For YANG, the network node hostname, from which YANG
-				datastore the YANG metrics are published from and the YANG
-				index is used to generate the Message Key.</t>
+        datastore the YANG metrics are published from and the YANG
+        index is used to generate the Message Key.</t>
   
         <section>
           <name>YANG Message Broker Producer</name>
   
           <t>YANG data nodes are uniquely identifiable. <xref
           section="6.5" sectionFormat="of" target="RFC7950"/> defines
-					with "absolute-schema-nodeid" how absolute YANG schema node
+          with "absolute-schema-nodeid" how absolute YANG schema node
           identifiers are being crafted locally unique to the YANG
-					module. </t>
+          module. </t>
   
           <t><xref section="3.3" sectionFormat="of" target="RFC9254"/>
           defines how globally unique YANG item identifiers are defined
@@ -377,19 +377,19 @@
           the YANG-Push receiver.</t>
 
           <t>To calculate the YANG Index of the Message Key, the YANG
-					item identifier needs to be extracted from the used YANG-Push
-					subtree or xpath subscription filter. If the YANG item
-					identifier is a YANG list as defined in <xref section="7.8"
-					sectionFormat="of" target="RFC7950"/> the YANG list key
-					defined in <xref section="7.8.2" sectionFormat="of"
-					target="RFC7950"/> statement is suffixed with a "/" to the
-					YANG item identifier. </t>
+          item identifier needs to be extracted from the used YANG-Push
+          subtree or xpath subscription filter. If the YANG item
+          identifier is a YANG list as defined in <xref section="7.8"
+          sectionFormat="of" target="RFC7950"/> the YANG list key
+          defined in <xref section="7.8.2" sectionFormat="of"
+          target="RFC7950"/> statement is suffixed with a "/" to the
+          YANG item identifier. </t>
         
           <t>For example, if the following xpath filter is being used, 
           the YANG item identifier is 
           "ietf-interface:interfaces/interface". Interface is a YANG
           list with name as key. Therefore, the YANG Index of the
-					Message Key is "ietf-interface:interfaces/interface/name".</t>
+          Message Key is "ietf-interface:interfaces/interface/name".</t>
 
 <figure anchor="yang-push-xpath-filter-example"
 title="YANG-Push ietf-interface Xpath Filter Example">        
@@ -418,13 +418,13 @@ title="YANG-Push ietf-hardware Subtree Filter Example">
 ]]></sourcecode></figure>
         
           <t>When the Message is being produced to the Message Broker,
-					the Network node hostname and YANG datastore name is used from
-					the structured YANG data defined in
+          the Network node hostname and YANG datastore name is used from
+          the structured YANG data defined in
           "ietf-yang-push-telemetry-message" <xref section="3"
           sectionFormat="of"
           target="I-D.ietf-nmop-message-broker-telemetry-message"/>
-					where the YANG Index is derived from subtree and xpath
-					filters, respectively from their YANG schema tree.</t>
+          where the YANG Index is derived from subtree and xpath
+          filters, respectively from their YANG schema tree.</t>
         </section>
   
         <section>
@@ -453,14 +453,14 @@ title="YANG-Push ietf-hardware Subtree Filter Example">
         
         <t>This document proposes to include "statistics", "states" and
         "state-changes" in the topic name as the first part to denote
-				the types of data. Followed by "yang" to denote YANG data.
-				Followed by the YANG module names subscribed, and followed by
-				the YANG Schema Node Identifier where "/" is substituted by
-				"_".</t> 
+        the types of data. Followed by "yang" to denote YANG data.
+        Followed by the YANG module names subscribed, and followed by
+        the YANG Schema Node Identifier where "/" is substituted by
+        "_".</t> 
   
         <t>For example, if the "ietf-interface:interfaces/interface"
-				xpath filter is being used, the Message Broker topic name would
-				be as following. In the example the project name and enviroment
+        xpath filter is being used, the Message Broker topic name would
+        be as following. In the example the project name and environment
         (prod, dev, test etc.) is prefixed.</t>
 
 <figure anchor="yang-push-topic-name-example"
@@ -488,14 +488,14 @@ project.enviroment.statistics.yang.ietf-interfaces.interfaces_interface
   
           <t>The consumer has the ability to consume with a wildcard
           denoted with "*" in the topic name to consume from more than
-					one topic.</t>
+          one topic.</t>
   
           <t>For example, if YANG states should be consumed and indexed
-					in Time Series database or stream processor than below Topic
-					Name could be used and the YANG data could be ingested into
-					tables according to topic names and indexed per Message Key.
-					If Topic Compaction is enabled, only current state is
-					consumed.</t>
+          in Time Series database or stream processor than below Topic
+          Name could be used, and the YANG data could be ingested into
+          tables according to topic names and indexed per Message Key.
+          If Topic Compaction is enabled, only current state is
+          consumed.</t>
 
 <figure anchor="yang-push-topic-wildcard-name-example"
 title="YANG-Push Wildcard Topic Name Example">        
@@ -511,10 +511,10 @@ project.enviroment.states.yang.*
     <section>
       <name>Message Broker Implementations</name>
 
-      <t>Topic, Partioning and Message Keying are generic concepts of
-			Message Brokers. There are two known Message Broker
-			implementations supporting all features described in this
-			document.</t>
+      <t>Topic, Partitioning and Message Keying are generic concepts of
+      Message Brokers. There are two known Message Broker
+      implementations supporting all features described in this
+      document.</t>
       
       <section>
         <name>Apache Kafka</name>
@@ -530,7 +530,7 @@ project.enviroment.states.yang.*
 
         <t>Apache Pulsar supports Message Keying, Partitioning and Topic
         Compaction. The topic names allow all characters except: "/".
-				</t>
+        </t>
       </section>
     </section>
 
@@ -548,32 +548,32 @@ project.enviroment.states.yang.*
 
     <section anchor="Operational">
       <name>Operational Considerations</name>
-			<t>The YANG Message Broker Producer of a YANG-Push receiver SHOULD
-			have three config knobs facilitate the features described in this
-			document as optional:</t>
+      <t>The YANG Message Broker Producer of a YANG-Push receiver SHOULD
+      have three config knobs facilitate the features described in this
+      document as optional:</t>
 
         <ul>
           <li>Topic Distribution: Select between "topic" and "subject"
-					distribution. Default is subject to remain backward
-					compatibility to <xref
-			    target="I-D.ietf-nmop-yang-message-broker-integration"/>.</li>
+          distribution. Default is subject to remain backward
+          compatibility to <xref
+          target="I-D.ietf-nmop-yang-message-broker-integration"/>.</li>
 
           <li>Distribution Type: Select between "none" and
-					"YANG-Push subscription type".</li>
+          "YANG-Push subscription type".</li>
           
           <li>YANG Message Key: Select between "enable" and "disable".
-					</li>
+          </li>
         </ul>
-				
-			<t>To accommondate for potential date loss throughout the data
-			processing pipeline, periodical update of the current State for
-			State metrics is RECOMMENDED. This can be accomondated with
-			YANG-Push as defined in <xref target="RFC8641"/> by complementing
-			"on-change sync on start" subscriptions with periodical
-			subscriptions. Alternatively, in YANG-Push Lite defined in
-			<xref section="7.6" sectionFormat="of"
-			target="I-D.wilton-netconf-yang-push-lite"/> this simplified in
-			one subscription.</t>			
+        
+      <t>To accommodate for potential date loss throughout the data
+      processing pipeline, periodical update of the current State for
+      State metrics is RECOMMENDED. This can be accommodated with
+      YANG-Push as defined in <xref target="RFC8641"/> by complementing
+      "on-change sync on start" subscriptions with periodical
+      subscriptions. Alternatively, in YANG-Push Lite defined in
+      <xref section="7.6" sectionFormat="of"
+      target="I-D.wilton-netconf-yang-push-lite"/> this simplified in
+      one subscription.</t>      
     </section>
   </middle>
 
@@ -616,7 +616,7 @@ project.enviroment.states.yang.*
             <author fullname="Daniel Gonzalez-Sanchez" surname="Gonzalez-Sanchez"/>
             <author fullname="Luis Bellido" surname="Bellido"/>
             <author fullname="David Fernandez" surname="Fernandez"/>
-            <author fullname="Diego R. Lopez" surname="Lopez"/>						
+            <author fullname="Diego R. Lopez" surname="Lopez"/>            
   
             <date month="February" year="2024"/>
           </front>
@@ -634,7 +634,7 @@ project.enviroment.states.yang.*
             <author fullname="Jan Bode" surname="Bode"/>
             <author fullname="Niklas Kühl" surname="Kühl"/>
             <author fullname="Dominik Kreuzberger" surname="Kreuzberger"/>
-            <author fullname="Carsten Holtmann" surname="Holtmann"/>			
+            <author fullname="Carsten Holtmann" surname="Holtmann"/>      
   
             <date month="January" year="2024"/>
           </front>
@@ -725,13 +725,13 @@ project.enviroment.states.yang.*
     <section anchor="Contributors" numbered="false">
       <name>Contributors</name>
       <t>We like to thank Victor Lopez for the initial idea on the
-			network controller use case. Ashley Woods, Sivakumar
-			Sundaravadivel and Rafael Julio for the idea of grouping topics by
-			YANG-Push subscription type and insisting that Topic Compaction
-			is a key enabler for inventory metrics and YANG data consumer
-			integration and should be supported day 1. And Nigel Davis for
-			confirming that Topic Compaction simpifies indeed data processing
-			system architecture.</t>
+      network controller use case. Ashley Woods, Sivakumar
+      Sundaravadivel and Rafael Julio for the idea of grouping topics by
+      YANG-Push subscription type and insisting that Topic Compaction
+      is a key enabler for inventory metrics and YANG data consumer
+      integration and should be supported day 1. And Nigel Davis for
+      confirming that Topic Compaction simplifies indeed data processing
+      system architecture.</t>
     </section>
     
  </back>
