@@ -11,7 +11,7 @@
 
 <rfc
   xmlns:xi="http://www.w3.org/2001/XInclude"
-  category="info"
+  category="std"
   docName="draft-netana-nmop-yang-message-broker-message-key-00"
   ipr="trust200902"
   obsoletes=""
@@ -68,6 +68,7 @@
 
     <author fullname="Benoît Claise" initials="BC" surname="Claise">
 
+    <organization>Everything OPS</organization>
       <address>
         <postal>
           <city>Liege</city>
@@ -87,7 +88,7 @@
     <keyword>Network Analytics</keyword>
 
     <abstract>
-      <t>This document describes a mechanism to define a unique message
+      <t>This document specifies a mechanism to define a unique message
       key for a YANG to message broker integration and a topic
       addressing scheme based on YANG-Push subscription type and a YANG
       index defined in this document. This enables a Message Broker to
@@ -108,13 +109,6 @@
       configurations and obtain YANG modelled operational data from
       their networks according to <xref target="Mar24"/>.</t>
 
-      <t>YANG data can be used for several network analytic use cases.
-      Depending on use case, only a subset of the subscribed data might
-      be necessary. This subset could be the current network state
-      instead of state changes over a period of time, or instead of
-      consuming data for all network nodes maybe only for a particular
-      network node or network node component of a YANG subscription.</t>
-
       <t>Most network analytic use cases require real-time data and
       deliver near real-time analytical, actionable insights. This
       requires high scalability, resilience and low overhead in the data
@@ -130,7 +124,7 @@
       processing components in topics and subjects. Typically, data is
       being stored in Message Broker topics for several hours or days
       to facilitate resilience in the data processing chain and
-      addressed in subjects depending on schema. Enabling a data
+      addressed in subjects depending on schema, enabling a data
       consumer to address and re-consume previously consumed data again
       if previously lost.</t>
 
@@ -166,11 +160,18 @@
       processing (OLAP) and data warehouses. <xref
       target="RFC7950">YANG</xref> as a data modelling language
       facilitates the modelling of dimensional data.</t>
+
+      <t>YANG data can be used for several network analytic use cases.
+      Importantly, depending on the use case, only a subset of the subscribed YANG data might
+      be necessary (in time or space). This subset could be the current network state
+      instead of state changes over a period of time. This subset might also be maybe only
+      a few YANG subscriptions for a particular network node or network node component, instead
+      of consuming data for all network nodes by default.</t>
        
       <t>This document defines how YANG messages should be indexed and
       organized in Message Broker topics by leveraging the network node
       hostname, YANG datastore name and YANG item identifier for
-      indexing and YANG-Push subscription type and YANG schema name for
+      indexing; and YANG-Push subscription type and YANG schema name for
       a Message Broker topic naming scheme.</t>
 
       <t>Network node hostname, YANG datastore name and subtree and
