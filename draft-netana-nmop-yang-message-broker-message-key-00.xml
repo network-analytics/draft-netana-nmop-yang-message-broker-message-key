@@ -106,7 +106,7 @@
 
       <t>Nowadays network operators are using machine and human
       readable <xref target="RFC7950">YANG</xref> to model their
-      configurations and obtain YANG modelled operational data from
+      configurations and monitor YANG operational data from
       their networks according to <xref target="Mar24"/>.</t>
 
       <t>Most network analytic use cases require real-time data and
