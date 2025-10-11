@@ -11,7 +11,7 @@
 
 <rfc
   xmlns:xi="http://www.w3.org/2001/XInclude"
-  category="info"
+  category="std"
   docName="draft-netana-nmop-yang-message-broker-message-key-00"
   ipr="trust200902"
   obsoletes=""
@@ -68,6 +68,7 @@
 
     <author fullname="Benoît Claise" initials="BC" surname="Claise">
 
+    <organization>Everything OPS</organization>
       <address>
         <postal>
           <city>Liege</city>
@@ -87,7 +88,7 @@
     <keyword>Network Analytics</keyword>
 
     <abstract>
-      <t>This document describes a mechanism to define a unique message
+      <t>This document specifies a mechanism to define a unique message
       key for a YANG to message broker integration and a topic
       addressing scheme based on YANG-Push subscription type and a YANG
       index defined in this document. This enables a Message Broker to
@@ -105,19 +106,12 @@
 
       <t>Nowadays network operators are using machine and human
       readable <xref target="RFC7950">YANG</xref> to model their
-      configurations and obtain YANG modelled operational data from
+      configurations and monitor YANG operational data from
       their networks according to <xref target="Mar24"/>.</t>
-
-      <t>YANG data can be used for several network analytic use cases.
-      Depending on use case, only a subset of the subscribed data might
-      be necessary. This subset could be the current network state
-      instead of state changes over a period of time, or instead of
-      consuming data for all network nodes maybe only for a particular
-      network node or network node component of a YANG subscription.</t>
 
       <t>Most network analytic use cases require real-time data and
       deliver near real-time analytical, actionable insights. This
-      requires high scalability, resilience and low overhead in the data
+      imposes high scalability, resilience and low overhead in the data
       processing pipeline. Accessing the right data for the right use
       case with minimal overhead and in the shortest period of time is
       therefore crucial.</t> 
@@ -130,16 +124,16 @@
       processing components in topics and subjects. Typically, data is
       being stored in Message Broker topics for several hours or days
       to facilitate resilience in the data processing chain and
-      addressed in subjects depending on schema. Enabling a data
+      addressed in subjects depending on schema, enabling a data
       consumer to address and re-consume previously consumed data again
       if previously lost.</t>
 
       <t><xref target="I-D.ietf-nmop-yang-message-broker-integration">An
       Architecture for YANG-Push to Message Broker Integration</xref>
-      defined an architecture for integrating YANG-Push with
+      specifies an architecture for integrating YANG-Push with
       Message Brokers for a Data Mesh architecture. How the 
-      notification messages at a YANG-Push Receiver is being transformed
-      to the Message Broker is being described in <xref
+      notification messages at a YANG-Push Receiver are being transformed
+      to the Message Broker is described in <xref
       section="4.5" sectionFormat="of"
       target="I-D.ietf-nmop-yang-message-broker-integration"/> and
       to which message schema in <xref section="3" sectionFormat="of"
@@ -154,7 +148,7 @@
       Topic from all Partitions needs to be consumed first before data
       selection can be applied. This leads to avoidable data processing
       overhead which in turn impairs scalability and real-time
-      capabilities which are requirements for certain Network Analytics
+      capabilities, required for certain Network Analytics
       use cases.</t>
 
       <t>Dimensional data is structured information in a data warehouse.
@@ -166,11 +160,19 @@
       processing (OLAP) and data warehouses. <xref
       target="RFC7950">YANG</xref> as a data modelling language
       facilitates the modelling of dimensional data.</t>
+
+      <t>YANG telmetry data can be used for several network analytic use cases.
+      Importantly, depending on the use case, only a subset of the subscribed YANG data might
+      be necessary (in time or space). For example, for specific use cases, it's more important to know 
+      the current network state, as opposed to have the full series of the state
+      changes over time. In other use cases, instead of consuming data for
+      all network nodes, only a specific network node or network
+      node component requires the YANG monitoring and hence subscription.</t>
        
       <t>This document defines how YANG messages should be indexed and
       organized in Message Broker topics by leveraging the network node
-      hostname, YANG datastore name and YANG item identifier for
-      indexing and YANG-Push subscription type and YANG schema name for
+      hostname, YANG datastore name and YANG Item Identifier for
+      indexing; and YANG-Push subscription type and YANG schema name for
       a Message Broker topic naming scheme.</t>
 
       <t>Network node hostname, YANG datastore name and subtree and
@@ -259,7 +261,7 @@
           the shape and content of the messages exchange.</li>
 
           <li>Schema ID: A unique identifier of a schema associated to a
-          Message broker subject.</li>
+          Message Broker subject.</li>
         </ul>
 
         <t>The following terms are used as defined in <xref
@@ -304,13 +306,13 @@
         target="RFC9254"/>:</t>
 
         <ul>
-          <li>YANG item identifiers</li>
+          <li>YANG Item Identifiers</li>
         </ul>
 
         <t>This document defines the following term:</t>
 
         <ul>
-          <li>YANG index: Is a subset of YANG item identifiers
+          <li>YANG Index: Is a subset of YANG Item Identifiers
           containing only schema node identifiers. Different to an
           absolute schema node identifier it includes the YANG module
           name and is therefore globally unique. When the schema node
@@ -324,14 +326,14 @@
       <name>Solution Design</name>
 
       <t>In order to identify which YANG node identifier of a network
-      node YANG datastore is produced in which Message broker Topic and
+      node YANG datastore is produced in which Message Broker Topic and
       Partition for which Subject, <xref
       target="yang_message_keys_indexes_solution">YANG Message Keys and
       Indexes</xref> are being introduced.</t>
 
       <t>In order to facilitate Message Broker Topic Compaction, a
       <xref  target="yang-push_message_broker_topic-naming_solution">
-      YANG-Push subscription type based topic  nameing scheme</xref> is
+      YANG-Push subscription type based topic naming scheme</xref> is
       proposed. This segregates statistical (Value), State and State
       change YANG metrics and facilitates a YANG Message Broker Consumer
       to use the Topic wild card consumption method to select based on
@@ -366,7 +368,7 @@
           module. </t>
   
           <t><xref section="3.3" sectionFormat="of" target="RFC9254"/>
-          defines how globally unique YANG item identifiers are defined
+          defines how globally unique YANG Item Identifiers are defined
           as text strings.</t>
 
           <t><xref section="3.6" sectionFormat="of" target="RFC8641"/>
@@ -383,10 +385,10 @@
           sectionFormat="of" target="RFC7950"/> the YANG list key
           defined in <xref section="7.8.2" sectionFormat="of"
           target="RFC7950"/> statement is suffixed with a "/" to the
-          YANG item identifier. </t>
+          YANG Item Identifier. </t>
         
           <t>For example, if the following xpath filter is being used, 
-          the YANG item identifier is 
+          the YANG Item Identifier is 
           "ietf-interface:interfaces/interface". Interface is a YANG
           list with name as key. Therefore, the YANG Index of the
           Message Key is "ietf-interface:interfaces/interface/name".</t>
@@ -398,7 +400,7 @@ ietf-interface:interfaces/interface[type='ianaift:ethernetCsmacd']
 ]]></sourcecode></figure>
 
           <t>For example, if the following subtree filter is being used, 
-          the YANG item identifier is
+          the YANG Item Identifier is
           "ietf-hardware:hardware/component/state". Therefore, the YANG
           Index of the Message Key is
           "ietf-hardware:hardware/component/state".</t>
