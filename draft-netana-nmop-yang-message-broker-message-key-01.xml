@@ -78,7 +78,7 @@
       </address>
     </author>
    
-    <date day="20" month="September" year="2025"/>
+    <date day="18" month="October" year="2025"/>
 
     <area>General</area>
     <workgroup>NMOP</workgroup>
@@ -287,6 +287,8 @@
         target="I-D.ietf-netconf-notif-envelope"/>:</t>
 
         <ul>
+          <li>Notifications</li>
+					
           <li>Hostname</li>
         </ul>
 
@@ -519,8 +521,8 @@ project.environment.states.yang.*
 
       <t>Topic, Partitioning and Message Keying are generic concepts of
       Message Brokers. There are two known Message Broker
-      implementations supporting all features described in this
-      document.</t>
+			implementations supporting all features described in this
+			document.</t>
       
       <section>
         <name>Apache Kafka</name>
