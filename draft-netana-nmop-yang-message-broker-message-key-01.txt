@@ -269,7 +269,7 @@ Internet-Draft              YANG Message Keys               October 2025
    The following terms are used as defined in
    [I-D.ietf-netconf-notif-envelope]:
 
-   *  Notifications
+   *  Notification
 
    *  Hostname
 

@@ -287,7 +287,7 @@
         target="I-D.ietf-netconf-notif-envelope"/>:</t>
 
         <ul>
-          <li>Notifications</li>
+          <li>Notification</li>
 					
           <li>Hostname</li>
         </ul>
