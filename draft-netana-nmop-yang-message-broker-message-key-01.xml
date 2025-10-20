@@ -486,7 +486,7 @@ project.environment.statistics.yang.ietf-interfaces.interfaces_interface
           module defined in <xref section="4.1" sectionFormat="of"
           target="RFC8641"/>, subscription state notifications MUST be
           used to derive wherever subscribed YANG data is "statistics",
-          "states" or "state-changes". The YANG Index MUST be derived
+          "states" or "state-changes", respectively. The YANG Index MUST be derived
 					from subtree and xpath filter data of subscription state
           notifications, respectively from their YANG schema tree.</t>
         </section>
