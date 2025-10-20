@@ -459,7 +459,7 @@ title="YANG-Push ietf-hardware Subtree Filter Example">
         Usually topics are named hierarchically similar to the DNS
         namespace where "." deliminates hierarchies.</t>
         
-        <t>This document proposes to include "statistics", "states" and
+        <t>This document defines "statistics", "states" and
         "state-changes" in the topic name as the first part to denote
         the types of data. Followed by "yang" to denote YANG data.
         Followed by the YANG module names subscribed, and followed by
@@ -484,10 +484,10 @@ project.environment.statistics.yang.ietf-interfaces.interfaces_interface
           "on-change" and "sync-on-start" contained data in
           "update-trigger" from "ietf-subscribed-notifications", YANG
           module defined in <xref section="4.1" sectionFormat="of"
-          target="RFC8641"/>, subscription state notifications are being
+          target="RFC8641"/>, subscription state notifications MUST be
           used to derive wherever subscribed YANG data is "statistics",
-          "states" or "state-changes". The YANG Index is derived from
-          subtree and xpath filter data of subscription state
+          "states" or "state-changes". The YANG Index MUST be derived
+					from subtree and xpath filter data of subscription state
           notifications, respectively from their YANG schema tree.</t>
         </section>
   

@@ -430,11 +430,11 @@ Internet-Draft              YANG Message Keys               October 2025
    topics are named hierarchically similar to the DNS namespace where
    "." deliminates hierarchies.
 
-   This document proposes to include "statistics", "states" and "state-
-   changes" in the topic name as the first part to denote the types of
-   data.  Followed by "yang" to denote YANG data.  Followed by the YANG
-   module names subscribed, and followed by the YANG Schema Node
-   Identifier where "/" is substituted by "_".
+   This document defines "statistics", "states" and "state-changes" in
+   the topic name as the first part to denote the types of data.
+   Followed by "yang" to denote YANG data.  Followed by the YANG module
+   names subscribed, and followed by the YANG Schema Node Identifier
+   where "/" is substituted by "_".
 
    For example, if the "ietf-interface:interfaces/interface" xpath
    filter is being used, the Message Broker topic name would be as
@@ -457,11 +457,11 @@ Internet-Draft              YANG Message Keys               October 2025
    For the Message Broker topic creation, the "periodic", "on-change"
    and "sync-on-start" contained data in "update-trigger" from "ietf-
    subscribed-notifications", YANG module defined in Section 4.1 of
-   [RFC8641], subscription state notifications are being used to derive
+   [RFC8641], subscription state notifications MUST be used to derive
    wherever subscribed YANG data is "statistics", "states" or "state-
-   changes".  The YANG Index is derived from subtree and xpath filter
-   data of subscription state notifications, respectively from their
-   YANG schema tree.
+   changes".  The YANG Index MUST be derived from subtree and xpath
+   filter data of subscription state notifications, respectively from
+   their YANG schema tree.
 
 3.2.2.  YANG Message Broker Consumer
 
