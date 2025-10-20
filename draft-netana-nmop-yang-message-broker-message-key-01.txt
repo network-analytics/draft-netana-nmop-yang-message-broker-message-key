@@ -5,11 +5,11 @@
 NMOP                                                            TG. Graf
 Internet-Draft                                             AE. Elhassany
 Intended status: Standards Track                                Swisscom
-Expires: 21 April 2026                                   AHF. Huang Feng
+Expires: 23 April 2026                                   AHF. Huang Feng
                                                                INSA-Lyon
                                                               BC. Claise
                                                           Everything OPS
-                                                         18 October 2025
+                                                         20 October 2025
 
 
             YANG Message Keys for Message Broker Integration
@@ -20,10 +20,10 @@ Abstract
    This document specifies a mechanism to define a unique message key
    for a YANG to message broker integration and a topic addressing
    scheme based on YANG-Push subscription type and a YANG index defined
-   in this document.  This enables YANG data consumption of a specific
-   YANG node identifier from a network node datastore on a single
-   Message Broker topic and partition; and Message Brokers to compress
-   topics to the current state for YANG state metrics.
+   in this document.  This enables YANG data consumption of a subset of
+   subscribed YANG data, either per specific YANG node, identifier or
+   telemetry message type, by indexing and organizing in Message Broker
+   topics, indexing the information the right way.
 
 Status of This Memo
 
@@ -40,7 +40,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 21 April 2026.
+   This Internet-Draft will expire on 23 April 2026.
 
 Copyright Notice
 
@@ -53,7 +53,7 @@ Copyright Notice
 
 
 
-Graf, et al.              Expires 21 April 2026                 [Page 1]
+Graf, et al.              Expires 23 April 2026                 [Page 1]
 
 Internet-Draft              YANG Message Keys               October 2025
 
@@ -109,7 +109,7 @@ Table of Contents
 
 
 
-Graf, et al.              Expires 21 April 2026                 [Page 2]
+Graf, et al.              Expires 23 April 2026                 [Page 2]
 
 Internet-Draft              YANG Message Keys               October 2025
 
@@ -165,7 +165,7 @@ Internet-Draft              YANG Message Keys               October 2025
 
 
 
-Graf, et al.              Expires 21 April 2026                 [Page 3]
+Graf, et al.              Expires 23 April 2026                 [Page 3]
 
 Internet-Draft              YANG Message Keys               October 2025
 
@@ -221,7 +221,7 @@ Internet-Draft              YANG Message Keys               October 2025
 
 
 
-Graf, et al.              Expires 21 April 2026                 [Page 4]
+Graf, et al.              Expires 23 April 2026                 [Page 4]
 
 Internet-Draft              YANG Message Keys               October 2025
 
@@ -277,7 +277,7 @@ Internet-Draft              YANG Message Keys               October 2025
 
 
 
-Graf, et al.              Expires 21 April 2026                 [Page 5]
+Graf, et al.              Expires 23 April 2026                 [Page 5]
 
 Internet-Draft              YANG Message Keys               October 2025
 
@@ -333,7 +333,7 @@ Internet-Draft              YANG Message Keys               October 2025
 
 
 
-Graf, et al.              Expires 21 April 2026                 [Page 6]
+Graf, et al.              Expires 23 April 2026                 [Page 6]
 
 Internet-Draft              YANG Message Keys               October 2025
 
@@ -389,7 +389,7 @@ Internet-Draft              YANG Message Keys               October 2025
 
 
 
-Graf, et al.              Expires 21 April 2026                 [Page 7]
+Graf, et al.              Expires 23 April 2026                 [Page 7]
 
 Internet-Draft              YANG Message Keys               October 2025
 
@@ -445,7 +445,7 @@ Internet-Draft              YANG Message Keys               October 2025
 
 
 
-Graf, et al.              Expires 21 April 2026                 [Page 8]
+Graf, et al.              Expires 23 April 2026                 [Page 8]
 
 Internet-Draft              YANG Message Keys               October 2025
 
@@ -501,7 +501,7 @@ Internet-Draft              YANG Message Keys               October 2025
 
 
 
-Graf, et al.              Expires 21 April 2026                 [Page 9]
+Graf, et al.              Expires 23 April 2026                 [Page 9]
 
 Internet-Draft              YANG Message Keys               October 2025
 
@@ -516,7 +516,7 @@ Internet-Draft              YANG Message Keys               October 2025
 
 7.  Operational Considerations
 
-   The YANG Message Broker Producer of a YANG-Push receiver SHOULD have
+   The YANG Message Broker Producer of a YANG-Push receiver should have
    three config knobs facilitate the features described in this document
    as optional:
 
@@ -557,7 +557,7 @@ Internet-Draft              YANG Message Keys               October 2025
 
 
 
-Graf, et al.              Expires 21 April 2026                [Page 10]
+Graf, et al.              Expires 23 April 2026                [Page 10]
 
 Internet-Draft              YANG Message Keys               October 2025
 
@@ -613,7 +613,7 @@ Internet-Draft              YANG Message Keys               October 2025
 
 
 
-Graf, et al.              Expires 21 April 2026                [Page 11]
+Graf, et al.              Expires 23 April 2026                [Page 11]
 
 Internet-Draft              YANG Message Keys               October 2025
 
@@ -669,7 +669,7 @@ Acknowledgements
 
 
 
-Graf, et al.              Expires 21 April 2026                [Page 12]
+Graf, et al.              Expires 23 April 2026                [Page 12]
 
 Internet-Draft              YANG Message Keys               October 2025
 
@@ -725,4 +725,4 @@ Authors' Addresses
 
 
 
-Graf, et al.              Expires 21 April 2026                [Page 13]
+Graf, et al.              Expires 23 April 2026                [Page 13]
