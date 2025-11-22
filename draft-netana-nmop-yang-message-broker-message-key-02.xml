@@ -1,0 +1,808 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-model href="rfc7991bis.rnc"?>
+<!DOCTYPE rfc [
+  <!ENTITY nbsp    "&#160;">
+  <!ENTITY zwsp   "&#8203;">
+  <!ENTITY nbhy   "&#8209;">
+  <!ENTITY wj     "&#8288;">
+]>
+<!-- If further character entities are required then they should be added to the DOCTYPE above.
+     Use of an external entity file is not recommended. -->
+
+<rfc
+  xmlns:xi="http://www.w3.org/2001/XInclude"
+  category="std"
+  docName="draft-netana-nmop-yang-message-broker-message-key-01"
+  ipr="trust200902"
+  obsoletes=""
+  updates=""
+  submissionType="IETF"
+  xml:lang="en"
+  version="3">
+
+  <front>
+    <title abbrev="YANG Message Keys"> YANG Message Keys for
+     Message Broker Integration</title>
+
+    <seriesInfo name="Internet-Draft" value="draft-netana-nmop-yang-message-broker-message-key-01"/>
+   
+    <author fullname="Thomas Graf" initials="TG" surname="Graf">
+
+      <organization>Swisscom</organization>
+      <address>
+        <postal>
+          <street>Binzring 17</street>
+          <city>Zurich</city>
+          <code>8045</code>
+          <country>CH</country>
+        </postal>        
+        <email>thomas.graf@swisscom.com</email>
+      </address>
+    </author>
+
+    <author fullname="Ahmed Elhassany" initials="AE" surname="Elhassany">
+
+      <organization>Swisscom</organization>
+      <address>
+        <postal>
+          <street>Binzring 17</street>
+          <city>Zurich</city>
+          <code>8045</code>
+          <country>CH</country>
+        </postal>        
+        <email>ahmed.elhassany@swisscom.com</email>
+      </address>
+    </author>
+
+    <author fullname="Alex Huang Feng" initials="AHF" surname="Huang Feng">
+
+      <organization>INSA-Lyon</organization>
+      <address>
+        <postal>
+          <city>Lyon</city>
+          <country>FR</country>
+        </postal>        
+        <email>alex.huang-feng@insa-lyon.fr</email>
+      </address>
+    </author>
+
+    <author fullname="Benoît Claise" initials="BC" surname="Claise">
+
+    <organization>Everything OPS</organization>
+      <address>
+        <postal>
+          <city>Liege</city>
+          <country>BE</country>
+        </postal>        
+        <email>benoit@everything-ops.net</email>
+      </address>
+    </author>
+   
+    <author fullname="Paolo" initials="PL" surname="Lucente">
+
+    <organization>NTT</organization>
+      <address>
+        <postal>
+          <street>Veemweg 23</street>
+          <city>Barneveld</city>
+          <code>3771</code>
+          <country>NL</country>
+        </postal>        
+        <email>paolo@ntt.net</email>
+      </address>
+    </author>
+   
+    <date day="22" month="November" year="2025"/>
+
+    <area>General</area>
+    <workgroup>NMOP</workgroup>
+    <keyword>YANG-Push</keyword>
+    <keyword>Data Mesh</keyword>
+    <keyword>Network Telemetry</keyword>
+    <keyword>Network Analytics</keyword>
+
+    <abstract>
+      <t>This document specifies a mechanism to define a unique message
+      key for a YANG to message broker integration and a topic
+      addressing scheme based on YANG-Push subscription type and a YANG
+      index defined in this document. This enables YANG data consumption
+			of a subset of subscribed YANG data, either per specific YANG
+			node, identifier or telemetry message type, by indexing and
+			organizing in Message Broker topics, indexing the information the
+			right way.</t>
+    </abstract>
+ 
+  </front>
+
+  <middle>
+    
+    <section anchor="Introduction">
+      <name>Introduction</name>
+
+      <t>Nowadays network operators are using machine and human
+      readable <xref target="RFC7950">YANG</xref> to model their
+      configurations and monitor YANG operational data from
+      their networks according to <xref target="Mar24"/>.</t>
+
+      <t>Most network analytic use cases require real-time data and
+      deliver near real-time analytical, actionable insights. This
+      imposes high scalability, resilience and low overhead in the data
+      processing pipeline. Accessing the right data for the right use
+      case with minimal overhead and in the shortest period of time is
+      therefore crucial.</t> 
+    
+      <t>Network operators organize their data in a <xref
+      target="Deh22">Data Mesh</xref> according to <xref
+      target="Bod24"/> where a Message Broker such as <xref
+      target="Kaf11">Apache Kafka</xref> or <xref target="Pul16">Apache
+      Pulsar</xref> facilitates the exchange of messages among data
+      processing components in topics and subjects. Typically, data is
+      being stored in Message Broker topics for several hours or days
+      to facilitate resilience in the data processing chain and
+      addressed in subjects depending on schema, enabling a data
+      consumer to address and re-consume previously consumed data again
+      if previously lost.</t>
+
+      <t>Dimensional data is structured information in a data store.
+      It uses a model of dimension tables to organize business metrics
+      and their descriptive context. This model, developed by <xref
+      target="Kim96">Ralph Kimball</xref>, simplifies data analysis and
+      reporting by creating denormalized, easy-to-understand structures
+      for quick querying. It is optimized for online analytical
+      processing (OLAP) and data warehouses. <xref
+      target="RFC7950">YANG</xref> as a data modelling language
+      facilitates the modelling of dimensional data.</t>
+
+      <t><xref target="I-D.ietf-nmop-yang-message-broker-integration">An
+      Architecture for YANG-Push to Message Broker Integration</xref>
+      specifies an architecture for integrating YANG-Push with
+      Message Brokers for a Data Mesh architecture. How the 
+      notification messages at a YANG-Push Receiver are being transformed
+      to the Message Broker is described in <xref
+      section="4.5" sectionFormat="of"
+      target="I-D.ietf-nmop-yang-message-broker-integration"/> and
+      to which message schema in <xref section="3" sectionFormat="of"
+      target="I-D.ietf-nmop-message-broker-telemetry-message"/>, however 
+      how messages should be indexed best for dimensional YANG data is
+      left unspecified.</t>
+
+      <t>Due to the missing dimensional indexing for Message Broker
+      stored YANG data, all YANG data is stored in one single Topic,
+      distributed round robin across multiple Partitions and each YANG
+      schema id is a subject within that topic. Therefore, the entire
+      Topic from all Partitions needs to be consumed first before data
+      selection can be applied. This leads to avoidable data processing
+      overhead which in turn impairs scalability and real-time
+      capabilities, required for certain Network Analytics
+      use cases.</t>
+
+      <t>YANG telmetry data can be used for several network analytic use
+			cases. Importantly, depending on the use case, only a subset of
+			the subscribed YANG data might be necessary (in time or space).
+			For example, for specific use cases, it's more important to know 
+      the current network state, as opposed to have the full series of
+			the state changes over time. In other use cases, instead of
+			consuming data for all network nodes, only a specific network node
+			or network node component requires the YANG monitoring and hence
+			subscription.</t>
+       
+      <t>This document defines how YANG messages <xref
+      target="I-D.ietf-nmop-message-broker-telemetry-message"/> should
+			be indexed and organized in Message Broker topics by leveraging
+			the network node hostname, YANG datastore name and YANG Item
+			Identifier for indexing; and YANG-Push subscription type and YANG
+			schema name for a Message Broker topic naming scheme.</t>
+
+      <t>Network node hostname, YANG datastore name and subtree and
+      xpath filters are part of "ietf-yang-push-telemetry-message" 
+      structured YANG data defined in <xref section="3"
+      sectionFormat="of"
+      target="I-D.ietf-nmop-message-broker-telemetry-message"/>. YANG
+      item identifier are derived from subtree and xpath filters
+      respectively from their YANG schema tree.</t>
+    </section>
+
+    <section anchor="Conventions_and_Definitions">
+      <name>Conventions and Definitions</name>
+
+      <t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL",
+      "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", 
+      "NOT RECOMMENDED", "MAY", and "OPTIONAL" in this document are to
+      be interpreted as described in BCP 14 <xref target="RFC2119"/>
+      <xref target="RFC8174"/> when, and only when, they appear in all
+      capitals, as shown here.</t>
+
+      <section anchor="Terminology">
+          <name>Terminology</name>
+
+        <t>The following terms are used as defined in <xref
+        target="I-D.ietf-nmop-terminology"/>:</t>
+
+        <ul>
+          <li>Network Telemetry</li>
+
+          <li>Network Analytics</li>
+
+          <li>Value</li>
+          
+          <li>State</li>
+
+          <li>Change</li>
+        </ul>
+
+        <t>The following terms are used as defined in <xref
+        target="I-D.ietf-nmop-yang-message-broker-integration"/>:</t>
+
+        <ul>
+          <li>Message Broker</li>
+
+          <li>YANG Message Broker Producer</li>
+          
+          <li>YANG Message Broker Consumer</li>
+        </ul>
+
+        <t>The following terms are used as defined in <xref
+        target="Kaf11">Apache Kafka</xref> and <xref
+        target="Pul16">Apache Pulsar</xref> Message Broker:</t>
+
+        <ul>
+          <li>Subject: A named communication channel where a schema
+          id is associated.</li>
+
+          <li>Topic: A communication channel for publishing and
+          subscribing messages with one or more subjects.</li>
+
+          <li>Topic Compaction: The act of compressing messages in a
+          topic to the latest state. As used with Apache Pulsar. Apache
+          Kafka uses the term Log Compaction with identical meaning.
+          </li>
+
+          <li>Partition: Messages in a topic are spread over hash
+          buckets where a hash bucket refers to a partition.
+          
+          </li>
+          
+          <li>Message: A piece of structured data sent between data
+          processing components to facilitate communication in a
+          distributed system</li>
+
+          <li>Message Key: Metadata associated with a message to
+          facilitate deterministic hash bucketing.</li>
+        </ul>
+
+        <t>The following terms are used as defined in <xref
+        target="ConDoc18">Confluent Schema Registry
+        Documentation</xref>:</t>
+
+        <ul>
+          <li>Schema: A formalized, documented structure that defines
+          the shape and content of the messages exchange.</li>
+
+          <li>Schema ID: A unique identifier of a schema associated to a
+          Message Broker subject.</li>
+        </ul>
+
+        <t>The following terms are used as defined in <xref
+        target="RFC8641"/>:</t>
+
+        <ul>
+          <li>Periodical</li>
+
+          <li>On-Change</li>
+          
+          <li>Sync-On-Start</li>
+
+          <li>Xpath Filter</li>
+
+          <li>Subtree Filter</li>
+        </ul>
+
+        <t>The following terms are used as defined in <xref
+        target="I-D.ietf-netconf-notif-envelope"/>:</t>
+
+        <ul>
+          <li>Notification</li>
+					
+          <li>Hostname</li>
+        </ul>
+
+        <t>The following terms are used as defined in <xref
+        target="RFC8342"/>:</t>
+
+        <ul>
+          <li>Datastore</li>
+        </ul>
+
+        <t>The following terms are used as defined in <xref
+        target="RFC7950"/>:</t>
+
+        <ul>
+          <li>Schema Node Identifier</li>
+
+          <li>Schema Tree</li>
+        </ul>
+
+        <t>The following terms are used as defined in <xref
+        target="RFC9254"/>:</t>
+
+        <ul>
+          <li>YANG Item Identifiers</li>
+        </ul>
+
+        <t>This document defines the following term:</t>
+
+        <ul>
+          <li>YANG Index: Is a subset of YANG Item Identifiers
+          containing only schema node identifiers. Different to an
+          absolute schema node identifier it includes the YANG module
+          name and is therefore globally unique. When the schema node
+          identifier points to a YANG list, then the key to that list is
+          included.</li>
+        </ul>
+      </section>
+    </section>
+
+    <section anchor="Solution_Design">
+      <name>Solution Design</name>
+
+      <t>In order to identify which YANG node identifier of a network
+      node YANG datastore is produced in which Message Broker Topic and
+      Partition for which Subject, <xref
+      target="YANG_Message_Broker_Producer_Key_Solution">YANG Message
+			Keys and Indexes</xref> are being introduced.</t>
+
+      <t>In order to facilitate Message Broker Topic Compaction, a
+      <xref  target="YANG-Push_Message_Broker_Topic-Naming_Solution">
+      YANG-Push subscription type based topic naming scheme</xref> is
+      proposed. This segregates statistical (Value), State and State
+      change YANG metrics and facilitates a YANG Message Broker Consumer
+      to use the Topic wild card consumption method to select based on
+      YANG-Push subscription type.</t>
+      
+      <section anchor="YANG_Message_Keys_Indexes_Solution">
+        <name>YANG Message Keys and Indexes</name>
+  
+        <t>A Message Broker MUST use a Message Key to index the message
+				and a value to carry the Message content. If no Message Key is
+        defined then the Messages are distributed in a round robin
+        fashion across partitions. If a Message Key is defined, then the
+        value of the Message Key is being used as input for the Message
+        Broker Producer hash function to distribute across Partitions.
+        Therefore, Message Keys facilitate Message ordering.</t>
+  
+        <t>The Message Key not only used for Message indexing at the
+        Message Producer but also at the Message Broker for topic
+        compaction.</t>
+
+        <t>For YANG, the network node hostname, from which YANG
+        datastore the YANG metrics are published from and the YANG
+        index is used to generate the Message Key.</t>
+  
+        <section anchor="YANG_Message_Broker_Producer_Key_Solution">
+          <name>YANG Message Broker Producer</name>
+  
+          <t>YANG data nodes are uniquely identifiable within the YANG
+					schema tree. <xref section="6.5" sectionFormat="of"
+					target="RFC7950"/> defines with "absolute-schema-nodeid" how
+					absolute YANG schema node identifiers are being crafted
+					locally unique to the YANG module.</t>
+  
+          <t><xref section="3.3" sectionFormat="of" target="RFC9254"/>
+          defines how globally unique YANG Item Identifiers are defined
+          as text strings.</t>
+
+          <t><xref section="3.6" sectionFormat="of" target="RFC8641"/>
+          defines how YANG data nodes can be subscribed with subtree and
+          xpath selection filters. A YANG-Push publisher publishes with
+          "subscription-started" state notifications for each
+          subscription which filter and filter type is being used to
+          the YANG-Push receiver.</t>
+
+          <t>To calculate the YANG Index of the Message Key, the YANG
+          item identifier needs to be extracted from the used YANG-Push
+          subtree or xpath subscription filter. If the YANG item
+          identifier is a YANG list as defined in <xref section="7.8"
+          sectionFormat="of" target="RFC7950"/> the YANG list key
+          defined in <xref section="7.8.2" sectionFormat="of"
+          target="RFC7950"/> statement is suffixed with a "/" to the
+          YANG Item Identifier. </t>
+        
+          <t>For example, if the following xpath filter is being used, 
+          the YANG Item Identifier is 
+          "ietf-interface:interfaces/interface". Interface is a YANG
+          list with name as key. Therefore, the YANG Index of the
+          Message Key is "ietf-interface:interfaces/interface/name".</t>
+
+<figure anchor="yang-push-xpath-filter-example"
+title="YANG-Push ietf-interface Xpath Filter Example">        
+<sourcecode type="xml"><![CDATA[
+ietf-interface:interfaces/interface[type='ianaift:ethernetCsmacd']      
+]]></sourcecode></figure>
+
+          <t>For example, if the following subtree filter is being used, 
+          the YANG Item Identifier is
+          "ietf-hardware:hardware/component/state". Therefore, the YANG
+          Index of the Message Key is
+          "ietf-hardware:hardware/component/state".</t>
+
+<figure anchor="yang-push-subtree-filter-example"
+title="YANG-Push ietf-hardware Subtree Filter Example">        
+<sourcecode type="xml"><![CDATA[
+<get>
+  <filter type="subtree">
+    <hardware xmlns="urn:ietf:params:xml:ns:yang:ietf-hardware">
+      <component>
+        <state/>
+      </component>
+    </hardware>
+  </filter>
+</get>        
+]]></sourcecode></figure>
+        
+          <t>When the Message is being produced to the Message Broker,
+          the Network node hostname and YANG datastore name is used from
+          the structured YANG data defined in
+          "ietf-yang-push-telemetry-message" <xref section="3"
+          sectionFormat="of"
+          target="I-D.ietf-nmop-message-broker-telemetry-message"/>
+          where the YANG Index is derived from subtree and xpath
+          filters, respectively from their YANG schema tree.</t>
+        </section>
+  
+        <section anchor="YANG_Message_Broker_Consumer_Key_Solution">
+          <name>YANG Message Broker Consumer</name>
+  
+          <t>The consumer hashes the Message Key and applies modulo with
+          the number of partitions to determine the partition it needs
+          to consume from to obtain Messages with desired Message Key.
+          </t>
+
+          <t>At a YANG data store, such as a Time Series database or
+					stream processor, the YANG data could than be ingested into
+          tables according to topic names and indexed per Message Key.
+          If Topic Compaction is enabled, only current state is
+          consumed.</t>
+
+        </section>
+
+        <section anchor="Time_Series_Database">
+          <name>Time Series Database</name>
+          <t>Text</t>
+        </section>
+  
+      </section>
+  
+      <section anchor="YANG-Push_Message_Broker_Topic-Naming_Solution">
+        <name>YANG-Push Message Broker Topic Naming</name>
+  
+        <t>YANG can be subscribed periodically, on-change or on-change
+        with sync-on-start. Periodical subscriptions are used for
+        obtaining statistical metrics. On-Change subscriptions are used
+        for obtaining State Changes and on-change with sync-on-start for
+        obtaining States.</t>
+  
+        <t>Message Brokers topics are addressed with a unique name.
+        Usually topics are named hierarchically similar to the DNS
+        namespace where "." deliminates hierarchies.</t>
+        
+        <t>This document defines "statistics", "states" and
+        "state-changes" in the topic name as the first part to denote
+        the types of data. Followed by "yang" to denote YANG data.
+        Followed by the YANG module names subscribed, and followed by
+        the YANG Schema Node Identifier where "/" is substituted by
+        "_".</t> 
+  
+        <t>For example, if the "ietf-interface:interfaces/interface"
+        xpath filter is being used, the Message Broker topic name would
+        be as following. In the example the project name and environment
+        (prod, dev, test etc.) is prefixed.</t>
+
+<figure anchor="yang-push-topic-name-example"
+title="YANG-Push ietf-interface Topic Name Example">        
+<sourcecode type="text"><![CDATA[
+project.environment.statistics.yang.ietf-interfaces.interfaces_interface
+]]></sourcecode></figure>      
+ 
+        <section anchor="YANG_Message_Broker_Producer_Topic_Solution">
+          <name>YANG Message Broker Producer</name>
+  
+          <t>For the Message Broker topic creation, the "periodic",
+          "on-change" and "sync-on-start" contained data in
+          "update-trigger" from "ietf-subscribed-notifications", YANG
+          module defined in <xref section="4.1" sectionFormat="of"
+          target="RFC8641"/>, subscription state notifications MUST be
+          used to derive wherever subscribed YANG data is "statistics",
+          "states" or "state-changes". The YANG Index MUST be derived
+					from subtree and xpath filter data of subscription state
+          notifications, respectively from their YANG schema tree.</t>
+        </section>
+  
+        <section anchor="YANG_Message_Broker_Consumer_Topic_Solution">
+          <name>YANG Message Broker Consumer</name>
+  
+          <t>The consumer has the ability to consume with a wildcard
+          denoted with "*" in the topic name to consume from more than
+          one topic.</t>
+  
+          <t>For example, if YANG states should be consumed and indexed
+          in Time Series database or stream processor than below Topic
+          Name could be used, and the YANG data could be ingested into
+          tables according to topic names and indexed per Message Key.
+          If Topic Compaction is enabled, only current state is
+          consumed.</t>
+
+<figure anchor="yang-push-topic-wildcard-name-example"
+title="YANG-Push Wildcard Topic Name Example">        
+<sourcecode type="text"><![CDATA[
+project.environment.states.yang.*
+]]></sourcecode></figure>    
+
+        </section>
+      </section>
+
+    </section>
+
+    <section anchor="Message_Broker_Implementations">
+      <name>Message Broker Implementations</name>
+
+      <t>Topic, Partitioning and Message Keying are generic concepts of
+      Message Brokers. There are two known Message Broker
+			implementations supporting all features described in this
+			document.</t>
+      
+      <section anchor="MB_Implementations_Kafka">
+        <name>Apache Kafka</name>
+
+        <t>Apache Kafka supports Message Keying, Partitioning and Log
+        Compaction. The topic names are constrained to 249 character
+        length and the following characters: "a-z", "A-Z", "0-9", ".",
+        "_" and "-".</t>
+      </section>
+
+      <section anchor="MB_Implementations_Pulsar">
+        <name>Apache Pulsar</name>
+
+        <t>Apache Pulsar supports Message Keying, Partitioning and Topic
+        Compaction. The topic names allow all characters except: "/".
+        </t>
+      </section>
+    </section>
+
+    <section anchor="TSDB_Implementations">
+      <name>Time Series Database Implementations</name>
+
+      <t>Tables, partition and keys are generic concepts of time series
+			databases. With ClickHouse, this document examples how YANG
+			Message Keys can be obtained from Message Broker and how it can
+			used for indexing.</t>
+      
+      <section anchor="TSDB_Implementations_Clickhouse">
+        <name>ClickHouse</name>
+
+        <t>Text</t>
+      </section>
+    </section>
+    
+    <section anchor="IANA">
+      <name>IANA Considerations</name>
+      <t>This document includes no request to IANA.</t>
+    </section>
+    
+    <section anchor="Security">
+      <name>Security Considerations</name>
+      <t>This document should not affect the security of the Internet.
+      </t>
+    </section>
+
+    <section anchor="Operational">
+      <name>Operational Considerations</name>
+      <t>The YANG Message Broker Producer of a YANG-Push receiver should
+      have three config knobs facilitate the features described in this
+      document as optional:</t>
+
+        <ul>
+          <li>Topic Distribution: Select between "topic" and "subject"
+          distribution. Default is subject to remain backward
+          compatibility to <xref
+          target="I-D.ietf-nmop-yang-message-broker-integration"/>.</li>
+
+          <li>Distribution Type: Select between "none" and
+          "YANG-Push subscription type".</li>
+          
+          <li>YANG Message Key: Select between "enable" and "disable".
+          </li>
+        </ul>
+        
+      <t>To accommodate for potential date loss throughout the data
+      processing pipeline, periodical update of the current State for
+      State metrics is RECOMMENDED. This can be accommodated with
+      YANG-Push as defined in <xref target="RFC8641"/> by complementing
+      "on-change sync on start" subscriptions with periodical
+      subscriptions. Alternatively, in YANG-Push Lite defined in
+      <xref section="7.6" sectionFormat="of"
+      target="I-D.wilton-netconf-yang-push-lite"/> this simplified in
+      one subscription.</t>      
+    </section>
+  </middle>
+
+  <back>
+    <references>
+      <name>References</name>
+      <references>
+        <name>Normative References</name>
+        <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.2119.xml"/>
+  
+        <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.7950.xml"/>
+  
+        <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.8174.xml"/>
+
+        <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.8342.xml"/>
+  
+        <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.8641.xml"/>
+
+        <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.9254.xml"/>
+
+        <xi:include href="https://bib.ietf.org/public/rfc/bibxml3/reference.I-D.ietf-nmop-terminology.xml"/>
+  
+        <xi:include href="https://bib.ietf.org/public/rfc/bibxml3/reference.I-D.ietf-nmop-yang-message-broker-integration.xml"/>
+
+        <xi:include href="https://bib.ietf.org/public/rfc/bibxml3/reference.I-D.ietf-nmop-message-broker-telemetry-message.xml"/>
+
+        <xi:include href="https://bib.ietf.org/public/rfc/bibxml3/reference.I-D.ietf-netconf-notif-envelope.xml"/>
+      </references>
+ 
+      <references>
+        <name>Informative References</name>
+        <xi:include href="https://bib.ietf.org/public/rfc/bibxml3/reference.I-D.wilton-netconf-yang-push-lite.xml"/>
+
+        <reference anchor="Mar24"
+                   target="https://arxiv.org/html/2402.06511v1">
+          <front>
+            <title>Toward Building a Semantic Network Inventory for Model-Driven Telemetry</title>
+  
+            <author fullname="Ignacio D. Martinez-Casanueva" surname="D. Martinez-Casanueva"/>
+            <author fullname="Daniel Gonzalez-Sanchez" surname="Gonzalez-Sanchez"/>
+            <author fullname="Luis Bellido" surname="Bellido"/>
+            <author fullname="David Fernandez" surname="Fernandez"/>
+            <author fullname="Diego R. Lopez" surname="Lopez"/>            
+  
+            <date month="February" year="2024"/>
+          </front>
+  
+          <seriesInfo name="DOI" value="10.1109/MCOM.001.2200222"/>
+  
+          <refcontent>IEEE</refcontent>
+        </reference>
+
+        <reference anchor="Bod24"
+                   target="https://arxiv.org/html/2302.01713v4">
+          <front>
+            <title>Toward Avoiding the Data Mess: Industry Insights From Data Mesh Implementations</title>
+  
+            <author fullname="Jan Bode" surname="Bode"/>
+            <author fullname="Niklas Kühl" surname="Kühl"/>
+            <author fullname="Dominik Kreuzberger" surname="Kreuzberger"/>
+            <author fullname="Carsten Holtmann" surname="Holtmann"/>      
+  
+            <date month="January" year="2024"/>
+          </front>
+  
+          <seriesInfo name="DOI" value="10.1109/ACCESS.2024.3417291"/>
+  
+          <refcontent>IEEE</refcontent>
+        </reference>
+
+        <reference anchor="Deh22"
+                   target="https://www.oreilly.com/library/view/data-mesh/9781492092384/">
+          <front>
+            <title>Data Mesh</title>
+  
+            <author fullname="Zhamak Dehghani" initials="Z." surname="Dehghani"/>
+  
+            <date month="March" year="2022"/>
+          </front>
+  
+          <seriesInfo name="ISBN" value="9781492092391"/>
+  
+          <refcontent>O'Reilly Media</refcontent>
+        </reference>
+
+        <reference anchor="Kim96"
+                   target="https://www.kimballgroup.com/data-warehouse-business-intelligence-resources/books/data-warehouse-dw-toolkit/">
+          <front>
+            <title>The Data Warehouse Toolkit</title>
+  
+            <author fullname="Ralph Kimball" surname="Kimball"/>
+            <author fullname="Margy Ross" surname="Ross"/>
+  
+            <date year="1996"/>
+          </front>
+  
+          <seriesInfo name="ISBN" value="9781118530801"/>
+  
+          <refcontent>Wiley</refcontent>
+        </reference>
+  
+        <reference anchor="Kaf11" target="https://kafka.apache.org/">
+          <front>
+            <title>Apache Kafka</title>
+  
+            <author fullname="Neha Narkhede" initials="N." surname="Narkhede"/>
+  
+            <date month="January" year="2011"/>
+          </front>
+  
+          <refcontent>Apache Software Foundation</refcontent>
+        </reference>
+  
+        <reference anchor="Pul16" target="https://pulsar.apache.org/">
+          <front>
+            <title>Apache Pulsar</title>
+  
+            <author fullname="Sijie Guo" initials="S." surname="Guo"/>
+   
+            <author fullname="Matteo  Merli" initials="M." surname="Merli"/>
+  
+            <date month="January" year="2016"/>
+          </front>
+  
+          <refcontent>Apache Software Foundation</refcontent>
+        </reference>
+
+        <reference anchor="ConDoc18"
+                   target="https://docs.confluent.io/platform/current/schema-registry/">
+          <front>
+            <title>Confluent Schema Registry Documentation</title>
+  
+            <author fullname="Robert Yokota " initials="R." surname="Yokota"/>
+  
+            <date month="December" year="2018"/>
+          </front>
+
+          <refcontent>Confluent Community and Apache Software
+          Foundation</refcontent>
+        </reference>     
+      </references>
+    </references>
+    
+    <section anchor="Acknowledgements" numbered="false">
+      <name>Acknowledgements</name>
+      <t>Thanks to</t>
+    </section>
+    
+    <section anchor="Contributors" numbered="false">
+      <name>Contributors</name>
+
+      <t>Many thanks goes to Hellmar Becker who contributed <xref
+			target="Time_Series_Database"/> and <xref
+			target="TSDB_Implementations"/> on how YANG Message Keys can be
+			obtained from Message Broker, how time series databases can use
+			it for indexing YANG data and example implementation in
+			ClickHouse.</t>
+
+      <author fullname="Hellmar Becker" initials="HB" surname="Becker">
+  
+        <organization>ClickHouse</organization>
+        <address>
+          <postal>
+            <street>601 Marshall Street</street>
+            <city>Redwood City</city>
+            <code>CA 94063</code>
+            <country>US</country>
+          </postal>        
+          <email>hellmar.becker@clickhouse.com</email>
+        </address>
+      </author>
+
+      <t>We also like to thank Victor Lopez for the initial idea on the
+      network controller use case. Ashley Woods, Sivakumar
+      Sundaravadivel and Rafael Julio for the idea of grouping topics by
+      YANG-Push subscription type and insisting that Topic Compaction
+      is a key enabler for inventory metrics and YANG data consumer
+      integration and should be supported day 1. And Nigel Davis for
+      confirming that Topic Compaction simplifies indeed data processing
+      system architecture.</t>
+    </section>
+    
+ </back>
+</rfc>
