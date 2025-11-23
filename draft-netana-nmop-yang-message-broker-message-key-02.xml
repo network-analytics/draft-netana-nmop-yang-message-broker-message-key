@@ -108,8 +108,9 @@
       index defined in this document. This enables YANG data consumption
 			of a subset of subscribed YANG data, either per specific YANG
 			node, identifier or telemetry message type, by indexing and
-			organizing in Message Broker topics, indexing the information the
-			right way.</t>
+			organizing in Message Broker topics, indexing the information by
+			using data taxonomy and organize data in partitions and shards.
+			</t>
     </abstract>
  
   </front>
@@ -149,8 +150,9 @@
       target="Kim96">Ralph Kimball</xref>, simplifies data analysis and
       reporting by creating denormalized, easy-to-understand structures
       for quick querying. It is optimized for online analytical
-      processing (OLAP) and data warehouses. <xref
-      target="RFC7950">YANG</xref> as a data modelling language
+      processing (OLAP) and data warehouses by using the data taxonomy
+			to scale in partitions and shards. <xref
+			target="RFC7950">YANG</xref> as a data modelling language
       facilitates the modelling of dimensional data.</t>
 
       <t><xref target="I-D.ietf-nmop-yang-message-broker-integration">An
@@ -164,7 +166,8 @@
       to which message schema in <xref section="3" sectionFormat="of"
       target="I-D.ietf-nmop-message-broker-telemetry-message"/>, however 
       how messages should be indexed best for dimensional YANG data is
-      left unspecified.</t>
+      left unspecified. Not making use of topics, partitioning and
+			sharding.</t>
 
       <t>Due to the missing dimensional indexing for Message Broker
       stored YANG data, all YANG data is stored in one single Topic,
@@ -258,9 +261,13 @@
           </li>
 
           <li>Partition: Messages in a topic are spread over hash
-          buckets where a hash bucket refers to a partition.
-          
-          </li>
+          buckets where a hash bucket refers to a partition being
+					stored on one message broker node.</li>
+
+          <li>Shard: The same as partition but distributed among
+					message broker nodes. In this document Partitions is being
+					used primarily but concept equaliy applies also to Shards.
+					</li>
           
           <li>Message: A piece of structured data sent between data
           processing components to facilitate communication in a
@@ -268,6 +275,17 @@
 
           <li>Message Key: Metadata associated with a message to
           facilitate deterministic hash bucketing.</li>
+        </ul>
+
+        <t>The following terms are used as defined in <xref
+        target="One96">The Log-Structured Merge-Tree</xref> scientific
+				paper:</t>
+
+        <ul>
+          <li>LSM Tree: Log-Structured Merge-Tree is a data structure
+					with performance characteristics that make it attractive for
+					providing indexed access to files with high insert volume. LSM
+					trees, like other search trees, maintain key-value pairs.</li>
         </ul>
 
         <t>The following terms are used as defined in <xref
@@ -554,17 +572,41 @@ project.environment.states.yang.*
         <name>Apache Kafka</name>
 
         <t>Apache Kafka supports Message Keying, Partitioning and Log
-        Compaction. The topic names are constrained to 249 character
+        Compaction.</t>
+				
+				<t>With "min.cleanable.dirty.ratio" and "min.compaction.lag.ms"
+				how often and when Log Compaction should occur is being
+				configured.</t>
+				
+				<t>The topic names are constrained to 249 character
         length and the following characters: "a-z", "A-Z", "0-9", ".",
-        "_" and "-".</t>
+        "_" and "-". Topics can be created on the fly by producing into
+				a new Topic when "auto.create.topics.enable" has been configured
+        prior.</t>
+
+        <t>The Partition count for a given Topic can be increased but
+				not decreased. Consumer groups are automatically re-joined and
+				partitions are being rebalanced on Message Broker nodes when
+				Partition count changed.</t>
       </section>
 
       <section anchor="MB_Implementations_Pulsar">
         <name>Apache Pulsar</name>
 
         <t>Apache Pulsar supports Message Keying, Partitioning and Topic
-        Compaction. The topic names allow all characters except: "/".
-        </t>
+        Compaction.</t>
+				
+				<t>With "brokerServiceCompactionThreshold" when Topic Compaction
+				should occur is being configured.</t>
+				
+				<t>The topic names allow all characters except: "/".
+        Topics can be created on the fly by producing into a new Topic
+				when "allowAutoTopicCreation" has been configured prior.</t>
+
+        <t>The Partition count for a given Topic can be increased but
+				not decreased. Consumer groups are automatically re-joined and
+				partitions are being rebalanced on Message Broker nodes when
+				Partition count changed.</t>
       </section>
     </section>
 
@@ -717,10 +759,28 @@ project.environment.states.yang.*
   
             <date year="1996"/>
           </front>
+
+          <seriesInfo name="DOI" value="10.1007/s002360050048"/>
+  
+          <refcontent>Wiley</refcontent>
+        </reference>
+
+        <reference anchor="One96"
+                   target="https://www.cs.umb.edu/~poneil/lsmtree.pdf">
+          <front>
+            <title>The Log-Structured Merge-Tree</title>
+  
+            <author fullname="Patrick O'Neil" surname="O'Neil"/>
+            <author fullname="Edward Cheng" surname="Cheng"/>
+            <author fullname="Dieter Gawlick" surname="Gawlick"/>
+						<author fullname="Elizabeth O'Neil" surname="O'Neil"/>
+  
+            <date year="1996"/>
+          </front>
   
           <seriesInfo name="ISBN" value="9781118530801"/>
   
-          <refcontent>Wiley</refcontent>
+          <refcontent>Acta Informatica</refcontent>
         </reference>
   
         <reference anchor="Kaf11" target="https://kafka.apache.org/">
@@ -767,7 +827,8 @@ project.environment.states.yang.*
     
     <section anchor="Acknowledgements" numbered="false">
       <name>Acknowledgements</name>
-      <t>Thanks to</t>
+      <t>Thanks to Camilo Cardona, Rob Wilton, Holger Keller and Nigel
+			Davis for their comments and reviews.</t>
     </section>
     
     <section anchor="Contributors" numbered="false">

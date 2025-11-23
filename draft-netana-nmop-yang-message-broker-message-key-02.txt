@@ -25,7 +25,8 @@ Abstract
    in this document.  This enables YANG data consumption of a subset of
    subscribed YANG data, either per specific YANG node, identifier or
    telemetry message type, by indexing and organizing in Message Broker
-   topics, indexing the information the right way.
+   topics, indexing the information by using data taxonomy and organize
+   data in partitions and shards.
 
 Status of This Memo
 
@@ -52,7 +53,6 @@ Copyright Notice
 
 
 
-
 Graf, et al.               Expires 26 May 2026                  [Page 1]
 
 Internet-Draft              YANG Message Keys              November 2025
@@ -72,28 +72,28 @@ Table of Contents
    1.  Introduction  . . . . . . . . . . . . . . . . . . . . . . . .   2
    2.  Conventions and Definitions . . . . . . . . . . . . . . . . .   4
      2.1.  Terminology . . . . . . . . . . . . . . . . . . . . . . .   4
-   3.  Solution Design . . . . . . . . . . . . . . . . . . . . . . .   6
+   3.  Solution Design . . . . . . . . . . . . . . . . . . . . . . .   7
      3.1.  YANG Message Keys and Indexes . . . . . . . . . . . . . .   7
        3.1.1.  YANG Message Broker Producer  . . . . . . . . . . . .   7
        3.1.2.  YANG Message Broker Consumer  . . . . . . . . . . . .   8
-       3.1.3.  Time Series Database  . . . . . . . . . . . . . . . .   8
-     3.2.  YANG-Push Message Broker Topic Naming . . . . . . . . . .   8
+       3.1.3.  Time Series Database  . . . . . . . . . . . . . . . .   9
+     3.2.  YANG-Push Message Broker Topic Naming . . . . . . . . . .   9
        3.2.1.  YANG Message Broker Producer  . . . . . . . . . . . .   9
-       3.2.2.  YANG Message Broker Consumer  . . . . . . . . . . . .   9
+       3.2.2.  YANG Message Broker Consumer  . . . . . . . . . . . .  10
    4.  Message Broker Implementations  . . . . . . . . . . . . . . .  10
      4.1.  Apache Kafka  . . . . . . . . . . . . . . . . . . . . . .  10
      4.2.  Apache Pulsar . . . . . . . . . . . . . . . . . . . . . .  10
-   5.  Time Series Database Implementations  . . . . . . . . . . . .  10
-     5.1.  ClickHouse  . . . . . . . . . . . . . . . . . . . . . . .  10
-   6.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  10
-   7.  Security Considerations . . . . . . . . . . . . . . . . . . .  10
-   8.  Operational Considerations  . . . . . . . . . . . . . . . . .  10
-   9.  References  . . . . . . . . . . . . . . . . . . . . . . . . .  11
-     9.1.  Normative References  . . . . . . . . . . . . . . . . . .  11
-     9.2.  Informative References  . . . . . . . . . . . . . . . . .  12
-   Acknowledgements  . . . . . . . . . . . . . . . . . . . . . . . .  13
-   Contributors  . . . . . . . . . . . . . . . . . . . . . . . . . .  13
-   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  14
+   5.  Time Series Database Implementations  . . . . . . . . . . . .  11
+     5.1.  ClickHouse  . . . . . . . . . . . . . . . . . . . . . . .  11
+   6.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  11
+   7.  Security Considerations . . . . . . . . . . . . . . . . . . .  11
+   8.  Operational Considerations  . . . . . . . . . . . . . . . . .  11
+   9.  References  . . . . . . . . . . . . . . . . . . . . . . . . .  12
+     9.1.  Normative References  . . . . . . . . . . . . . . . . . .  12
+     9.2.  Informative References  . . . . . . . . . . . . . . . . .  13
+   Acknowledgements  . . . . . . . . . . . . . . . . . . . . . . . .  14
+   Contributors  . . . . . . . . . . . . . . . . . . . . . . . . . .  14
+   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  15
 
 1.  Introduction
 
@@ -136,9 +136,10 @@ Internet-Draft              YANG Message Keys              November 2025
    descriptive context.  This model, developed by Ralph Kimball [Kim96],
    simplifies data analysis and reporting by creating denormalized,
    easy-to-understand structures for quick querying.  It is optimized
-   for online analytical processing (OLAP) and data warehouses.  YANG
-   [RFC7950] as a data modelling language facilitates the modelling of
-   dimensional data.
+   for online analytical processing (OLAP) and data warehouses by using
+   the data taxonomy to scale in partitions and shards.  YANG [RFC7950]
+   as a data modelling language facilitates the modelling of dimensional
+   data.
 
    An Architecture for YANG-Push to Message Broker Integration
    [I-D.ietf-nmop-yang-message-broker-integration] specifies an
@@ -149,7 +150,7 @@ Internet-Draft              YANG Message Keys              November 2025
    which message schema in Section 3 of
    [I-D.ietf-nmop-message-broker-telemetry-message], however how
    messages should be indexed best for dimensional YANG data is left
-   unspecified.
+   unspecified.  Not making use of topics, partitioning and sharding.
 
    Due to the missing dimensional indexing for Message Broker stored
    YANG data, all YANG data is stored in one single Topic, distributed
@@ -159,7 +160,6 @@ Internet-Draft              YANG Message Keys              November 2025
    applied.  This leads to avoidable data processing overhead which in
    turn impairs scalability and real-time capabilities, required for
    certain Network Analytics use cases.
-
 
 
 
@@ -246,7 +246,12 @@ Internet-Draft              YANG Message Keys              November 2025
       the term Log Compaction with identical meaning.
 
    *  Partition: Messages in a topic are spread over hash buckets where
-      a hash bucket refers to a partition.
+      a hash bucket refers to a partition being stored on one message
+      broker node.
+
+   *  Shard: The same as partition but distributed among message broker
+      nodes.  In this document Partitions is being used primarily but
+      concept equaliy applies also to Shards.
 
    *  Message: A piece of structured data sent between data processing
       components to facilitate communication in a distributed system
@@ -254,11 +259,28 @@ Internet-Draft              YANG Message Keys              November 2025
    *  Message Key: Metadata associated with a message to facilitate
       deterministic hash bucketing.
 
+   The following terms are used as defined in The Log-Structured
+   Merge-Tree [One96] scientific paper:
+
+   *  LSM Tree: Log-Structured Merge-Tree is a data structure with
+      performance characteristics that make it attractive for providing
+      indexed access to files with high insert volume.  LSM trees, like
+      other search trees, maintain key-value pairs.
+
    The following terms are used as defined in Confluent Schema Registry
    Documentation [ConDoc18]:
 
    *  Schema: A formalized, documented structure that defines the shape
       and content of the messages exchange.
+
+
+
+
+
+Graf, et al.               Expires 26 May 2026                  [Page 5]
+
+Internet-Draft              YANG Message Keys              November 2025
+
 
    *  Schema ID: A unique identifier of a schema associated to a Message
       Broker subject.
@@ -274,13 +296,6 @@ Internet-Draft              YANG Message Keys              November 2025
    *  Xpath Filter
 
    *  Subtree Filter
-
-
-
-Graf, et al.               Expires 26 May 2026                  [Page 5]
-
-Internet-Draft              YANG Message Keys              November 2025
-
 
    The following terms are used as defined in
    [I-D.ietf-netconf-notif-envelope]:
@@ -311,6 +326,18 @@ Internet-Draft              YANG Message Keys              November 2025
       globally unique.  When the schema node identifier points to a YANG
       list, then the key to that list is included.
 
+
+
+
+
+
+
+
+Graf, et al.               Expires 26 May 2026                  [Page 6]
+
+Internet-Draft              YANG Message Keys              November 2025
+
+
 3.  Solution Design
 
    In order to identify which YANG node identifier of a network node
@@ -324,19 +351,6 @@ Internet-Draft              YANG Message Keys              November 2025
    change YANG metrics and facilitates a YANG Message Broker Consumer to
    use the Topic wild card consumption method to select based on YANG-
    Push subscription type.
-
-
-
-
-
-
-
-
-
-Graf, et al.               Expires 26 May 2026                  [Page 6]
-
-Internet-Draft              YANG Message Keys              November 2025
-
 
 3.1.  YANG Message Keys and Indexes
 
@@ -371,6 +385,15 @@ Internet-Draft              YANG Message Keys              November 2025
    for each subscription which filter and filter type is being used to
    the YANG-Push receiver.
 
+
+
+
+
+Graf, et al.               Expires 26 May 2026                  [Page 7]
+
+Internet-Draft              YANG Message Keys              November 2025
+
+
    To calculate the YANG Index of the Message Key, the YANG item
    identifier needs to be extracted from the used YANG-Push subtree or
    xpath subscription filter.  If the YANG item identifier is a YANG
@@ -386,13 +409,6 @@ Internet-Draft              YANG Message Keys              November 2025
    ietf-interface:interfaces/interface[type='ianaift:ethernetCsmacd']
 
           Figure 1: YANG-Push ietf-interface Xpath Filter Example
-
-
-
-Graf, et al.               Expires 26 May 2026                  [Page 7]
-
-Internet-Draft              YANG Message Keys              November 2025
-
 
    For example, if the following subtree filter is being used, the YANG
    Item Identifier is "ietf-hardware:hardware/component/state".
@@ -424,6 +440,16 @@ Internet-Draft              YANG Message Keys              November 2025
    number of partitions to determine the partition it needs to consume
    from to obtain Messages with desired Message Key.
 
+
+
+
+
+
+Graf, et al.               Expires 26 May 2026                  [Page 8]
+
+Internet-Draft              YANG Message Keys              November 2025
+
+
    At a YANG data store, such as a Time Series database or stream
    processor, the YANG data could than be ingested into tables according
    to topic names and indexed per Message Key.  If Topic Compaction is
@@ -439,16 +465,6 @@ Internet-Draft              YANG Message Keys              November 2025
    sync-on-start.  Periodical subscriptions are used for obtaining
    statistical metrics.  On-Change subscriptions are used for obtaining
    State Changes and on-change with sync-on-start for obtaining States.
-
-
-
-
-
-
-Graf, et al.               Expires 26 May 2026                  [Page 8]
-
-Internet-Draft              YANG Message Keys              November 2025
-
 
    Message Brokers topics are addressed with a unique name.  Usually
    topics are named hierarchically similar to the DNS namespace where
@@ -480,6 +496,16 @@ Internet-Draft              YANG Message Keys              November 2025
    filter data of subscription state notifications, respectively from
    their YANG schema tree.
 
+
+
+
+
+
+Graf, et al.               Expires 26 May 2026                  [Page 9]
+
+Internet-Draft              YANG Message Keys              November 2025
+
+
 3.2.2.  YANG Message Broker Consumer
 
    The consumer has the ability to consume with a wildcard denoted with
@@ -495,17 +521,6 @@ Internet-Draft              YANG Message Keys              November 2025
 
               Figure 4: YANG-Push Wildcard Topic Name Example
 
-
-
-
-
-
-
-Graf, et al.               Expires 26 May 2026                  [Page 9]
-
-Internet-Draft              YANG Message Keys              November 2025
-
-
 4.  Message Broker Implementations
 
    Topic, Partitioning and Message Keying are generic concepts of
@@ -515,13 +530,46 @@ Internet-Draft              YANG Message Keys              November 2025
 4.1.  Apache Kafka
 
    Apache Kafka supports Message Keying, Partitioning and Log
-   Compaction.  The topic names are constrained to 249 character length
-   and the following characters: "a-z", "A-Z", "0-9", ".", "_" and "-".
+   Compaction.
+
+   With "min.cleanable.dirty.ratio" and "min.compaction.lag.ms" how
+   often and when Log Compaction should occur is being configured.
+
+   The topic names are constrained to 249 character length and the
+   following characters: "a-z", "A-Z", "0-9", ".", "_" and "-".  Topics
+   can be created on the fly by producing into a new Topic when
+   "auto.create.topics.enable" has been configured prior.
+
+   The Partition count for a given Topic can be increased but not
+   decreased.  Consumer groups are automatically re-joined and
+   partitions are being rebalanced on Message Broker nodes when
+   Partition count changed.
 
 4.2.  Apache Pulsar
 
    Apache Pulsar supports Message Keying, Partitioning and Topic
-   Compaction.  The topic names allow all characters except: "/".
+   Compaction.
+
+   With "brokerServiceCompactionThreshold" when Topic Compaction should
+   occur is being configured.
+
+
+
+
+
+Graf, et al.               Expires 26 May 2026                 [Page 10]
+
+Internet-Draft              YANG Message Keys              November 2025
+
+
+   The topic names allow all characters except: "/".  Topics can be
+   created on the fly by producing into a new Topic when
+   "allowAutoTopicCreation" has been configured prior.
+
+   The Partition count for a given Topic can be increased but not
+   decreased.  Consumer groups are automatically re-joined and
+   partitions are being rebalanced on Message Broker nodes when
+   Partition count changed.
 
 5.  Time Series Database Implementations
 
@@ -555,14 +603,20 @@ Internet-Draft              YANG Message Keys              November 2025
    *  Distribution Type: Select between "none" and "YANG-Push
       subscription type".
 
+   *  YANG Message Key: Select between "enable" and "disable".
 
 
-Graf, et al.               Expires 26 May 2026                 [Page 10]
+
+
+
+
+
+
+
+Graf, et al.               Expires 26 May 2026                 [Page 11]
 
 Internet-Draft              YANG Message Keys              November 2025
 
-
-   *  YANG Message Key: Select between "enable" and "disable".
 
    To accommodate for potential date loss throughout the data processing
    pipeline, periodical update of the current State for State metrics is
@@ -604,20 +658,6 @@ Internet-Draft              YANG Message Keys              November 2025
               RFC 9254, DOI 10.17487/RFC9254, July 2022,
               <https://www.rfc-editor.org/info/rfc9254>.
 
-
-
-
-
-
-
-
-
-
-Graf, et al.               Expires 26 May 2026                 [Page 11]
-
-Internet-Draft              YANG Message Keys              November 2025
-
-
    [I-D.ietf-nmop-terminology]
               Davis, N., Farrel, A., Graf, T., Wu, Q., and C. Yu, "Some
               Key Terms for Network Fault and Problem Management", Work
@@ -625,6 +665,14 @@ Internet-Draft              YANG Message Keys              November 2025
               23, 18 August 2025,
               <https://datatracker.ietf.org/doc/html/draft-ietf-nmop-
               terminology-23>.
+
+
+
+
+Graf, et al.               Expires 26 May 2026                 [Page 12]
+
+Internet-Draft              YANG Message Keys              November 2025
+
 
    [I-D.ietf-nmop-yang-message-broker-integration]
               Graf, T. and A. Elhassany, "An Architecture for YANG-Push
@@ -666,19 +714,21 @@ Internet-Draft              YANG Message Keys              November 2025
               IEEE, DOI 10.1109/MCOM.001.2200222, February 2024,
               <https://arxiv.org/html/2402.06511v1>.
 
-
-
-
-Graf, et al.               Expires 26 May 2026                 [Page 12]
-
-Internet-Draft              YANG Message Keys              November 2025
-
-
    [Bod24]    Bode, J., Kühl, N., Kreuzberger, D., and C. Holtmann,
               "Toward Avoiding the Data Mess: Industry Insights From
               Data Mesh Implementations", IEEE,
               DOI 10.1109/ACCESS.2024.3417291, January 2024,
               <https://arxiv.org/html/2302.01713v4>.
+
+
+
+
+
+
+Graf, et al.               Expires 26 May 2026                 [Page 13]
+
+Internet-Draft              YANG Message Keys              November 2025
+
 
    [Deh22]    Dehghani, Z., "Data Mesh", O'Reilly Media,
               ISBN 9781492092391, March 2022,
@@ -686,9 +736,14 @@ Internet-Draft              YANG Message Keys              November 2025
               mesh/9781492092384/>.
 
    [Kim96]    Kimball, R. and M. Ross, "The Data Warehouse Toolkit",
-              Wiley, ISBN 9781118530801, 1996,
+              Wiley, DOI 10.1007/s002360050048, 1996,
               <https://www.kimballgroup.com/data-warehouse-business-
               intelligence-resources/books/data-warehouse-dw-toolkit/>.
+
+   [One96]    O'Neil, P., Cheng, E., Gawlick, D., and E. O'Neil, "The
+              Log-Structured Merge-Tree", Acta Informatica,
+              ISBN 9781118530801, 1996,
+              <https://www.cs.umb.edu/~poneil/lsmtree.pdf>.
 
    [Kaf11]    Narkhede, N., "Apache Kafka", Apache Software Foundation,
               January 2011, <https://kafka.apache.org/>.
@@ -704,7 +759,8 @@ Internet-Draft              YANG Message Keys              November 2025
 
 Acknowledgements
 
-   Thanks to
+   Thanks to Camilo Cardona, Rob Wilton, Holger Keller and Nigel Davis
+   for their comments and reviews.
 
 Contributors
 
@@ -725,7 +781,7 @@ Contributors
 
 
 
-Graf, et al.               Expires 26 May 2026                 [Page 13]
+Graf, et al.               Expires 26 May 2026                 [Page 14]
 
 Internet-Draft              YANG Message Keys              November 2025
 
@@ -781,4 +837,4 @@ Authors' Addresses
 
 
 
-Graf, et al.               Expires 26 May 2026                 [Page 14]
+Graf, et al.               Expires 26 May 2026                 [Page 15]
