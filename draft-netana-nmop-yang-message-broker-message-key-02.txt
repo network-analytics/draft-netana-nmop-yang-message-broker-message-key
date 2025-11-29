@@ -5,13 +5,13 @@
 NMOP                                                            TG. Graf
 Internet-Draft                                             AE. Elhassany
 Intended status: Standards Track                                Swisscom
-Expires: 26 May 2026                                     AHF. Huang Feng
+Expires: 2 June 2026                                     AHF. Huang Feng
                                                                INSA-Lyon
                                                               BC. Claise
                                                           Everything OPS
                                                              PL. Lucente
                                                                      NTT
-                                                        22 November 2025
+                                                        29 November 2025
 
 
             YANG Message Keys for Message Broker Integration
@@ -43,7 +43,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 26 May 2026.
+   This Internet-Draft will expire on 2 June 2026.
 
 Copyright Notice
 
@@ -53,7 +53,7 @@ Copyright Notice
 
 
 
-Graf, et al.               Expires 26 May 2026                  [Page 1]
+Graf, et al.               Expires 2 June 2026                  [Page 1]
 
 Internet-Draft              YANG Message Keys              November 2025
 
@@ -109,7 +109,7 @@ Table of Contents
 
 
 
-Graf, et al.               Expires 26 May 2026                  [Page 2]
+Graf, et al.               Expires 2 June 2026                  [Page 2]
 
 Internet-Draft              YANG Message Keys              November 2025
 
@@ -165,7 +165,7 @@ Internet-Draft              YANG Message Keys              November 2025
 
 
 
-Graf, et al.               Expires 26 May 2026                  [Page 3]
+Graf, et al.               Expires 2 June 2026                  [Page 3]
 
 Internet-Draft              YANG Message Keys              November 2025
 
@@ -221,7 +221,7 @@ Internet-Draft              YANG Message Keys              November 2025
 
 
 
-Graf, et al.               Expires 26 May 2026                  [Page 4]
+Graf, et al.               Expires 2 June 2026                  [Page 4]
 
 Internet-Draft              YANG Message Keys              November 2025
 
@@ -235,8 +235,9 @@ Internet-Draft              YANG Message Keys              November 2025
    The following terms are used as defined in Apache Kafka [Kaf11] and
    Apache Pulsar [Pul16] Message Broker:
 
-   *  Subject: A named communication channel where a schema id is
-      associated.
+   *  Subject: Is used for Messages within a Topic sharing the same
+      schema tree and also to identify a unique schema tree within a
+      schema registry.
 
    *  Topic: A communication channel for publishing and subscribing
       messages with one or more subjects.
@@ -276,8 +277,7 @@ Internet-Draft              YANG Message Keys              November 2025
 
 
 
-
-Graf, et al.               Expires 26 May 2026                  [Page 5]
+Graf, et al.               Expires 2 June 2026                  [Page 5]
 
 Internet-Draft              YANG Message Keys              November 2025
 
@@ -324,7 +324,8 @@ Internet-Draft              YANG Message Keys              November 2025
       schema node identifiers.  Different to an absolute schema node
       identifier it includes the YANG module name and is therefore
       globally unique.  When the schema node identifier points to a YANG
-      list, then the key to that list is included.
+      list, then the key to that list is included.  The YANG Index is
+      used to generate the Message Key.  See Section 3.1.1 .
 
 
 
@@ -332,8 +333,7 @@ Internet-Draft              YANG Message Keys              November 2025
 
 
 
-
-Graf, et al.               Expires 26 May 2026                  [Page 6]
+Graf, et al.               Expires 2 June 2026                  [Page 6]
 
 Internet-Draft              YANG Message Keys              November 2025
 
@@ -389,14 +389,14 @@ Internet-Draft              YANG Message Keys              November 2025
 
 
 
-Graf, et al.               Expires 26 May 2026                  [Page 7]
+Graf, et al.               Expires 2 June 2026                  [Page 7]
 
 Internet-Draft              YANG Message Keys              November 2025
 
 
-   To calculate the YANG Index of the Message Key, the YANG item
-   identifier needs to be extracted from the used YANG-Push subtree or
-   xpath subscription filter.  If the YANG item identifier is a YANG
+   To derive the YANG Indexes and generate the Message Key, the YANG
+   item identifier needs to be extracted from the used YANG-Push subtree
+   or xpath subscription filter.  If the YANG item identifier is a YANG
    list as defined in Section 7.8 of [RFC7950] the YANG list key defined
    in Section 7.8.2 of [RFC7950] statement is suffixed with a "/" to the
    YANG Item Identifier.
@@ -445,7 +445,7 @@ Internet-Draft              YANG Message Keys              November 2025
 
 
 
-Graf, et al.               Expires 26 May 2026                  [Page 8]
+Graf, et al.               Expires 2 June 2026                  [Page 8]
 
 Internet-Draft              YANG Message Keys              November 2025
 
@@ -501,7 +501,7 @@ Internet-Draft              YANG Message Keys              November 2025
 
 
 
-Graf, et al.               Expires 26 May 2026                  [Page 9]
+Graf, et al.               Expires 2 June 2026                  [Page 9]
 
 Internet-Draft              YANG Message Keys              November 2025
 
@@ -557,7 +557,7 @@ Internet-Draft              YANG Message Keys              November 2025
 
 
 
-Graf, et al.               Expires 26 May 2026                 [Page 10]
+Graf, et al.               Expires 2 June 2026                 [Page 10]
 
 Internet-Draft              YANG Message Keys              November 2025
 
@@ -613,7 +613,7 @@ Internet-Draft              YANG Message Keys              November 2025
 
 
 
-Graf, et al.               Expires 26 May 2026                 [Page 11]
+Graf, et al.               Expires 2 June 2026                 [Page 11]
 
 Internet-Draft              YANG Message Keys              November 2025
 
@@ -669,7 +669,7 @@ Internet-Draft              YANG Message Keys              November 2025
 
 
 
-Graf, et al.               Expires 26 May 2026                 [Page 12]
+Graf, et al.               Expires 2 June 2026                 [Page 12]
 
 Internet-Draft              YANG Message Keys              November 2025
 
@@ -725,7 +725,7 @@ Internet-Draft              YANG Message Keys              November 2025
 
 
 
-Graf, et al.               Expires 26 May 2026                 [Page 13]
+Graf, et al.               Expires 2 June 2026                 [Page 13]
 
 Internet-Draft              YANG Message Keys              November 2025
 
@@ -759,8 +759,8 @@ Internet-Draft              YANG Message Keys              November 2025
 
 Acknowledgements
 
-   Thanks to Camilo Cardona, Rob Wilton, Holger Keller and Nigel Davis
-   for their comments and reviews.
+   Thanks to Camilo Cardona, Rob Wilton, Holger Keller, Reshad Rahman
+   and Nigel Davis for their comments and reviews.
 
 Contributors
 
@@ -781,7 +781,7 @@ Contributors
 
 
 
-Graf, et al.               Expires 26 May 2026                 [Page 14]
+Graf, et al.               Expires 2 June 2026                 [Page 14]
 
 Internet-Draft              YANG Message Keys              November 2025
 
@@ -837,4 +837,4 @@ Authors' Addresses
 
 
 
-Graf, et al.               Expires 26 May 2026                 [Page 15]
+Graf, et al.               Expires 2 June 2026                 [Page 15]

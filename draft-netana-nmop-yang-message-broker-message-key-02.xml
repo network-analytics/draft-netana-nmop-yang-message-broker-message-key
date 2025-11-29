@@ -92,7 +92,7 @@
       </address>
     </author>
    
-    <date day="22" month="November" year="2025"/>
+    <date day="29" month="November" year="2025"/>
 
     <area>General</area>
     <workgroup>NMOP</workgroup>
@@ -249,8 +249,9 @@
         target="Pul16">Apache Pulsar</xref> Message Broker:</t>
 
         <ul>
-          <li>Subject: A named communication channel where a schema
-          id is associated.</li>
+          <li>Subject: Is used for Messages within a Topic sharing the
+					same schema tree and also to identify a unique schema tree
+					within a schema registry.</li>
 
           <li>Topic: A communication channel for publishing and
           subscribing messages with one or more subjects.</li>
@@ -355,7 +356,9 @@
           absolute schema node identifier it includes the YANG module
           name and is therefore globally unique. When the schema node
           identifier points to a YANG list, then the key to that list is
-          included.</li>
+          included. The YANG Index is used to generate the Message Key.
+					See <xref target="YANG_Message_Broker_Producer_Key_Solution"/>
+					.</li>
         </ul>
       </section>
     </section>
@@ -416,12 +419,12 @@
           subscription which filter and filter type is being used to
           the YANG-Push receiver.</t>
 
-          <t>To calculate the YANG Index of the Message Key, the YANG
-          item identifier needs to be extracted from the used YANG-Push
-          subtree or xpath subscription filter. If the YANG item
-          identifier is a YANG list as defined in <xref section="7.8"
-          sectionFormat="of" target="RFC7950"/> the YANG list key
-          defined in <xref section="7.8.2" sectionFormat="of"
+          <t>To derive the YANG Indexes and generate the Message Key,
+					the YANG item identifier needs to be extracted from the used
+					YANG-Push subtree or xpath subscription filter. If the YANG
+					item identifier is a YANG list as defined in <xref
+					section="7.8" sectionFormat="of" target="RFC7950"/> the YANG
+					list key defined in <xref section="7.8.2" sectionFormat="of"
           target="RFC7950"/> statement is suffixed with a "/" to the
           YANG Item Identifier. </t>
         
@@ -827,8 +830,8 @@ project.environment.states.yang.*
     
     <section anchor="Acknowledgements" numbered="false">
       <name>Acknowledgements</name>
-      <t>Thanks to Camilo Cardona, Rob Wilton, Holger Keller and Nigel
-			Davis for their comments and reviews.</t>
+      <t>Thanks to Camilo Cardona, Rob Wilton, Holger Keller, Reshad
+			Rahman and Nigel Davis for their comments and reviews.</t>
     </section>
     
     <section anchor="Contributors" numbered="false">
