@@ -92,7 +92,7 @@
       </address>
     </author>
    
-    <date day="29" month="November" year="2025"/>
+    <date day="30" month="November" year="2025"/>
 
     <area>General</area>
     <workgroup>NMOP</workgroup>
@@ -166,7 +166,7 @@
       to which message schema in <xref section="3" sectionFormat="of"
       target="I-D.ietf-nmop-message-broker-telemetry-message"/>, however 
       how messages should be indexed best for dimensional YANG data is
-      left unspecified. Not making use of topics, partitioning and
+      left unspecified, not making use of topics, partitioning and
 			sharding.</t>
 
       <t>Due to the missing dimensional indexing for Message Broker
@@ -265,7 +265,7 @@
           buckets where a hash bucket refers to a partition being
 					stored on one message broker node.</li>
 
-          <li>Shard: The same as partition but distributed among
+          <li>Shard: The same as Partition but distributed among
 					message broker nodes. In this document Partitions is being
 					used primarily but concept equaliy applies also to Shards.
 					</li>
@@ -284,7 +284,7 @@
 
         <ul>
           <li>LSM Tree: Log-Structured Merge-Tree is a data structure
-					with performance characteristics that make it attractive for
+					with performance characteristics that makes it attractive for
 					providing indexed access to files with high insert volume. LSM
 					trees, like other search trees, maintain key-value pairs.</li>
         </ul>
