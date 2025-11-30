@@ -832,6 +832,15 @@ project.environment.states.yang.*
       <name>Acknowledgements</name>
       <t>Thanks to Camilo Cardona, Rob Wilton, Holger Keller, Reshad
 			Rahman and Nigel Davis for their comments and reviews.</t>
+		
+      <t>We also like to thank Victor Lopez for the initial idea on the
+      network controller use case. Ashley Woods, Sivakumar
+      Sundaravadivel and Rafael Julio for the idea of grouping topics by
+      YANG-Push subscription type and insisting that Topic Compaction
+      is a key enabler for inventory metrics and YANG data consumer
+      integration and should be supported day 1. And Nigel Davis for
+      confirming that Topic Compaction simplifies indeed data processing
+      system architecture.</t>
     </section>
     
     <section anchor="Contributors" numbered="false">
@@ -857,15 +866,6 @@ project.environment.states.yang.*
           <email>hellmar.becker@clickhouse.com</email>
         </address>
       </author>
-
-      <t>We also like to thank Victor Lopez for the initial idea on the
-      network controller use case. Ashley Woods, Sivakumar
-      Sundaravadivel and Rafael Julio for the idea of grouping topics by
-      YANG-Push subscription type and insisting that Topic Compaction
-      is a key enabler for inventory metrics and YANG data consumer
-      integration and should be supported day 1. And Nigel Davis for
-      confirming that Topic Compaction simplifies indeed data processing
-      system architecture.</t>
     </section>
     
  </back>
