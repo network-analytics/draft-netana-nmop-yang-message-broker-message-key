@@ -762,20 +762,20 @@ Acknowledgements
    Thanks to Camilo Cardona, Rob Wilton, Holger Keller, Reshad Rahman
    and Nigel Davis for their comments and reviews.
 
+   We also like to thank Victor Lopez for the initial idea on the
+   network controller use case.  Ashley Woods, Sivakumar Sundaravadivel
+   and Rafael Julio for the idea of grouping topics by YANG-Push
+   subscription type and insisting that Topic Compaction is a key
+   enabler for inventory metrics and YANG data consumer integration and
+   should be supported day 1.  And Nigel Davis for confirming that Topic
+   Compaction simplifies indeed data processing system architecture.
+
 Contributors
 
    Many thanks goes to Hellmar Becker who contributed Section 3.1.3 and
    Section 5 on how YANG Message Keys can be obtained from Message
    Broker, how time series databases can use it for indexing YANG data
    and example implementation in ClickHouse.
-
-   Hellmar Becker
-   ClickHouse
-   601 Marshall Street
-   Redwood City,  CA 94063
-   United States of America
-   Email: hellmar.becker@clickhouse.com
-
 
 
 
@@ -786,13 +786,13 @@ Graf, et al.               Expires 3 June 2026                 [Page 14]
 Internet-Draft              YANG Message Keys              November 2025
 
 
-   We also like to thank Victor Lopez for the initial idea on the
-   network controller use case.  Ashley Woods, Sivakumar Sundaravadivel
-   and Rafael Julio for the idea of grouping topics by YANG-Push
-   subscription type and insisting that Topic Compaction is a key
-   enabler for inventory metrics and YANG data consumer integration and
-   should be supported day 1.  And Nigel Davis for confirming that Topic
-   Compaction simplifies indeed data processing system architecture.
+   Hellmar Becker
+   ClickHouse
+   601 Marshall Street
+   Redwood City,  CA 94063
+   United States of America
+   Email: hellmar.becker@clickhouse.com
+
 
 Authors' Addresses
 
