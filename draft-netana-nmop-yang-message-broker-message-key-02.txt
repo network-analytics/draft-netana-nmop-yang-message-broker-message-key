@@ -580,7 +580,68 @@ Internet-Draft              YANG Message Keys              November 2025
 
 5.1.  ClickHouse
 
-   Text
+5.1.1.  Data Model
+
+   Unlike other realtime analytics databases, ClickHouse does not 
+   (necessarily) rely on partitioning data by timestamp. ClickHouse
+   represents data in the MergeTree format, which is similar to a
+   LSM tree:
+
+   A table consists of data parts sorted by primary key.
+
+   When data is inserted in a table, separate data parts are created 
+   and each of them is lexicographically sorted by primary key. For 
+   example, if the primary key is (MessageKey, Date), the data in the 
+   part is sorted by MessageKey, and within each MessageKey, it is 
+   ordered by Date.
+
+   Data belonging to different partitions are separated into different 
+   parts. In the background, ClickHouse merges data parts for more 
+   efficient storage. Parts belonging to different partitions are not 
+   merged. The merge mechanism does not guarantee that all rows with 
+   the same primary key will be in the same data part.
+
+   Each data part is logically divided into granules. A granule is 
+   the smallest indivisible data set that ClickHouse reads when 
+   selecting data. ClickHouse does not split rows or values, so each 
+   granule always contains an integer number of rows. The first row of 
+   a granule is marked with the value of the primary key for the row. 
+   For each data part, ClickHouse creates an index file that stores 
+   the marks. For each column, whether it's in the primary key or not,
+   ClickHouse also stores the same marks. These marks let you find 
+   data directly in column files.
+
+   Thus, it is possible to quickly run queries on one or many ranges 
+   of the primary key.
+
+5.1.2.  Message Broker Integration
+
+   ClickHouse integrates with Message Brokers through Integration Table
+   Engines.
+
+   Here is a DDL example:
+
+   CREATE TABLE queue (
+      timestamp UInt64,
+      level String,
+      message String
+   ) ENGINE = Kafka('localhost:9092', 'topic', 'group1', 'JSONEachRow');
+
+   Reading (selecting) data through Kafka Table Engine follows Kafka 
+   semantics of advancing the offset, so subsequent reads will start 
+   at the offset the previous read left off.
+
+   It is the responsibility of the data model designer to transfer 
+   data to a regular table:
+
+    - Use the engine to create a Kafka consumer and consider it a data 
+      stream.
+    - Create a table with the desired structure.
+    - Create a materialized view that converts data from the engine and
+      puts it into a previously created table.
+
+   The message key and partition ID are available as virtual (read only)
+   columns _key and _partition.
 
 6.  IANA Considerations
 
