@@ -92,7 +92,7 @@
       </address>
     </author>
    
-    <date day="02" month="December" year="2025"/>
+    <date day="03" month="December" year="2025"/>
 
     <area>General</area>
     <workgroup>NMOP</workgroup>
@@ -125,18 +125,18 @@
       configurations and monitor YANG operational data from
       their networks according to <xref target="Mar24"/>.</t>
 
-      <t>Most network analytic use cases require real-time data and
-      deliver near real-time analytical, actionable insights. This
-      imposes high scalability, resilience and low overhead in the data
-      processing pipeline. Accessing the right data for the right use
-      case with minimal overhead and in the shortest period of time is
-      therefore crucial.</t> 
+      <t>Most network analytic use cases require real-time data and the
+			delivery of near real-time analytical and actionable insights.
+			This imposes high scalability, resilience and low overhead in the
+			data processing pipeline. Accessing the right data for the right
+			use case with minimal overhead and in the shortest period of time
+			is therefore crucial.</t> 
     
       <t>Network operators organize their data in a <xref
       target="Deh22">Data Mesh</xref> according to <xref
-      target="Bod24"/> where a Message Broker such as <xref
+      target="Bod24"/> where a Message Broker, such as <xref
       target="Kaf11">Apache Kafka</xref> or <xref target="Pul16">Apache
-      Pulsar</xref> facilitates the exchange of messages among data
+      Pulsar</xref>, facilitates the exchange of messages among data
       processing components in topics and subjects. Typically, data is
       being stored in Message Broker topics for several hours or days
       to facilitate resilience in the data processing chain and
@@ -158,31 +158,31 @@
       <t><xref target="I-D.ietf-nmop-yang-message-broker-integration">An
       Architecture for YANG-Push to Message Broker Integration</xref>
       specifies an architecture for integrating YANG-Push with
-      Message Brokers for a Data Mesh architecture. How the 
-      notification messages at a YANG-Push Receiver are being transformed
-      to the Message Broker is described in <xref
-      section="4.5" sectionFormat="of"
-      target="I-D.ietf-nmop-yang-message-broker-integration"/> and
-      to which message schema in <xref section="3" sectionFormat="of"
-      target="I-D.ietf-nmop-message-broker-telemetry-message"/>, however 
-      how messages should be indexed best for dimensional YANG data is
-      left unspecified, not making use of topics, partitioning and
-			sharding.</t>
+      Message Brokers for a Data Mesh architecture. <xref section="4.5" sectionFormat="of"
+			target="I-D.ietf-nmop-yang-message-broker-integration"/> describes
+			how the notification messages at a YANG-Push Receiver are being
+			transformed to the Message Broker while <xref section="3"
+			sectionFormat="of"
+			target="I-D.ietf-nmop-message-broker-telemetry-message"/>
+			specifies to a message schema to contextualize telemetry data.
+			However, neither of these documents address how these messages
+			should be indexed in a message broker, nor define how topics,
+			partitioning and sharding must be used.</t>
 
-      <t>Due to the missing dimensional indexing for Message Broker
-      stored YANG data, all YANG data is stored in one single Topic,
-      distributed round robin across multiple Partitions and each YANG
-      schema id is a subject within that topic. Therefore, the entire
-      Topic from all Partitions needs to be consumed first before data
-      selection can be applied. This leads to avoidable data processing
-      overhead which in turn impairs scalability and real-time
-      capabilities, required for certain Network Analytics
-      use cases.</t>
+      <t>Due to this missing dimensional indexing for Message Broker
+      stored YANG data, all YANG data is stored in one single Topic.
+      This leads to a round robin distribution across multiple
+			Partitions where each YANG schema id is defined as a subject
+			within that topic. Therefore, the entire Topic from all Partitions
+			needs to be consumed first before data selection can be applied.
+			This leads to avoidable data processing overhead which in turn
+			impairs scalability and real-time capabilities, required for
+			certain Network Analytics use cases.</t>
 
-      <t>YANG telmetry data can be used for several network analytic use
+      <t>YANG telemetry data can be used for several network analytic use
 			cases. Importantly, depending on the use case, only a subset of
 			the subscribed YANG data might be necessary (in time or space).
-			For example, for specific use cases, it's more important to know 
+			For example, for specific use cases, it is more important to know 
       the current network state, as opposed to have the full series of
 			the state changes over time. In other use cases, instead of
 			consuming data for all network nodes, only a specific network node
@@ -192,9 +192,10 @@
       <t>This document defines how YANG messages <xref
       target="I-D.ietf-nmop-message-broker-telemetry-message"/> should
 			be indexed and organized in Message Broker topics by leveraging
-			the network node hostname, YANG datastore name and YANG Item
-			Identifier for indexing; and YANG-Push subscription type and YANG
-			schema name for a Message Broker topic naming scheme.</t>
+			the network node hostname, the YANG datastore name and a YANG Item
+			Identifier for indexing. Then, a YANG-Push subscription type and
+			YANG schema name for a Message Broker topic naming scheme is
+			defined to better organize YANG data.</t>
 
       <t>Network node hostname, YANG datastore name and subtree and
       xpath filters are part of "ietf-yang-push-telemetry-message" 
@@ -266,9 +267,9 @@
 					stored on one message broker node.</li>
 
           <li>Shard: The same as Partition but distributed among
-					message broker nodes. In this document Partitions is being
-					used primarily but concept equaliy applies also to Shards.
-					</li>
+					message broker nodes. In this document, the term Partition
+					is being used primarily but concept equally applies also to
+					Shards. </li>
           
           <li>Message: A piece of structured data sent between data
           processing components to facilitate communication in a
@@ -366,16 +367,18 @@
     <section anchor="Solution_Design">
       <name>Solution Design</name>
 
-      <t>In order to identify which YANG node identifier of a network
-      node YANG datastore is produced in which Message Broker Topic and
-      Partition for which Subject, <xref
+      <t>To identify which network node produced which YANG data into
+			which Message Broker Topic, Partition and Subject, <xref
       target="YANG_Message_Broker_Producer_Key_Solution">YANG Message
-			Keys and Indexes</xref> are being introduced.</t>
+			Keys and Indexes</xref> are being introduced. These keys enable a
+			deterministic distribution of YANG messages accross Topics and
+			Partitions enabling applications to consume only the needed data
+			from specific topics and partitions.</t>
 
       <t>In order to facilitate Message Broker Topic Compaction, a
       <xref  target="YANG-Push_Message_Broker_Topic-Naming_Solution">
       YANG-Push subscription type based topic naming scheme</xref> is
-      proposed. This segregates statistical (Value), State and State
+      defined. This segregates statistical (Value), State and State
       change YANG metrics and facilitates a YANG Message Broker Consumer
       to use the Topic wild card consumption method to select based on
       YANG-Push subscription type.</t>
@@ -398,7 +401,10 @@
         <t>For YANG, the network node hostname, from which YANG
         datastore the YANG metrics are published from and the YANG
         index is used to generate the Message Key.</t>
-  
+				
+        <t>The following sections describe how Message Keys are used in
+				both message producers and message consumers.</t>
+				
         <section anchor="YANG_Message_Broker_Producer_Key_Solution">
           <name>YANG Message Broker Producer</name>
   
@@ -496,11 +502,11 @@ title="YANG-Push ietf-hardware Subtree Filter Example">
       <section anchor="YANG-Push_Message_Broker_Topic-Naming_Solution">
         <name>YANG-Push Message Broker Topic Naming</name>
   
-        <t>YANG can be subscribed periodically, on-change or on-change
-        with sync-on-start. Periodical subscriptions are used for
-        obtaining statistical metrics. On-Change subscriptions are used
-        for obtaining State Changes and on-change with sync-on-start for
-        obtaining States.</t>
+        <t>YANG data can be subscribed periodically, 'on-change' or
+				'on-change' with 'sync-on-start'. Periodical subscriptions are
+				used for obtaining statistical metrics. On-Change subscriptions
+				are used for obtaining State Changes and on-change with
+				sync-on-start is used for obtaining States.</t>
   
         <t>Message Brokers topics are addressed with a unique name.
         Usually topics are named hierarchically similar to the DNS
@@ -566,7 +572,7 @@ project.environment.states.yang.*
     <section anchor="Message_Broker_Implementations">
       <name>Message Broker Implementations</name>
 
-      <t>Topic, Partitioning and Message Keying are generic concepts of
+      <t>Topic, Partitioning and Message Keys are generic concepts of
       Message Brokers. There are two known Message Broker
 			implementations supporting all features described in this
 			document.</t>
@@ -574,7 +580,7 @@ project.environment.states.yang.*
       <section anchor="MB_Implementations_Kafka">
         <name>Apache Kafka</name>
 
-        <t>Apache Kafka supports Message Keying, Partitioning and Log
+        <t>Apache Kafka supports Message Keys, Partitioning and Log
         Compaction.</t>
 				
 				<t>With "min.cleanable.dirty.ratio" and "min.compaction.lag.ms"
@@ -596,7 +602,7 @@ project.environment.states.yang.*
       <section anchor="MB_Implementations_Pulsar">
         <name>Apache Pulsar</name>
 
-        <t>Apache Pulsar supports Message Keying, Partitioning and Topic
+        <t>Apache Pulsar supports Message Keys, Partitioning and Topic
         Compaction.</t>
 				
 				<t>With "brokerServiceCompactionThreshold" when Topic Compaction
@@ -934,7 +940,7 @@ CREATE TABLE queue (
             <code>CA 94063</code>
             <country>US</country>
           </postal>        
-          <email>hellmar.becker@ClickHouse.com</email>
+          <email>hellmar.becker@clickhouse.com</email>
         </address>
       </author>
     </section>
