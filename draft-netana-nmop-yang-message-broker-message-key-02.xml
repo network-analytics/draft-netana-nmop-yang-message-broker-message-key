@@ -386,13 +386,14 @@
       <section anchor="YANG_Message_Keys_Indexes_Solution">
         <name>YANG Message Keys and Indexes</name>
   
-        <t>A Message Broker MUST use a Message Key to index the message
+        <t>A Message Broker uses a Message Key to index the message
 				and a value to carry the Message content. If no Message Key is
         defined then the Messages are distributed in a round robin
         fashion across partitions. If a Message Key is defined, then the
         value of the Message Key is being used as input for the Message
         Broker Producer hash function to distribute across Partitions.
-        Therefore, Message Keys facilitate Message ordering.</t>
+        Therefore, Message Keys facilitate Message deterministic
+				distribution.</t>
   
         <t>The Message Key not only used for Message indexing at the
         Message Producer but also at the Message Broker for topic
