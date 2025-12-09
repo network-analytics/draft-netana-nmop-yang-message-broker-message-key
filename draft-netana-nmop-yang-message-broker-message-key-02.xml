@@ -586,9 +586,13 @@ project.environment.states.yang.*
         <t>Apache Kafka supports Message Keys, Partitioning and Log
         Compaction.</t>
 				
-				<t>With "min.cleanable.dirty.ratio" and "min.compaction.lag.ms"
-				how often and when Log Compaction should occur is being
-				configured.</t>
+				<t>With "compact" in "cleanup.policy" the log compaction can be
+				turned on per topic. With "min.cleanable.dirty.ratio" and
+				"delete.retention.ms" how often and when Log Compaction should
+				occur per topic. Where with "min.cleanable.dirty.ratio" and
+				with "max.compaction.lag.ms" the topic specific compaction
+				configurations can be limited how often the topics are
+				compacted.</t>
 				
 				<t>The topic names are constrained to 249 character
         length and the following characters: "a-z", "A-Z", "0-9", ".",
