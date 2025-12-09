@@ -87,13 +87,13 @@ Table of Contents
      5.1.  ClickHouse  . . . . . . . . . . . . . . . . . . . . . . .  11
        5.1.1.  Data Model  . . . . . . . . . . . . . . . . . . . . .  11
        5.1.2.  Message Broker Integration  . . . . . . . . . . . . .  12
-   6.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  12
+   6.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  13
    7.  Security Considerations . . . . . . . . . . . . . . . . . . .  13
    8.  Operational Considerations  . . . . . . . . . . . . . . . . .  13
    9.  References  . . . . . . . . . . . . . . . . . . . . . . . . .  13
      9.1.  Normative References  . . . . . . . . . . . . . . . . . .  13
-     9.2.  Informative References  . . . . . . . . . . . . . . . . .  14
-   Acknowledgements  . . . . . . . . . . . . . . . . . . . . . . . .  15
+     9.2.  Informative References  . . . . . . . . . . . . . . . . .  15
+   Acknowledgements  . . . . . . . . . . . . . . . . . . . . . . . .  16
    Contributors  . . . . . . . . . . . . . . . . . . . . . . . . . .  16
    Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  16
 
@@ -243,7 +243,7 @@ Internet-Draft              YANG Message Keys              December 2025
       schema registry.
 
    *  Topic: A communication channel for publishing and subscribing
-      messages with one or more subjects.
+      messages with one or more subjects and partitions.
 
    *  Topic Compaction: The act of compressing messages in a topic to
       the latest state.  As used with Apache Pulsar.  Apache Kafka uses
@@ -251,7 +251,7 @@ Internet-Draft              YANG Message Keys              December 2025
 
    *  Partition: Messages in a topic are spread over hash buckets where
       a hash bucket refers to a partition being stored on one message
-      broker node.
+      broker node.  Message ordering is guaranteed within a partition.
 
    *  Shard: The same as Partition but distributed among message broker
       nodes.  In this document, the term Partition is being used
@@ -548,12 +548,12 @@ Internet-Draft              YANG Message Keys              December 2025
    The topic names are constrained to 249 character length and the
    following characters: "a-z", "A-Z", "0-9", ".", "_" and "-".  Topics
    can be created on the fly by producing into a new Topic when
-   "auto.create.topics.enable" has been configured prior.
+   "auto.create.topics.enable" has been configured prior.  Topics should
+   be deleted at the end of the lifecycle through the kafka-topics.sh
+   command.
 
-   The Partition count for a given Topic can be increased but not
-   decreased.  Consumer groups are automatically re-joined and
-   partitions are being rebalanced on Message Broker nodes when
-   Partition count changed.
+
+
 
 
 
@@ -561,6 +561,11 @@ Graf, et al.               Expires 6 June 2026                 [Page 10]
 
 Internet-Draft              YANG Message Keys              December 2025
 
+
+   The Partition count for a given Topic can be increased but not
+   decreased.  Consumer groups are automatically re-joined and
+   partitions are being rebalanced on Message Broker nodes when
+   Partition count changed.
 
 4.2.  Apache Pulsar
 
@@ -572,7 +577,9 @@ Internet-Draft              YANG Message Keys              December 2025
 
    The topic names allow all characters except: "/".  Topics can be
    created on the fly by producing into a new Topic when
-   "allowAutoTopicCreation" has been configured prior.
+   "allowAutoTopicCreation" has been configured prior.  Topics should be
+   deleted at the end of the lifecycle through pulsar-admin or pulsarctl
+   tools.
 
    The Partition count for a given Topic can be increased but not
    decreased.  Consumer groups are automatically re-joined and
@@ -603,13 +610,6 @@ Internet-Draft              YANG Message Keys              December 2025
    part is sorted by MessageKey, and within each MessageKey, it is
    ordered by Date.
 
-   Data belonging to different partitions are separated into different
-   parts.  In the background, ClickHouse merges data parts for more
-   efficient storage.  Parts belonging to different partitions are not
-   merged.  The merge mechanism does not guarantee that all rows with
-   the same primary key will be in the same data part.
-
-
 
 
 
@@ -617,6 +617,12 @@ Graf, et al.               Expires 6 June 2026                 [Page 11]
 
 Internet-Draft              YANG Message Keys              December 2025
 
+
+   Data belonging to different partitions are separated into different
+   parts.  In the background, ClickHouse merges data parts for more
+   efficient storage.  Parts belonging to different partitions are not
+   merged.  The merge mechanism does not guarantee that all rows with
+   the same primary key will be in the same data part.
 
    Each data part is logically divided into granules.  A granule is the
    smallest indivisible data set that ClickHouse reads when selecting
@@ -659,12 +665,6 @@ Internet-Draft              YANG Message Keys              December 2025
    *  Create a materialized view that converts data from the engine and
       puts it into a previously created table.
 
-   The message key and partition ID are available as virtual (read only)
-   columns _key and _partition.
-
-6.  IANA Considerations
-
-   This document includes no request to IANA.
 
 
 
@@ -673,6 +673,13 @@ Graf, et al.               Expires 6 June 2026                 [Page 12]
 
 Internet-Draft              YANG Message Keys              December 2025
 
+
+   The message key and partition ID are available as virtual (read only)
+   columns _key and _partition.
+
+6.  IANA Considerations
+
+   This document includes no request to IANA.
 
 7.  Security Considerations
 
@@ -693,6 +700,10 @@ Internet-Draft              YANG Message Keys              December 2025
 
    *  YANG Message Key: Select between "enable" and "disable".
 
+   Subject distribution enables message ordering for a set of YANG
+   Message Keys on each partition.  Where in topic distribution messages
+   are randomly being distributed among partitions.
+
    To accommodate for potential date loss throughout the data processing
    pipeline, periodical update of the current State for State metrics is
    RECOMMENDED.  This can be accommodated with YANG-Push as defined in
@@ -710,6 +721,15 @@ Internet-Draft              YANG Message Keys              December 2025
               DOI 10.17487/RFC2119, March 1997,
               <https://www.rfc-editor.org/info/rfc2119>.
 
+
+
+
+
+Graf, et al.               Expires 6 June 2026                 [Page 13]
+
+Internet-Draft              YANG Message Keys              December 2025
+
+
    [RFC7950]  Bjorklund, M., Ed., "The YANG 1.1 Data Modeling Language",
               RFC 7950, DOI 10.17487/RFC7950, August 2016,
               <https://www.rfc-editor.org/info/rfc7950>.
@@ -722,13 +742,6 @@ Internet-Draft              YANG Message Keys              December 2025
               and R. Wilton, "Network Management Datastore Architecture
               (NMDA)", RFC 8342, DOI 10.17487/RFC8342, March 2018,
               <https://www.rfc-editor.org/info/rfc8342>.
-
-
-
-Graf, et al.               Expires 6 June 2026                 [Page 13]
-
-Internet-Draft              YANG Message Keys              December 2025
-
 
    [RFC8641]  Clemm, A. and E. Voit, "Subscription to YANG Notifications
               for Datastore Updates", RFC 8641, DOI 10.17487/RFC8641,
@@ -764,6 +777,15 @@ Internet-Draft              YANG Message Keys              December 2025
               <https://datatracker.ietf.org/doc/html/draft-ietf-nmop-
               message-broker-telemetry-message-03>.
 
+
+
+
+
+Graf, et al.               Expires 6 June 2026                 [Page 14]
+
+Internet-Draft              YANG Message Keys              December 2025
+
+
    [I-D.ietf-netconf-notif-envelope]
               Feng, A. H., Francois, P., Graf, T., and B. Claise,
               "Extensible YANG Model for YANG-Push Notifications", Work
@@ -778,14 +800,6 @@ Internet-Draft              YANG Message Keys              December 2025
               Wilton, R., Keller, H., Claise, B., Aries, E., Cumming,
               J., and T. Graf, "YANG Datastore Telemetry (YANG Push
               Lite)", Work in Progress, Internet-Draft, draft-wilton-
-
-
-
-Graf, et al.               Expires 6 June 2026                 [Page 14]
-
-Internet-Draft              YANG Message Keys              December 2025
-
-
               netconf-yang-push-lite-02, 20 October 2025,
               <https://datatracker.ietf.org/doc/html/draft-wilton-
               netconf-yang-push-lite-02>.
@@ -820,6 +834,14 @@ Internet-Draft              YANG Message Keys              December 2025
    [Kaf11]    Narkhede, N., "Apache Kafka", Apache Software Foundation,
               January 2011, <https://kafka.apache.org/>.
 
+
+
+
+Graf, et al.               Expires 6 June 2026                 [Page 15]
+
+Internet-Draft              YANG Message Keys              December 2025
+
+
    [Pul16]    Guo, S. and M. Merli, "Apache Pulsar", Apache Software
               Foundation, January 2016, <https://pulsar.apache.org/>.
 
@@ -833,14 +855,6 @@ Acknowledgements
 
    Thanks to Camilo Cardona, Rob Wilton, Holger Keller, Reshad Rahman
    and Nigel Davis for their comments and reviews.
-
-
-
-
-Graf, et al.               Expires 6 June 2026                 [Page 15]
-
-Internet-Draft              YANG Message Keys              December 2025
-
 
    We also like to thank Victor Lopez for the initial idea on the
    network controller use case.  Ashley Woods, Sivakumar Sundaravadivel
@@ -875,6 +889,15 @@ Authors' Addresses
    Email: thomas.graf@swisscom.com
 
 
+
+
+
+
+Graf, et al.               Expires 6 June 2026                 [Page 16]
+
+Internet-Draft              YANG Message Keys              December 2025
+
+
    Ahmed Elhassany
    Swisscom
    Binzring 17
@@ -890,14 +913,6 @@ Authors' Addresses
    Email: alex.huang-feng@insa-lyon.fr
 
 
-
-
-
-Graf, et al.               Expires 6 June 2026                 [Page 16]
-
-Internet-Draft              YANG Message Keys              December 2025
-
-
    Benoît Claise
    Everything OPS
    Liege
@@ -911,21 +926,6 @@ Internet-Draft              YANG Message Keys              December 2025
    3771 Barneveld
    Netherlands
    Email: paolo@ntt.net
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

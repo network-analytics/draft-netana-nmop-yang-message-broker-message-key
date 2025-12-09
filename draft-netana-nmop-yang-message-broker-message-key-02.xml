@@ -255,7 +255,8 @@
 					within a schema registry.</li>
 
           <li>Topic: A communication channel for publishing and
-          subscribing messages with one or more subjects.</li>
+          subscribing messages with one or more subjects and
+					partitions.</li>
 
           <li>Topic Compaction: The act of compressing messages in a
           topic to the latest state. As used with Apache Pulsar. Apache
@@ -264,7 +265,8 @@
 
           <li>Partition: Messages in a topic are spread over hash
           buckets where a hash bucket refers to a partition being
-					stored on one message broker node.</li>
+					stored on one message broker node. Message ordering is
+					guaranteed within a partition.</li>
 
           <li>Shard: The same as Partition but distributed among
 					message broker nodes. In this document, the term Partition
@@ -592,7 +594,8 @@ project.environment.states.yang.*
         length and the following characters: "a-z", "A-Z", "0-9", ".",
         "_" and "-". Topics can be created on the fly by producing into
 				a new Topic when "auto.create.topics.enable" has been configured
-        prior.</t>
+        prior. Topics should be deleted at the end of the lifecycle
+				through the kafka-topics.sh command.</t>
 
         <t>The Partition count for a given Topic can be increased but
 				not decreased. Consumer groups are automatically re-joined and
@@ -611,7 +614,9 @@ project.environment.states.yang.*
 				
 				<t>The topic names allow all characters except: "/".
         Topics can be created on the fly by producing into a new Topic
-				when "allowAutoTopicCreation" has been configured prior.</t>
+				when "allowAutoTopicCreation" has been configured prior. Topics
+				should be deleted at the end of the lifecycle through
+				pulsar-admin or pulsarctl tools.</t>
 
         <t>The Partition count for a given Topic can be increased but
 				not decreased. Consumer groups are automatically re-joined and
@@ -735,6 +740,10 @@ CREATE TABLE queue (
           <li>YANG Message Key: Select between "enable" and "disable".
           </li>
         </ul>
+
+      <t>Subject distribution enables message ordering for a set of
+			YANG Message Keys on each partition. Where in topic distribution
+			messages are randomly being distributed among partitions.</t>
         
       <t>To accommodate for potential date loss throughout the data
       processing pipeline, periodical update of the current State for
