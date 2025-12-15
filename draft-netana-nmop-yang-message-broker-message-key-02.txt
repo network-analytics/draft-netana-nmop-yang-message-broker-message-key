@@ -5,13 +5,13 @@
 NMOP                                                            TG. Graf
 Internet-Draft                                             AE. Elhassany
 Intended status: Standards Track                                Swisscom
-Expires: 6 June 2026                                     AHF. Huang Feng
+Expires: 18 June 2026                                    AHF. Huang Feng
                                                                INSA-Lyon
                                                               BC. Claise
                                                           Everything OPS
                                                              PL. Lucente
                                                                      NTT
-                                                         3 December 2025
+                                                        15 December 2025
 
 
             YANG Message Keys for Message Broker Integration
@@ -43,7 +43,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 6 June 2026.
+   This Internet-Draft will expire on 18 June 2026.
 
 Copyright Notice
 
@@ -53,7 +53,7 @@ Copyright Notice
 
 
 
-Graf, et al.               Expires 6 June 2026                  [Page 1]
+Graf, et al.              Expires 18 June 2026                  [Page 1]
 
 Internet-Draft              YANG Message Keys              December 2025
 
@@ -109,7 +109,7 @@ Table of Contents
 
 
 
-Graf, et al.               Expires 6 June 2026                  [Page 2]
+Graf, et al.              Expires 18 June 2026                  [Page 2]
 
 Internet-Draft              YANG Message Keys              December 2025
 
@@ -165,7 +165,7 @@ Internet-Draft              YANG Message Keys              December 2025
 
 
 
-Graf, et al.               Expires 6 June 2026                  [Page 3]
+Graf, et al.              Expires 18 June 2026                  [Page 3]
 
 Internet-Draft              YANG Message Keys              December 2025
 
@@ -221,7 +221,7 @@ Internet-Draft              YANG Message Keys              December 2025
 
 
 
-Graf, et al.               Expires 6 June 2026                  [Page 4]
+Graf, et al.              Expires 18 June 2026                  [Page 4]
 
 Internet-Draft              YANG Message Keys              December 2025
 
@@ -277,7 +277,7 @@ Internet-Draft              YANG Message Keys              December 2025
 
 
 
-Graf, et al.               Expires 6 June 2026                  [Page 5]
+Graf, et al.              Expires 18 June 2026                  [Page 5]
 
 Internet-Draft              YANG Message Keys              December 2025
 
@@ -333,7 +333,7 @@ Internet-Draft              YANG Message Keys              December 2025
 
 
 
-Graf, et al.               Expires 6 June 2026                  [Page 6]
+Graf, et al.              Expires 18 June 2026                  [Page 6]
 
 Internet-Draft              YANG Message Keys              December 2025
 
@@ -389,7 +389,7 @@ Internet-Draft              YANG Message Keys              December 2025
 
 
 
-Graf, et al.               Expires 6 June 2026                  [Page 7]
+Graf, et al.              Expires 18 June 2026                  [Page 7]
 
 Internet-Draft              YANG Message Keys              December 2025
 
@@ -445,7 +445,7 @@ Internet-Draft              YANG Message Keys              December 2025
 
 
 
-Graf, et al.               Expires 6 June 2026                  [Page 8]
+Graf, et al.              Expires 18 June 2026                  [Page 8]
 
 Internet-Draft              YANG Message Keys              December 2025
 
@@ -463,7 +463,17 @@ Internet-Draft              YANG Message Keys              December 2025
 
 3.1.3.  Time Series Database
 
-   Text
+   Depending if the YANG Data Consumer described in Section 4.8 of
+   [I-D.ietf-nmop-message-broker-telemetry-message] knows the Message
+   Key from the YANG Message Broker Consumer Section 4.7 of
+   [I-D.ietf-nmop-message-broker-telemetry-message] or the YANG schema
+   from the YANG Schema Registry Section 4.4 of
+   [I-D.ietf-nmop-message-broker-telemetry-message] the network
+   telemetry messages can be indexed in a Time series database.  The
+   Message Key could be used as primary key where they keys from the
+   YANG data taxonomy can be reflected in indexing with primary and
+   secondary keying in a Time Series database.  Implementation examples
+   can be found under Section 5.
 
 3.2.  YANG-Push Message Broker Topic Naming
 
@@ -488,23 +498,17 @@ Internet-Draft              YANG Message Keys              December 2025
    following.  In the example the project name and environment (prod,
    dev, test etc.) is prefixed.
 
-   project.environment.statistics.yang.ietf-interfaces.interfaces_interface
-
-           Figure 3: YANG-Push ietf-interface Topic Name Example
 
 
 
-
-
-
-
-
-
-
-Graf, et al.               Expires 6 June 2026                  [Page 9]
+Graf, et al.              Expires 18 June 2026                  [Page 9]
 
 Internet-Draft              YANG Message Keys              December 2025
 
+
+   project.environment.statistics.yang.ietf-interfaces.interfaces_interface
+
+           Figure 3: YANG-Push ietf-interface Topic Name Example
 
 3.2.1.  YANG Message Broker Producer
 
@@ -553,11 +557,7 @@ Internet-Draft              YANG Message Keys              December 2025
 
 
 
-
-
-
-
-Graf, et al.               Expires 6 June 2026                 [Page 10]
+Graf, et al.              Expires 18 June 2026                 [Page 10]
 
 Internet-Draft              YANG Message Keys              December 2025
 
@@ -613,7 +613,7 @@ Internet-Draft              YANG Message Keys              December 2025
 
 
 
-Graf, et al.               Expires 6 June 2026                 [Page 11]
+Graf, et al.              Expires 18 June 2026                 [Page 11]
 
 Internet-Draft              YANG Message Keys              December 2025
 
@@ -669,7 +669,7 @@ Internet-Draft              YANG Message Keys              December 2025
 
 
 
-Graf, et al.               Expires 6 June 2026                 [Page 12]
+Graf, et al.              Expires 18 June 2026                 [Page 12]
 
 Internet-Draft              YANG Message Keys              December 2025
 
@@ -725,7 +725,7 @@ Internet-Draft              YANG Message Keys              December 2025
 
 
 
-Graf, et al.               Expires 6 June 2026                 [Page 13]
+Graf, et al.              Expires 18 June 2026                 [Page 13]
 
 Internet-Draft              YANG Message Keys              December 2025
 
@@ -781,7 +781,7 @@ Internet-Draft              YANG Message Keys              December 2025
 
 
 
-Graf, et al.               Expires 6 June 2026                 [Page 14]
+Graf, et al.              Expires 18 June 2026                 [Page 14]
 
 Internet-Draft              YANG Message Keys              December 2025
 
@@ -837,7 +837,7 @@ Internet-Draft              YANG Message Keys              December 2025
 
 
 
-Graf, et al.               Expires 6 June 2026                 [Page 15]
+Graf, et al.              Expires 18 June 2026                 [Page 15]
 
 Internet-Draft              YANG Message Keys              December 2025
 
@@ -893,7 +893,7 @@ Authors' Addresses
 
 
 
-Graf, et al.               Expires 6 June 2026                 [Page 16]
+Graf, et al.              Expires 18 June 2026                 [Page 16]
 
 Internet-Draft              YANG Message Keys              December 2025
 
@@ -949,4 +949,4 @@ Internet-Draft              YANG Message Keys              December 2025
 
 
 
-Graf, et al.               Expires 6 June 2026                 [Page 17]
+Graf, et al.              Expires 18 June 2026                 [Page 17]

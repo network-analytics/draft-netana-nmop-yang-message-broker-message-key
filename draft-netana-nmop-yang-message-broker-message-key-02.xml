@@ -92,7 +92,7 @@
       </address>
     </author>
    
-    <date day="03" month="December" year="2025"/>
+    <date day="15" month="December" year="2025"/>
 
     <area>General</area>
     <workgroup>NMOP</workgroup>
@@ -497,7 +497,21 @@ title="YANG-Push ietf-hardware Subtree Filter Example">
 
         <section anchor="Time_Series_Database">
           <name>Time Series Database</name>
-          <t>Text</t>
+          <t>Depending if the YANG Data Consumer described in <xref
+					section="4.8" sectionFormat="of"
+          target="I-D.ietf-nmop-message-broker-telemetry-message"/>
+					knows the Message Key from the YANG Message Broker Consumer
+					<xref section="4.7" sectionFormat="of"
+          target="I-D.ietf-nmop-message-broker-telemetry-message"/>
+					or the YANG schema from the YANG Schema Registry <xref
+					section="4.4" sectionFormat="of"
+          target="I-D.ietf-nmop-message-broker-telemetry-message"/>
+					the network telemetry messages can be indexed in a Time series
+					database. The Message Key could be used as primary key where
+					they keys from the YANG data taxonomy can be reflected in
+					indexing with primary and secondary keying in a Time Series
+					database. Implementation examples can be found under <xref
+					target="TSDB_Implementations"/>.</t>
         </section>
   
       </section>
