@@ -92,7 +92,7 @@
       </address>
     </author>
    
-    <date day="15" month="December" year="2025"/>
+    <date day="22" month="December" year="2025"/>
 
     <area>General</area>
     <workgroup>NMOP</workgroup>
@@ -102,8 +102,8 @@
     <keyword>Network Analytics</keyword>
 
     <abstract>
-      <t>This document specifies a mechanism to define a unique message
-      key for a YANG to message broker integration and a topic
+      <t>This document specifies a mechanism to define a unique Message
+      key for a YANG to Message Broker integration and a topic
       addressing scheme based on YANG-Push subscription type and a YANG
       index defined in this document. This enables YANG data consumption
 			of a subset of subscribed YANG data, either per specific YANG
@@ -136,11 +136,11 @@
       target="Deh22">Data Mesh</xref> according to <xref
       target="Bod24"/> where a Message Broker, such as <xref
       target="Kaf11">Apache Kafka</xref> or <xref target="Pul16">Apache
-      Pulsar</xref>, facilitates the exchange of messages among data
+      Pulsar</xref>, facilitates the exchange of Messages among data
       processing components in topics and subjects. Typically, data is
       being stored in Message Broker topics for several hours or days
       to facilitate resilience in the data processing chain and
-      addressed in subjects depending on schema, enabling a data
+      addressed in Subjects depending on Schema, enabling a data
       consumer to address and re-consume previously consumed data again
       if previously lost.</t>
 
@@ -164,15 +164,15 @@
 			transformed to the Message Broker while <xref section="3"
 			sectionFormat="of"
 			target="I-D.ietf-nmop-message-broker-telemetry-message"/>
-			specifies to a message schema to contextualize telemetry data.
+			specifies to a Message Schema to contextualize telemetry data.
 			However, neither of these documents address how these messages
-			should be indexed in a message broker, nor define how topics,
+			should be indexed in a Message Broker, nor define how topics,
 			partitioning and sharding must be used.</t>
 
       <t>Due to this missing dimensional indexing for Message Broker
       stored YANG data, all YANG data is stored in one single Topic.
       This leads to a round robin distribution across multiple
-			Partitions where each YANG schema id is defined as a subject
+			Partitions where each YANG Schema id is defined as a subject
 			within that topic. Therefore, the entire Topic from all Partitions
 			needs to be consumed first before data selection can be applied.
 			This leads to avoidable data processing overhead which in turn
@@ -189,12 +189,12 @@
 			or network node component requires the YANG monitoring and hence
 			subscription.</t>
        
-      <t>This document defines how YANG messages <xref
+      <t>This document defines how YANG Messages <xref
       target="I-D.ietf-nmop-message-broker-telemetry-message"/> should
 			be indexed and organized in Message Broker topics by leveraging
 			the network node hostname, the YANG datastore name and a YANG Item
 			Identifier for indexing. Then, a YANG-Push subscription type and
-			YANG schema name for a Message Broker topic naming scheme is
+			YANG Schema name for a Message Broker topic naming scheme is
 			defined to better organize YANG data.</t>
 
       <t>Network node hostname, YANG datastore name and subtree and
@@ -203,7 +203,7 @@
       sectionFormat="of"
       target="I-D.ietf-nmop-message-broker-telemetry-message"/>. YANG
       item identifier are derived from subtree and xpath filters
-      respectively from their YANG schema tree.</t>
+      respectively from their YANG Schema tree.</t>
     </section>
 
     <section anchor="Conventions_and_Definitions">
@@ -302,6 +302,9 @@
 
           <li>Schema ID: A unique identifier of a schema associated to a
           Message Broker subject.</li>
+
+          <li>Schema Registry: A system where schemas are registered,
+					compared and retrieved.</li>
         </ul>
 
         <t>The following terms are used as defined in <xref
@@ -388,7 +391,7 @@
       <section anchor="YANG_Message_Keys_Indexes_Solution">
         <name>YANG Message Keys and Indexes</name>
   
-        <t>A Message Broker uses a Message Key to index the message
+        <t>A Message Broker uses a Message Key to index the Message
 				and a value to carry the Message content. If no Message Key is
         defined then the Messages are distributed in a round robin
         fashion across partitions. If a Message Key is defined, then the
@@ -406,15 +409,15 @@
         index is used to generate the Message Key.</t>
 				
         <t>The following sections describe how Message Keys are used in
-				both message producers and message consumers.</t>
+				both Message producers and Message consumers.</t>
 				
         <section anchor="YANG_Message_Broker_Producer_Key_Solution">
           <name>YANG Message Broker Producer</name>
   
           <t>YANG data nodes are uniquely identifiable within the YANG
-					schema tree. <xref section="6.5" sectionFormat="of"
+					Schema tree. <xref section="6.5" sectionFormat="of"
 					target="RFC7950"/> defines with "absolute-schema-nodeid" how
-					absolute YANG schema node identifiers are being crafted
+					absolute YANG Schema node identifiers are being crafted
 					locally unique to the YANG module.</t>
   
           <t><xref section="3.3" sectionFormat="of" target="RFC9254"/>
@@ -476,7 +479,7 @@ title="YANG-Push ietf-hardware Subtree Filter Example">
           sectionFormat="of"
           target="I-D.ietf-nmop-message-broker-telemetry-message"/>
           where the YANG Index is derived from subtree and xpath
-          filters, respectively from their YANG schema tree.</t>
+          filters, respectively from their YANG Schema tree.</t>
         </section>
   
         <section anchor="YANG_Message_Broker_Consumer_Key_Solution">
@@ -503,7 +506,7 @@ title="YANG-Push ietf-hardware Subtree Filter Example">
 					knows the Message Key from the YANG Message Broker Consumer
 					<xref section="4.7" sectionFormat="of"
           target="I-D.ietf-nmop-message-broker-telemetry-message"/>
-					or the YANG schema from the YANG Schema Registry <xref
+					or the YANG Schema from the YANG Schema Registry <xref
 					section="4.4" sectionFormat="of"
           target="I-D.ietf-nmop-message-broker-telemetry-message"/>
 					the network telemetry messages can be indexed in a Time series
@@ -558,7 +561,7 @@ project.environment.statistics.yang.ietf-interfaces.interfaces_interface
           used to derive wherever subscribed YANG data is "statistics",
           "states" or "state-changes". The YANG Index MUST be derived
 					from subtree and xpath filter data of subscription state
-          notifications, respectively from their YANG schema tree.</t>
+          notifications, respectively from their YANG Schema tree.</t>
         </section>
   
         <section anchor="YANG_Message_Broker_Consumer_Topic_Solution">
@@ -599,21 +602,52 @@ project.environment.states.yang.*
 
         <t>Apache Kafka supports Message Keys, Partitioning and Log
         Compaction.</t>
+
+        <t>With the following example from the Apache Kafka admin client
+				API <eref target="https://kafka.apache.org/41/javadoc/org/apache/kafka/clients/admin/Admin.html"/>
+				a new compacted Topic can be created.</t>
+
+        <artwork><![CDATA[
+        Properties props = new Properties();
+        props.put(AdminClientConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
+        
+        try (Admin admin = Admin.create(props)) {
+          String topicName = "my-topic";
+          int partitions = 12;
+          short replicationFactor = 3;
+          // Create a compacted topic
+          CreateTopicsResult result = admin.createTopics(Collections.singleton(
+            new NewTopic(topicName, partitions, replicationFactor)
+              .configs(Collections.singletonMap(TopicConfig.CLEANUP_POLICY_CONFIG, TopicConfig.CLEANUP_POLICY_COMPACT))));
+        
+          // Call values() to get the result for a specific topic
+          KafkaFuture<Void> future = result.values().get(topicName);
+        
+          // Call get() to block until the topic creation is complete or has failed
+          // if creation failed the ExecutionException wraps the underlying cause.
+          future.get();
+        }
+        ]]></artwork>
+
+        <t>The most important configuration items from 
+				<eref target="https://kafka.apache.org/41/configuration/topic-configs/"/>
+				are "topicName" defines the Topic name, "partitions" the amount
+        of partitions, "replicationFactor" how many times the partition
+        is being replicated.</t>
 				
 				<t>With "compact" in "cleanup.policy" the log compaction can be
 				turned on per topic. With "min.cleanable.dirty.ratio" and
 				"delete.retention.ms" how often and when Log Compaction should
-				occur per topic. Where with "min.cleanable.dirty.ratio" and
-				with "max.compaction.lag.ms" the topic specific compaction
-				configurations can be limited how often the topics are
-				compacted.</t>
+				occur per topic. Where with "retention.bytes" and with
+				"retention.ms" the topic specific compaction configurations can
+				be limited how often the topics are compacted.</t>
 				
 				<t>The topic names are constrained to 249 character
         length and the following characters: "a-z", "A-Z", "0-9", ".",
         "_" and "-". Topics can be created on the fly by producing into
 				a new Topic when "auto.create.topics.enable" has been configured
         prior. Topics should be deleted at the end of the lifecycle
-				through the kafka-topics.sh command.</t>
+				through the "kafka-topics.sh" command.</t>
 
         <t>The Partition count for a given Topic can be increased but
 				not decreased. Consumer groups are automatically re-joined and
@@ -666,9 +700,9 @@ project.environment.states.yang.*
 					
 					<t>When data is inserted in a table, separate data parts are
 					created  and each of them is lexicographically sorted by
-					primary key. For example, if the primary key is (MessageKey,
-					Date), the data in the part is sorted by MessageKey, and
-					within each MessageKey, it is ordered by Date.</t>
+					primary key. For example, if the primary key is ("MessageKey",
+					"Date"), the data in the part is sorted by "MessageKey", and
+					within each "MessageKey", it is ordered by "Date".</t>
 
           <t>Data belonging to different partitions are separated into
 					different parts. In the background, ClickHouse merges data
@@ -678,7 +712,7 @@ project.environment.states.yang.*
 					the same data part.</t>
 
           <t>Each data part is logically divided into granules. A granule
-					is  the smallest indivisible data set that ClickHouse reads
+					is the smallest indivisible data set that ClickHouse reads
 					when selecting data. ClickHouse does not split rows or values,
 					so each granule always contains an integer number of rows. The
 					first row of a granule is marked with the value of the primary
@@ -698,33 +732,92 @@ project.environment.states.yang.*
           <t>ClickHouse integrates with Message Brokers through
 					Integration Table Engines.</t>
 
-          <t>Here is a Data Definition Language example:</t>
-
-<artwork><![CDATA[
-CREATE TABLE queue (
-   timestamp UInt64,
-   level String,
-   message String
-) ENGINE = Kafka('localhost:9092', 'topic', 'group1', 'JSONEachRow');
-]]></artwork>
-					 
           <t>Reading (selecting) data through Kafka Table Engine follows
-					Kafka semantics of advancing the offset, so subsequent reads
-					will start at the offset the previous read left off.</t>
-       
+					Apache Kafka semantics of advancing the offset, so subsequent
+					reads will start at the offset the previous read left off.</t>
+
           <t>It is the responsibility of the data model designer to
 					transfer data to a regular table:</t>
 
           <ul>
             <li>Use the engine to create a Kafka consumer and consider
 						it a data stream.</li>
+          </ul>
+
+          <t>Example:</t>
+
+          <artwork><![CDATA[
+          CREATE TABLE queue (
+              timestamp UInt64,
+              level String,
+              message String
+          ) 
+          ENGINE = Kafka 
+          SETTINGS kafka_broker_list = 'localhost:9092',
+              kafka_topic_list = 'topic',
+              kafka_group_name = 'group1',
+              kafka_format = 'JSONEachRow',
+              kafka_num_consumers = 4;
+          ]]></artwork>
+
+          <ul>
             <li>Create a table with the desired structure.</li>
+          </ul>
+
+          <t>Example:</t>
+
+          <artwork><![CDATA[
+          CREATE TABLE messages (
+              key String,
+              timestamp UInt64,
+              level String,
+              message String
+          ) 
+          ENGINE = MergeTree
+          ORDER BY (key, timestamp);
+          ]]></artwork>
+
+          <ul>
             <li>Create a materialized view that converts data from the
 						engine and puts it into a previously created table.</li>
-          </ul>
+          </ul>					 
+
+          <artwork><![CDATA[
+          CREATE MATERIALIZED VIEW mv_messages TO messages AS
+          SELECT
+              _key AS key,
+              timestamp,
+              level,
+              message
+          FROM queue;
+          ]]></artwork>
 					
-          <t>The message key and partition ID are available as virtual
-					(read only) columns _key and _partition.</t>		
+          <t>The Message Key and partition ID are available as virtual
+					(read only) columns _key and _partition.</t>	
+        </section>
+				
+				<section anchor="ClickHouse_Message_Formats">
+          <name>Message Formats</name>
+
+          <t>ClickHouse supports numerous Message formats natively. The
+					example above uses the JSON Lines format but other (binary)
+					formats, such as Apache Avro or Protobuf, are supported as
+					well.</t>	
+
+        </section>
+
+				<section anchor="ClickHouse_Schema_Registry">
+          <name>Schema Registry</name>
+
+          <t>ClickHouse has built in Schema Registry support. For Apache
+					Avro, the Schema Registry and authentication are encoded in
+					additional parameters to the Apache Kafka consumer.</t>
+
+          <t>For formats such as Confluent JSON_SR, use the
+					'kafka_schema_registry_skip_bytes' parameter to skip reading
+					the Schema Registry preamble. The Schema can then be encoded
+					explicitly.</t>
+					
         </section>
       </section>
     </section>
@@ -943,9 +1036,10 @@ CREATE TABLE queue (
       Sundaravadivel and Rafael Julio for the idea of grouping topics by
       YANG-Push subscription type and insisting that Topic Compaction
       is a key enabler for inventory metrics and YANG data consumer
-      integration and should be supported day 1. And Nigel Davis for
+      integration and should be supported day 1. Nigel Davis for
       confirming that Topic Compaction simplifies indeed data processing
-      system architecture.</t>
+      system architecture and Loïc Monney for the operational
+			configuration and monitoring details on Apache Kafka.</t>
     </section>
     
     <section anchor="Contributors" numbered="false">
