@@ -12,7 +12,7 @@
 <rfc
   xmlns:xi="http://www.w3.org/2001/XInclude"
   category="std"
-  docName="draft-netana-nmop-yang-message-broker-message-key-01"
+  docName="draft-netana-nmop-yang-message-broker-message-key-02"
   ipr="trust200902"
   obsoletes=""
   updates=""
@@ -24,7 +24,7 @@
     <title abbrev="YANG Message Keys"> YANG Message Keys for
      Message Broker Integration</title>
 
-    <seriesInfo name="Internet-Draft" value="draft-netana-nmop-yang-message-broker-message-key-01"/>
+    <seriesInfo name="Internet-Draft" value="draft-netana-nmop-yang-message-broker-message-key-02"/>
    
     <author fullname="Thomas Graf" initials="TG" surname="Graf">
 
@@ -92,7 +92,7 @@
       </address>
     </author>
    
-    <date day="22" month="December" year="2025"/>
+    <date day="18" month="January" year="2026"/>
 
     <area>General</area>
     <workgroup>NMOP</workgroup>
