@@ -92,7 +92,7 @@
       </address>
     </author>
 
-    <date day="20" month="January" year="2026"/>
+    <date day="24" month="January" year="2026"/>
 
     <area>General</area>
     <workgroup>NMOP</workgroup>
@@ -886,10 +886,6 @@ try (Admin admin = Admin.create(props)) {
 
         <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.9254.xml"/>
 
-        <xi:include href="https://bib.ietf.org/public/rfc/bibxml3/reference.I-D.ietf-nmop-terminology.xml"/>
-  
-        <xi:include href="https://bib.ietf.org/public/rfc/bibxml3/reference.I-D.ietf-nmop-yang-message-broker-integration.xml"/>
-
         <xi:include href="https://bib.ietf.org/public/rfc/bibxml3/reference.I-D.ietf-nmop-message-broker-telemetry-message.xml"/>
 
         <xi:include href="https://bib.ietf.org/public/rfc/bibxml3/reference.I-D.ietf-netconf-notif-envelope.xml"/>
@@ -897,6 +893,10 @@ try (Admin admin = Admin.create(props)) {
  
       <references>
         <name>Informative References</name>
+        <xi:include href="https://bib.ietf.org/public/rfc/bibxml3/reference.I-D.ietf-nmop-terminology.xml"/>
+  
+        <xi:include href="https://bib.ietf.org/public/rfc/bibxml3/reference.I-D.ietf-nmop-yang-message-broker-integration.xml"/>
+
         <xi:include href="https://bib.ietf.org/public/rfc/bibxml3/reference.I-D.wilton-netconf-yang-push-lite.xml"/>
 
         <reference anchor="Mar24"
