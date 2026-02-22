@@ -107,7 +107,7 @@
       addressing scheme based on YANG-Push subscription type and YANG
       Schema Node Identifier. This enables YANG data consumption
       of a subset of subscribed YANG data, either per specific YANG
-      node, identifier or telemetry message type, by indexing and
+      data node, identifier or telemetry message type, by indexing and
       organizing in Message Broker topics. It helps top index the
 			information by using data taxonomy and organizes data in
 			partitions and shards of Message Brokers and time series
@@ -161,8 +161,9 @@
       <t><xref target="I-D.ietf-nmop-yang-message-broker-integration">An
       Architecture for YANG-Push to Message Broker Integration</xref>
       specifies an architecture for integrating YANG-Push with
-      Message Brokers for a Data Mesh architecture. <xref section="4.5" sectionFormat="of"
-      target="I-D.ietf-nmop-yang-message-broker-integration"/> describes
+      Message Brokers for a Data Mesh architecture. <xref section="4.5"
+			sectionFormat="of"
+			target="I-D.ietf-nmop-yang-message-broker-integration"/> describes
       how the notification messages at a YANG-Push Receiver are being
       transformed to the Message Broker while <xref section="3"
       sectionFormat="of"
@@ -205,8 +206,8 @@
       structured YANG data defined in <xref section="3"
       sectionFormat="of"
       target="I-D.ietf-nmop-message-broker-telemetry-message"/>. YANG
-      item identifier are derived from subtree and xpath filters
-      respectively from their YANG Schema tree.</t>
+      data nodes are derived based on YANG Schema tree applied subtree
+			and xpath filters and the content of each telemetry message.</t>
     </section>
 
     <section anchor="Conventions_and_Definitions">
@@ -357,6 +358,9 @@
         <ul>
           <li>Schema Node Identifier</li>
 
+          <li>Data Node: Such as container, leaf, leaf-list, list,
+					choice and case elements.</li>
+
           <li>Schema Tree</li>
         </ul>
       </section>
@@ -399,7 +403,7 @@
 
         <t>For YANG, the network node hostname, from which YANG
         datastore the YANG metrics are published from and the YANG
-        index is used to generate the Message Key.</t>
+        data nodes are used to generate the Message Key.</t>
         
         <t>The following sections describe how Message Keys are used in
         both Message producers and Message consumers.</t>
@@ -411,7 +415,8 @@
           Schema tree. <xref section="6.5" sectionFormat="of"
           target="RFC7950"/> defines with "absolute-schema-nodeid" how
           absolute YANG Schema node identifiers are being crafted
-          locally unique to the YANG module.</t>
+          locally unique to the YANG module and how YANG data nodes
+					are associated.</t>
 
           <t><xref section="3.6" sectionFormat="of" target="RFC8641"/>
           defines how YANG data nodes can be subscribed with subtree and
@@ -433,7 +438,9 @@
 					target="yang-push-xpath-filter-example"/>, the
 					"absolute-schema-nodeid" is "interfaces/interface". Because
 					the interface list has a key named name, the resulting keys
-					for the Message Key are "interfaces/interface/name".</t>
+					for the Message Key are "interfaces/interface/name" plus the
+					YANG data node name of the list which is in this case the
+					name of the interface.</t>
 
 <figure anchor="yang-push-xpath-filter-example"
 title="YANG-Push ietf-interface Xpath Filter Example">        
@@ -444,7 +451,9 @@ ietf-interface:interfaces/interface[type='ianaift:ethernetCsmacd']
           <t>For example, if the following subtree filter is being used, 
           the "absolute-schema-nodeid" is
           "hardware/component/state". Therefore, the keys used for the
-					Message Key generation are "hardware/component/state".</t>
+					Message Key generation are "hardware/component/name/state"
+					plus the YANG data node name of the list which is in this case
+					the name of the component.</t>
 
 <figure anchor="yang-push-subtree-filter-example"
 title="YANG-Push ietf-hardware Subtree Filter Example">        
@@ -483,7 +492,6 @@ title="YANG-Push ietf-hardware Subtree Filter Example">
           tables according to topic names and indexed per Message Key.
           If Topic Compaction is enabled, only current state is
           consumed.</t>
-
         </section>
 
         <section anchor="Time_Series_Database">
