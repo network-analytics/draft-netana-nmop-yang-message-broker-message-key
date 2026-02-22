@@ -473,8 +473,8 @@ Internet-Draft              YANG Message Keys              February 2026
 
 3.2.  YANG-Push Message Broker Topic Naming
 
-   YANG data can be subscribed 'periodic', 'on-change' or 'on-change'
-   with 'sync-on-start'.  Periodic subscriptions are used for obtaining
+   YANG data can be subscribed "periodic", on-change" or "on-change"
+   with "sync-on-start".  Periodic subscriptions are used for obtaining
    statistical metrics.  On-Change subscriptions are used for obtaining
    State Changes and on-change with sync-on-start is used for obtaining
    States.
@@ -766,7 +766,7 @@ Internet-Draft              YANG Message Keys              February 2026
    parameters to the Apache Kafka consumer.
 
    For formats such as Confluent JSON_SR, use the
-   'kafka_schema_registry_skip_bytes' parameter to skip reading the
+   "kafka_schema_registry_skip_bytes" parameter to skip reading the
    Schema Registry preamble.  The Schema can then be encoded explicitly.
 
 6.  IANA Considerations
@@ -808,8 +808,8 @@ Internet-Draft              YANG Message Keys              February 2026
    To accommodate for potential date loss throughout the data processing
    pipeline, periodic update of the current State for State metrics is
    RECOMMENDED.  This can be accommodated with YANG-Push as defined in
-   [RFC8641] by complementing 'on-change sync on start' subscriptions
-   with 'periodic' subscriptions.  Alternatively, in YANG-Push Lite
+   [RFC8641] by complementing "on-change sync on start" subscriptions
+   with "periodic" subscriptions.  Alternatively, in YANG-Push Lite
    defined in Section 7.6 of [I-D.wilton-netconf-yang-push-lite] this
    simplified in one subscription.
 

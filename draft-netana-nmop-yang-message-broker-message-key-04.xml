@@ -504,8 +504,8 @@ title="YANG-Push ietf-hardware Subtree Filter Example">
       <section anchor="YANG-Push_Message_Broker_Topic-Naming_Solution">
         <name>YANG-Push Message Broker Topic Naming</name>
   
-        <t>YANG data can be subscribed 'periodic', 'on-change' or
-        'on-change' with 'sync-on-start'. Periodic subscriptions are
+        <t>YANG data can be subscribed "periodic", on-change" or
+        "on-change" with "sync-on-start". Periodic subscriptions are
         used for obtaining statistical metrics. On-Change subscriptions
         are used for obtaining State Changes and on-change with
         sync-on-start is used for obtaining States.</t>
@@ -799,7 +799,7 @@ try (Admin admin = Admin.create(props)) {
           additional parameters to the Apache Kafka consumer.</t>
 
           <t>For formats such as Confluent JSON_SR, use the
-          'kafka_schema_registry_skip_bytes' parameter to skip reading
+          "kafka_schema_registry_skip_bytes" parameter to skip reading
           the Schema Registry preamble. The Schema can then be encoded
           explicitly.</t>
           
@@ -846,7 +846,7 @@ try (Admin admin = Admin.create(props)) {
 			update of the current State for
       State metrics is RECOMMENDED. This can be accommodated with
       YANG-Push as defined in <xref target="RFC8641"/> by complementing
-      'on-change sync on start' subscriptions with 'periodic'
+      "on-change sync on start" subscriptions with "periodic"
       subscriptions. Alternatively, in YANG-Push Lite defined in
       <xref section="7.6" sectionFormat="of"
       target="I-D.wilton-netconf-yang-push-lite"/> this simplified in
