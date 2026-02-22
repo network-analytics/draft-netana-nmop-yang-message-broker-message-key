@@ -74,7 +74,7 @@ Table of Contents
      2.1.  Terminology . . . . . . . . . . . . . . . . . . . . . . .   4
    3.  Solution Design . . . . . . . . . . . . . . . . . . . . . . .   7
      3.1.  YANG Message Keys and Indexes . . . . . . . . . . . . . .   7
-       3.1.1.  YANG Message Broker Producer  . . . . . . . . . . . .   8
+       3.1.1.  YANG Message Broker Producer  . . . . . . . . . . . .   7
        3.1.2.  YANG Message Broker Consumer  . . . . . . . . . . . .   9
        3.1.3.  Time Series Database  . . . . . . . . . . . . . . . .   9
      3.2.  YANG-Push Message Broker Topic Naming . . . . . . . . . .   9
@@ -95,7 +95,7 @@ Table of Contents
    9.  References  . . . . . . . . . . . . . . . . . . . . . . . . .  15
      9.1.  Normative References  . . . . . . . . . . . . . . . . . .  15
      9.2.  Informative References  . . . . . . . . . . . . . . . . .  16
-   Acknowledgements  . . . . . . . . . . . . . . . . . . . . . . . .  17
+   Acknowledgements  . . . . . . . . . . . . . . . . . . . . . . . .  18
    Contributors  . . . . . . . . . . . . . . . . . . . . . . . . . .  18
    Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  18
 
@@ -138,8 +138,9 @@ Internet-Draft              YANG Message Keys              February 2026
    easy-to-understand structures for quick querying.  It is optimized
    for online analytical processing (OLAP) and data warehouses by using
    the data taxonomy to scale in partitions and shards.  YANG [RFC7950]
-   as a data modelling language facilitates the modelling of dimensional
-   data.
+   as a data modelling language based on hierarchical tree-based
+   structures facilitates the modelling of dimensional data.  This is
+   best shown with YANG Tree Diagrams [RFC8340].
 
    An Architecture for YANG-Push to Message Broker Integration
    [I-D.ietf-nmop-yang-message-broker-integration] specifies an
@@ -154,6 +155,21 @@ Internet-Draft              YANG Message Keys              February 2026
    Message Broker, nor define how topics, partitioning and sharding must
    be used.
 
+
+
+
+
+
+
+
+
+
+
+Graf, et al.             Expires 25 August 2026                 [Page 3]
+
+Internet-Draft              YANG Message Keys              February 2026
+
+
    Due to this missing dimensional indexing for Message Broker stored
    YANG data, all YANG data is stored in one single Topic.  This leads
    to a round robin distribution across multiple Partitions where each
@@ -162,13 +178,6 @@ Internet-Draft              YANG Message Keys              February 2026
    before data selection can be applied.  This leads to avoidable data
    processing overhead which in turn impairs scalability and real-time
    capabilities, required for certain Network Analytics use cases.
-
-
-
-Graf, et al.             Expires 25 August 2026                 [Page 3]
-
-Internet-Draft              YANG Message Keys              February 2026
-
 
    YANG telemetry data can be used for several network analytic use
    cases.  Importantly, depending on the use case, only a subset of the
@@ -209,15 +218,6 @@ Internet-Draft              YANG Message Keys              February 2026
 
    *  Network Telemetry
 
-   *  Network Analytics
-
-   *  Value
-
-   *  State
-
-   *  Change
-
-
 
 
 
@@ -225,6 +225,14 @@ Graf, et al.             Expires 25 August 2026                 [Page 4]
 
 Internet-Draft              YANG Message Keys              February 2026
 
+
+   *  Network Analytics
+
+   *  Value
+
+   *  State
+
+   *  Change
 
    The following terms are used as defined in
    [I-D.ietf-nmop-yang-message-broker-integration]:
@@ -267,20 +275,18 @@ Internet-Draft              YANG Message Keys              February 2026
       being used primarily but the described indexing concept equally
       applies also to Shards.
 
-   *  Message: A piece of structured data sent between data processing
-      components to facilitate communication in a distributed system
-
-   *  Message Key: Metadata associated with a message to facilitate
-      deterministic hash bucketing.
-
-
-
 
 
 Graf, et al.             Expires 25 August 2026                 [Page 5]
 
 Internet-Draft              YANG Message Keys              February 2026
 
+
+   *  Message: A piece of structured data sent between data processing
+      components to facilitate communication in a distributed system
+
+   *  Message Key: Metadata associated with a message to facilitate
+      deterministic hash bucketing for instantiated YANG data.
 
    The following terms are used as defined in The Log-Structured
    Merge-Tree [One96] scientific paper:
@@ -325,12 +331,6 @@ Internet-Draft              YANG Message Keys              February 2026
 
    *  Datastore
 
-   The following terms are used as defined in [RFC7950]:
-
-   *  Schema Node Identifier
-
-   *  Schema Tree
-
 
 
 Graf, et al.             Expires 25 August 2026                 [Page 6]
@@ -338,18 +338,11 @@ Graf, et al.             Expires 25 August 2026                 [Page 6]
 Internet-Draft              YANG Message Keys              February 2026
 
 
-   The following terms are used as defined in [RFC9254]:
+   The following terms are used as defined in [RFC7950]:
 
-   *  YANG Item Identifiers
+   *  Schema Node Identifier
 
-   This document defines the following term:
-
-   *  YANG Index: a subset of YANG Item Identifiers that contains only
-      schema-node identifiers.  Unlike an absolute schema-node
-      identifier, it incorporates the YANG module name, making it
-      globally unique.  If the schema-node identifier refers to a YANG
-      list, the list key is included.  The YANG Index is used to
-      generate the Message Key. See Section 3.1.1.
+   *  Schema Tree
 
 3.  Solution Design
 
@@ -387,13 +380,6 @@ Internet-Draft              YANG Message Keys              February 2026
    The following sections describe how Message Keys are used in both
    Message producers and Message consumers.
 
-
-
-Graf, et al.             Expires 25 August 2026                 [Page 7]
-
-Internet-Draft              YANG Message Keys              February 2026
-
-
 3.1.1.  YANG Message Broker Producer
 
    YANG data nodes are uniquely identifiable within the YANG Schema
@@ -401,8 +387,12 @@ Internet-Draft              YANG Message Keys              February 2026
    how absolute YANG Schema node identifiers are being crafted locally
    unique to the YANG module.
 
-   Section 3.3 of [RFC9254] defines how globally unique YANG Item
-   Identifiers are defined as text strings.
+
+
+Graf, et al.             Expires 25 August 2026                 [Page 7]
+
+Internet-Draft              YANG Message Keys              February 2026
+
 
    Section 3.6 of [RFC8641] defines how YANG data nodes can be
    subscribed with subtree and xpath selection filters.  A YANG-Push
@@ -410,25 +400,26 @@ Internet-Draft              YANG Message Keys              February 2026
    for each subscription which filter and filter type is being used to
    the YANG-Push receiver.
 
-   To derive the YANG Index and generate the Message Key, the YANG item
-   identifier must be extracted from the YANG-Push subtree or xpath
-   subscription filter in use.  If the identifier refers to a YANG list
-   (see Section 7.8 of [RFC7950]) the list key (Section 7.8.2 of
-   [RFC7950]) is appended to the identifier, separated by a slash.
+   To generate the Message Key, the "absolute-schema-nodeid" (see
+   Section 6.5 of [RFC7950]) must be extracted from the YANG-Push
+   subtree or xpath subscription filter in use.  If the identifier
+   refers to a YANG list (see Section 7.8 of [RFC7950]) the list key
+   (Section 7.8.2 of [RFC7950]) is appended to the identifier, separated
+   by a slash.
 
-   For example, given the XPath filter shown in Figure 1, the YANG Item
-   Identifier is "ietf-interface:interfaces/interface".  Because the
-   interface list has a key named name, the resulting YANG Index for the
-   Message Key is "ietf-interface:interfaces/interface/name".
+   For example, given the XPath filter shown in Figure 1, the "absolute-
+   schema-nodeid" is "interfaces/interface".  Because the interface list
+   has a key named name, the resulting keys for the Message Key are
+   "interfaces/interface/name".
 
    ietf-interface:interfaces/interface[type='ianaift:ethernetCsmacd']
 
           Figure 1: YANG-Push ietf-interface Xpath Filter Example
 
-   For example, if the following subtree filter is being used, the YANG
-   Item Identifier is "ietf-hardware:hardware/component/state".
-   Therefore, the YANG Index of the Message Key is "ietf-
-   hardware:hardware/component/state".
+   For example, if the following subtree filter is being used, the
+   "absolute-schema-nodeid" is "hardware/component/state".  Therefore,
+   the keys used for the Message Key generation are "hardware/component/
+   state".
 
    <get>
      <filter type="subtree">
@@ -442,6 +433,15 @@ Internet-Draft              YANG Message Keys              February 2026
 
           Figure 2: YANG-Push ietf-hardware Subtree Filter Example
 
+   When the Message is being produced to the Message Broker, the Network
+   node hostname and YANG datastore name is used from the structured
+   YANG data defined in "ietf-yang-push-telemetry-message" Section 3 of
+   [I-D.ietf-nmop-message-broker-telemetry-message] where the YANG
+   "absolute-schema-nodeid" with the optional list key is derived from
+   subtree and xpath filters, respectively from their YANG Schema tree.
+
+
+
 
 
 
@@ -449,13 +449,6 @@ Graf, et al.             Expires 25 August 2026                 [Page 8]
 
 Internet-Draft              YANG Message Keys              February 2026
 
-
-   When the Message is being produced to the Message Broker, the Network
-   node hostname and YANG datastore name is used from the structured
-   YANG data defined in "ietf-yang-push-telemetry-message" Section 3 of
-   [I-D.ietf-nmop-message-broker-telemetry-message] where the YANG Index
-   is derived from subtree and xpath filters, respectively from their
-   YANG Schema tree.
 
 3.1.2.  YANG Message Broker Consumer
 
@@ -492,11 +485,18 @@ Internet-Draft              YANG Message Keys              February 2026
 
    This document defines "statistics", "states" and "state-changes" in
    the topic name as the first part to denote the types of data.
-   Followed by "yang" to denote YANG data.  Followed by the YANG module
-   names subscribed, and followed by the YANG Schema Node Identifier
-   where all subsequent "/" are substituted by "_".
+   Followed by "yang" to denote YANG data.  Followed by the Section 6.5
+   of YANG prefix [RFC7950] and Section 7.1.4 of absolute-schema-nodeid
+   [RFC7950] where all subsequent "/" are substituted by "_".
 
+   For example, if the "ietf-interface:interfaces/interface" xpath
+   filter is being used, the Message Broker topic name would be as
+   following.  In the example the project name and environment (prod,
+   dev, test etc.) is prefixed.
 
+   project.environment.statistics.yang.if.interfaces_interface
+
+           Figure 3: YANG-Push ietf-interface Topic Name Example
 
 
 
@@ -506,15 +506,6 @@ Graf, et al.             Expires 25 August 2026                 [Page 9]
 Internet-Draft              YANG Message Keys              February 2026
 
 
-   For example, if the "ietf-interface:interfaces/interface" xpath
-   filter is being used, the Message Broker topic name would be as
-   following.  In the example the project name and environment (prod,
-   dev, test etc.) is prefixed.
-
-   project.environment.statistics.yang.ietf-interfaces.interfaces_interface
-
-           Figure 3: YANG-Push ietf-interface Topic Name Example
-
 3.2.1.  YANG Message Broker Producer
 
    For Message Broker topic creation, the "periodic", "on-change", and
@@ -522,9 +513,9 @@ Internet-Draft              YANG Message Keys              February 2026
    “ietf-subscribed-notifications” YANG module (Section 4.1 of
    [RFC8641]).  Subscription state notifications MUST be used to derive
    the subscribed YANG data when it represents "statistics", "states",
-   or "state-changes".  The YANG Index MUST be derived from subtree and
-   xpath filter data of subscription state notifications, respectively
-   from their YANG Schema tree.
+   or "state-changes".  The YANG "absolute-schema-nodeid" MUST be
+   derived from subtree and xpath filter data of subscription state
+   notifications, respectively from their YANG Schema tree.
 
 3.2.2.  YANG Message Broker Consumer
 
@@ -554,6 +545,15 @@ Internet-Draft              YANG Message Keys              February 2026
    With the following example from the Apache Kafka admin client API
    https://kafka.apache.org/41/javadoc/org/apache/kafka/clients/admin/
    Admin.html a new compacted Topic can be created.
+
+
+
+
+
+
+
+
+
 
 
 
@@ -846,12 +846,6 @@ Internet-Draft              YANG Message Keys              February 2026
               for Datastore Updates", RFC 8641, DOI 10.17487/RFC8641,
               September 2019, <https://www.rfc-editor.org/info/rfc8641>.
 
-   [RFC9254]  Veillette, M., Ed., Petrov, I., Ed., Pelov, A., Bormann,
-              C., and M. Richardson, "Encoding of Data Modeled with YANG
-              in the Concise Binary Object Representation (CBOR)",
-              RFC 9254, DOI 10.17487/RFC9254, July 2022,
-              <https://www.rfc-editor.org/info/rfc9254>.
-
    [I-D.ietf-nmop-message-broker-telemetry-message]
               Elhassany, A., Graf, T., and P. Lucente, "Extensible YANG
               Model for Network Telemetry Messages", Work in Progress,
@@ -870,6 +864,10 @@ Internet-Draft              YANG Message Keys              February 2026
 
 9.2.  Informative References
 
+   [RFC8340]  Bjorklund, M. and L. Berger, Ed., "YANG Tree Diagrams",
+              BCP 215, RFC 8340, DOI 10.17487/RFC8340, March 2018,
+              <https://www.rfc-editor.org/info/rfc8340>.
+
    [I-D.ietf-nmop-terminology]
               Davis, N., Farrel, A., Graf, T., Wu, Q., and C. Yu, "Some
               Key Terms for Network Fault and Problem Management", Work
@@ -886,10 +884,12 @@ Internet-Draft              YANG Message Keys              February 2026
               <https://datatracker.ietf.org/doc/html/draft-ietf-nmop-
               yang-message-broker-integration-10>.
 
-   [I-D.wilton-netconf-yang-push-lite]
-              Wilton, R., Keller, H., Claise, B., Aries, E., Cumming,
-              J., and T. Graf, "YANG Datastore Telemetry (YANG Push
-              Lite)", Work in Progress, Internet-Draft, draft-wilton-
+
+
+
+
+
+
 
 
 
@@ -898,6 +898,10 @@ Graf, et al.             Expires 25 August 2026                [Page 16]
 Internet-Draft              YANG Message Keys              February 2026
 
 
+   [I-D.wilton-netconf-yang-push-lite]
+              Wilton, R., Keller, H., Claise, B., Aries, E., Cumming,
+              J., and T. Graf, "YANG Datastore Telemetry (YANG Push
+              Lite)", Work in Progress, Internet-Draft, draft-wilton-
               netconf-yang-push-lite-02, 20 October 2025,
               <https://datatracker.ietf.org/doc/html/draft-wilton-
               netconf-yang-push-lite-02>.
@@ -941,11 +945,7 @@ Internet-Draft              YANG Message Keys              February 2026
               <https://docs.confluent.io/platform/current/schema-
               registry/>.
 
-Acknowledgements
 
-   Thanks to Camilo Cardona, Rob Wilton, Holger Keller, Reshad Rahman,
-   Nigel Davis, Olga Havel and Michael Mackey for their comments and
-   reviews.
 
 
 
@@ -953,6 +953,12 @@ Graf, et al.             Expires 25 August 2026                [Page 17]
 
 Internet-Draft              YANG Message Keys              February 2026
 
+
+Acknowledgements
+
+   Thanks to Camilo Cardona, Rob Wilton, Holger Keller, Reshad Rahman,
+   Nigel Davis, Olga Havel and Michael Mackey for their comments and
+   reviews.
 
    We also like to thank Victor Lopez for the initial idea on the
    network controller use case.  Ashley Woods, Sivakumar Sundaravadivel
@@ -997,17 +1003,18 @@ Authors' Addresses
    Email: ahmed.elhassany@swisscom.com
 
 
-   Alex Huang Feng
-   INSA-Lyon
-   Lyon
-   France
-   Email: alex.huang-feng@insa-lyon.fr
-
 
 
 Graf, et al.             Expires 25 August 2026                [Page 18]
 
 Internet-Draft              YANG Message Keys              February 2026
+
+
+   Alex Huang Feng
+   INSA-Lyon
+   Lyon
+   France
+   Email: alex.huang-feng@insa-lyon.fr
 
 
    Benoît Claise
@@ -1023,13 +1030,6 @@ Internet-Draft              YANG Message Keys              February 2026
    3771 Barneveld
    Netherlands
    Email: paolo@ntt.net
-
-
-
-
-
-
-
 
 
 

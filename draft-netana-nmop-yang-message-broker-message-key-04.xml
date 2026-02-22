@@ -154,7 +154,9 @@
       processing (OLAP) and data warehouses by using the data taxonomy
       to scale in partitions and shards. <xref
       target="RFC7950">YANG</xref> as a data modelling language
-      facilitates the modelling of dimensional data.</t>
+      based on hierarchical tree-based structures facilitates the
+			modelling of dimensional data. This is best shown with <xref
+      target="RFC8340">YANG Tree Diagrams</xref>.</t>
 
       <t><xref target="I-D.ietf-nmop-yang-message-broker-integration">An
       Architecture for YANG-Push to Message Broker Integration</xref>
@@ -288,7 +290,8 @@
           distributed system</li>
 
           <li>Message Key: Metadata associated with a message to
-          facilitate deterministic hash bucketing.</li>
+          facilitate deterministic hash bucketing for instantiated 
+					YANG data.</li>
         </ul>
 
         <t>The following terms are used as defined in <xref
@@ -356,25 +359,6 @@
 
           <li>Schema Tree</li>
         </ul>
-
-        <t>The following terms are used as defined in <xref
-        target="RFC9254"/>:</t>
-
-        <ul>
-          <li>YANG Item Identifiers</li>
-        </ul>
-
-        <t>This document defines the following term:</t>
-
-        <ul>
-          <li>YANG Index: a subset of YANG Item Identifiers that contains
-					only schema‑node identifiers. Unlike an absolute schema‑node
-					identifier, it incorporates the YANG module name, making it
-					globally unique. If the schema‑node identifier refers to a
-					YANG list, the list key is included. The YANG Index is used to
-					generate the Message Key. See <xref
-					target="YANG_Message_Broker_Producer_Key_Solution"/>.</li>
-        </ul>
       </section>
     </section>
 
@@ -428,10 +412,6 @@
           target="RFC7950"/> defines with "absolute-schema-nodeid" how
           absolute YANG Schema node identifiers are being crafted
           locally unique to the YANG module.</t>
-  
-          <t><xref section="3.3" sectionFormat="of" target="RFC9254"/>
-          defines how globally unique YANG Item Identifiers are defined
-          as text strings.</t>
 
           <t><xref section="3.6" sectionFormat="of" target="RFC8641"/>
           defines how YANG data nodes can be subscribed with subtree and
@@ -440,8 +420,9 @@
           subscription which filter and filter type is being used to
           the YANG-Push receiver.</t>
 
-          <t>To derive the YANG Index and generate the Message Key,
-          the YANG item identifier must be extracted from the YANG-Push
+          <t>To generate the Message Key, the "absolute-schema-nodeid"
+					(see <xref section="6.5"	sectionFormat="of"
+					target="RFC7950"/>) must be extracted from the YANG-Push
 					subtree or xpath subscription filter in use. If the identifier
 					refers to a YANG list (see <xref section="7.8"
 					sectionFormat="of" target="RFC7950"/>) the list key (<xref
@@ -449,11 +430,10 @@
 					appended to the identifier, separated by a slash.</t>
         
           <t>For example, given the XPath filter shown in <xref
-					target="yang-push-xpath-filter-example"/>, the YANG Item
-					Identifier is "ietf-interface:interfaces/interface". Because
-					the interface list has a key named name, the resulting YANG
-					Index for the Message Key is
-					"ietf-interface:interfaces/interface/name".</t>
+					target="yang-push-xpath-filter-example"/>, the
+					"absolute-schema-nodeid" is "interfaces/interface". Because
+					the interface list has a key named name, the resulting keys
+					for the Message Key are "interfaces/interface/name".</t>
 
 <figure anchor="yang-push-xpath-filter-example"
 title="YANG-Push ietf-interface Xpath Filter Example">        
@@ -462,10 +442,9 @@ ietf-interface:interfaces/interface[type='ianaift:ethernetCsmacd']
 ]]></sourcecode></figure>
 
           <t>For example, if the following subtree filter is being used, 
-          the YANG Item Identifier is
-          "ietf-hardware:hardware/component/state". Therefore, the YANG
-          Index of the Message Key is
-          "ietf-hardware:hardware/component/state".</t>
+          the "absolute-schema-nodeid" is
+          "hardware/component/state". Therefore, the keys used for the
+					Message Key generation are "hardware/component/state".</t>
 
 <figure anchor="yang-push-subtree-filter-example"
 title="YANG-Push ietf-hardware Subtree Filter Example">        
@@ -487,8 +466,9 @@ title="YANG-Push ietf-hardware Subtree Filter Example">
           "ietf-yang-push-telemetry-message" <xref section="3"
           sectionFormat="of"
           target="I-D.ietf-nmop-message-broker-telemetry-message"/>
-          where the YANG Index is derived from subtree and xpath
-          filters, respectively from their YANG Schema tree.</t>
+          where the YANG "absolute-schema-nodeid" with the optional list
+					key is derived from subtree and xpath filters, respectively
+					from their YANG Schema tree.</t>
         </section>
   
         <section anchor="YANG_Message_Broker_Consumer_Key_Solution">
@@ -537,9 +517,11 @@ title="YANG-Push ietf-hardware Subtree Filter Example">
         <t>This document defines "statistics", "states" and
         "state-changes" in the topic name as the first part to denote
         the types of data. Followed by "yang" to denote YANG data.
-        Followed by the YANG module names subscribed, and followed by
-        the YANG Schema Node Identifier where all subsequent "/" are
-				substituted by "_".</t> 
+        Followed by the <xref section="6.5" sectionFormat="of"
+				target="RFC7950">YANG prefix</xref> and <xref section="7.1.4"
+				sectionFormat="of"
+				target="RFC7950">absolute-schema-nodeid</xref> where all
+				subsequent "/" are substituted by "_".</t> 
   
         <t>For example, if the "ietf-interface:interfaces/interface"
         xpath filter is being used, the Message Broker topic name would
@@ -549,7 +531,7 @@ title="YANG-Push ietf-hardware Subtree Filter Example">
 <figure anchor="yang-push-topic-name-example"
 title="YANG-Push ietf-interface Topic Name Example">        
 <sourcecode type="text"><![CDATA[
-project.environment.statistics.yang.ietf-interfaces.interfaces_interface
+project.environment.statistics.yang.if.interfaces_interface
 ]]></sourcecode></figure>      
  
         <section anchor="YANG_Message_Broker_Producer_Topic_Solution">
@@ -561,9 +543,10 @@ project.environment.statistics.yang.ietf-interfaces.interfaces_interface
 					(<xref section="4.1" sectionFormat="of" target="RFC8641"/>).
           Subscription state notifications MUST be used to derive the
 					subscribed YANG data when it represents "statistics", 
-					"states", or "state‑changes". The YANG Index MUST be derived
-          from subtree and xpath filter data of subscription state
-          notifications, respectively from their YANG Schema tree.</t>
+					"states", or "state‑changes". The YANG
+					"absolute-schema-nodeid" MUST be derived from subtree and
+					xpath filter data of subscription state notifications,
+					respectively from their YANG Schema tree.</t>
         </section>
   
         <section anchor="YANG_Message_Broker_Consumer_Topic_Solution">
@@ -886,8 +869,6 @@ try (Admin admin = Admin.create(props)) {
   
         <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.8641.xml"/>
 
-        <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.9254.xml"/>
-
         <xi:include href="https://bib.ietf.org/public/rfc/bibxml3/reference.I-D.ietf-nmop-message-broker-telemetry-message.xml"/>
 
         <xi:include href="https://bib.ietf.org/public/rfc/bibxml3/reference.I-D.ietf-netconf-notif-envelope.xml"/>
@@ -895,6 +876,8 @@ try (Admin admin = Admin.create(props)) {
  
       <references>
         <name>Informative References</name>
+        <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.8340.xml"/>
+
         <xi:include href="https://bib.ietf.org/public/rfc/bibxml3/reference.I-D.ietf-nmop-terminology.xml"/>
   
         <xi:include href="https://bib.ietf.org/public/rfc/bibxml3/reference.I-D.ietf-nmop-yang-message-broker-integration.xml"/>
