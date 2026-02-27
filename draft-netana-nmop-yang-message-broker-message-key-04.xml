@@ -92,7 +92,7 @@
       </address>
     </author>
 
-    <date day="21" month="February" year="2026"/>
+    <date day="27" month="February" year="2026"/>
 
     <area>General</area>
     <workgroup>NMOP</workgroup>
@@ -388,13 +388,14 @@
       <section anchor="YANG_Message_Keys_Indexes_Solution">
         <name>YANG Message Keys and Indexes</name>
   
-        <t>A Message Broker uses a Message Key to index the Message
-        and a value to carry the Message content. If no Message Key is
-        defined then the Messages are distributed in a round robin
-        fashion across partitions. If a Message Key is defined, then the
-        value of the Message Key is being used as input for the Message
-        Broker Producer hash function to distribute across Partitions.
-        Therefore, Message Keys facilitate Message deterministic
+        <t>For topics that carry YANG telemetry messages as defined in
+				<xref target="I-D.ietf-nmop-message-broker-telemetry-message"/>,
+				a Message Key MUST be used. If no Message Key is defined then
+				the Messages are distributed in a round robin fashion across
+				partitions. If a Message Key is defined, then the value of the
+				Message Key is being used as input for the Message Broker
+				Producer hash function to distribute across Partitions.
+				Therefore, Message Keys facilitate Message deterministic
         distribution.</t>
   
         <t>The Message Key not only used for Message indexing at the
