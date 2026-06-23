@@ -92,7 +92,7 @@
       </address>
     </author>
 
-    <date day="04" month="April" year="2026"/>
+    <date day="23" month="June" year="2026"/>
 
     <area>General</area>
     <workgroup>NMOP</workgroup>
@@ -198,7 +198,7 @@
       be indexed and organized in Message Broker topics by leveraging
       the network node hostname, the YANG-Push subscription identifier,
       and concrete XPath data node instances derived from the YANG
-      schema tree for indexing. Then, a YANG-Push subscription type and
+      schema path for indexing. Then, a YANG-Push subscription type and
       YANG Schema name for a Message Broker topic naming scheme is
       defined to better organize YANG data.</t>
 
@@ -207,7 +207,7 @@
       defined in <xref section="3" sectionFormat="of"
       target="I-D.ietf-nmop-message-broker-telemetry-message"/>. The
       Message Key is derived through a three-phase algorithm that
-      normalizes subscription filters against the YANG schema tree and
+      normalizes subscription filters against the YANG schema path and
       extracts concrete data node instances from each notification
       message.</t>
     </section>
@@ -262,7 +262,7 @@
         target="Pul16">Apache Pulsar</xref> Message Broker:</t>
 
         <ul>
-          <li>Subject: Corresponds to a unique schema tree within a
+          <li>Subject: Corresponds to a unique Schema Path within a
           Schema Registry and is used to identify Messages within a
           Topic.</li>
 
@@ -360,8 +360,16 @@
           <li>Data Node: Such as "container", "leaf", "leaf-list",
           "list", "choice", "case", "augment", "uses", "anydata", and
           "anyxml" elements.</li>
+        </ul>
 
-          <li>Schema Tree</li>
+        <t>The following terms are used as defined in this document:</t>
+
+        <ul>
+          <li>Schema Path: A specific route to a single, leaf in a
+					schema tree. As oposed to a schema tree which represents the
+					entire hierarchical structure of a schema, showing how all
+					these individual paths branch out and relate to each other as
+					a whole.</li>
         </ul>
       </section>
     </section>
@@ -514,12 +522,12 @@ title="Three-Phase Message Key Derivation Algorithm">
 | (XPath, possibly  |       |  Phase 2:    |---->| + Extraction  |
 |  from Phase 1)    |       |  Schema      |     |   Specs       |
 +-------------------+       |  Resolution  |     +---------------+
-| YANG Schema Tree  |------>|              |
+| YANG Schema Path  |------>|              |
 +-------------------+       +--------------+
                                     |
                                     v
 +-------------------+       +--------------+     +--------------+
-| Parsed Data Tree  |------>|              |     | Message Key  |
+| Parsed Data Path  |------>|              |     | Message Key  |
 +-------------------+       |  Phase 3:    |---->| (line-       |
 | Node Name         |------>|  Data Walk   |     |  delimited)  |
 | Subscription ID   |------>|              |     |              |
@@ -616,7 +624,7 @@ title="Normalized XPath from Subtree Filter">
             </t>
 
             <t>For each branch, the algorithm resolves the XPath to
-            its target schema node using the YANG schema tree. It
+            its target schema node using the YANG Schema Path. It
             then walks the ancestor chain from the schema root to the
             target node, building the key template path. For each
             node in the path:</t>
@@ -884,9 +892,9 @@ Message Key:
             section="3" sectionFormat="of"
             target="I-D.ietf-nmop-message-broker-telemetry-message"/>.
             The concrete XPath expressions are derived from the
-            subscription filter and the YANG schema tree as described
+            subscription filter and the YANG Schema Path as described
             above, and then instantiated with values from each
-            notification data tree.</t>
+            notification data path.</t>
 
           </section>
 
@@ -1017,7 +1025,7 @@ Message Key:
             maximum topic name length (configurable, default 255),
             it is truncated at the last "-" boundary that keeps the
             name within the budget, and an 8-character hexadecimal
-            hash suffix (FNV-1a 64-bit of the full schema path) is
+            hash suffix (FNV-1a 64-bit of the full Schema Path) is
             appended for uniqueness. In practice, overflow rarely
             triggers — the longest realistic YANG paths produce topic
             names of 50-80 characters.</li>
@@ -1060,8 +1068,8 @@ Subscription XPath                                 Topic Name
 
           <ul>
             <li>The mapping is injective (one-to-one): given a topic
-            name, the original schema path can be reconstructed by
-            reversing the substitutions. Different schema paths always
+            name, the original Schema Path can be reconstructed by
+            reversing the substitutions. Different Schema Paths always
             produce different topic names.</li>
 
             <li>The topic name depends only on the subscription's own
@@ -1086,9 +1094,12 @@ Subscription XPath                                 Topic Name
           target="YANG_Message_Broker_Producer_Key_Solution"/>) and
           then applying the topic name derivation algorithm above.
           The subscription type ("periodic", "on-change", or
-          "on-change" with "sync-on-start") MAY be encoded in the
-          organization prefix or in a separate topic hierarchy
-          level, depending on the deployment's naming policy.</t>
+          "on-change" with "sync-on-start") MAY be encoded in a separate
+					topic hierarchy level, depending on the deployment's naming
+					policy. Where "periodic" is encoded as "stats", "on-change" as
+					"state-change", "on-change" with "sync-on-start" as "state"
+					and "on-change" with "sync-on-start" whre topic compaction
+					is enabled as "current-state".</t>
         </section>
 
         <section anchor="YANG_Message_Broker_Consumer_Topic_Solution">
@@ -1106,6 +1117,9 @@ Subscription XPath                                 Topic Name
 
             <li>All data from an organization:
             "^netops-.*"</li>
+
+            <li>All current-state data from an organization:
+            "^netops-current-state-.*"</li>
           </ul>
 
           <t>The YANG data is then ingested into tables according to
