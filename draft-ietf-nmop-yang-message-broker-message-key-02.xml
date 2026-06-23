@@ -471,9 +471,11 @@ router-nyc-01
 <figure anchor="message-key-multi-instance-example"
 title="Message Key for Multiple Interface Instances">
 <sourcecode type="text"><![CDATA[
+=============== NOTE: '\' line wrapping per RFC 8792 ================
 router-nyc-01
 1042
-/ietf-interfaces:interfaces/interface[name='eth0'] | /ietf-interfaces:interfaces/interface[name='eth1']
+/ietf-interfaces:interfaces/interface[name='eth0']\
+ | /ietf-interfaces:interfaces/interface[name='eth1']
 ]]></sourcecode></figure>
 
           <t><xref target="message-key-container-example"/>
@@ -766,6 +768,7 @@ Extraction:  /ietf-interfaces:interfaces/interface[name='eth0']/ietf-ip:ipv4/add
 <figure anchor="phase3-example"
 title="End-to-End Example: Subscription to Key">
 <sourcecode type="text"><![CDATA[
+=============== NOTE: '\' line wrapping per RFC 8792 ================
 Subscription XPath:
   /ietf-interfaces:interfaces/interface
 
@@ -792,7 +795,8 @@ Concrete XPaths (sorted):
 Message Key:
   router-nyc-01
   1042
-  /ietf-interfaces:interfaces/interface[name='eth0'] | /ietf-interfaces:interfaces/interface[name='eth1']
+  /ietf-interfaces:interfaces/interface[name='eth0']\
+	| /ietf-interfaces:interfaces/interface[name='eth1']
 ]]></sourcecode></figure>
 
             <t>When the subscription targets a YANG container (with
@@ -825,6 +829,7 @@ Message Key:
 <figure anchor="subtree-e2e-example"
 title="End-to-End Example Starting from Subtree Filter">
 <sourcecode type="text"><![CDATA[
+=============== NOTE: '\' line wrapping per RFC 8792 ================
 Subtree filter:
   <interfaces xmlns=
       "urn:ietf:params:xml:ns:yang:ietf-interfaces">
@@ -841,8 +846,10 @@ Subtree filter:
   </hardware>
 
 Phase 1 (Normalize):
-  /ietf-interfaces:interfaces/ietf-interfaces:interface[ietf-interfaces:name='eth0']/ietf-interfaces:oper-status
-  | /ietf-hardware:hardware/ietf-hardware:component/ietf-hardware:serial-num
+  /ietf-interfaces:interfaces/ietf-interfaces:interface[ietf-interfaces\
+	:name='eth0']/ietf-interfaces:oper-status
+  | /ietf-hardware:hardware/ietf-hardware:component/ietf-hardware\
+	:serial-num
 
 Phase 2 (Two branch templates):
   Branch 0 (leaf target, key pinned):
@@ -1037,12 +1044,14 @@ Message Key:
 <figure anchor="topic-name-derivation-example"
 title="Topic Name Derivation Examples">
 <sourcecode type="text"><![CDATA[
-Subscription XPath                                 Topic Name
-------------------------------------------------------  -------------------
-/ietf-interfaces:interfaces/interface              if-interfaces-interface
-/ietf-interfaces:interfaces/interface/oper-status  if-interfaces-interface-oper-status
-/ietf-system:system/clock                          sys-system-clock
-/ietf-system:system/dns-resolver/server            sys-system-dns-resolver-server
+=============== NOTE: '\' line wrapping per RFC 8792 ================
+ Subscription XPath                    | Topic Name
+---------------------------------------+--------------------------------
+/ietf-interfaces:interfaces/interface  | if-interfaces-interface
+/ietf-interfaces:interfaces/interface\ | if-interfaces-interface-oper\
+/oper-status                           | -status
+/ietf-system:system/clock              | sys-system-clock
+/ietf-system:system/dns-resolver/server| sys-system-dns-resolver-server
 ]]></sourcecode></figure>
 
           <t><xref target="topic-name-prefix-example"/> shows the
@@ -1051,11 +1060,12 @@ Subscription XPath                                 Topic Name
 <figure anchor="topic-name-prefix-example"
 title="Topic Names with Organization Prefix">
 <sourcecode type="text"><![CDATA[
-Subscription XPath                                 Topic Name
-------------------------------------------------------  -------------------
-/ietf-interfaces:interfaces/interface              netops-if-interfaces-interface
-/ietf-interfaces:interfaces/interface/oper-status  netops-if-interfaces-interface-oper-status
-/ietf-system:system/clock                          netops-sys-system-clock
+ Subscription XPath                    | Topic Name
+---------------------------------------+--------------------------------
+/ietf-interfaces:interfaces/interface  | netops-if-interfaces-interface
+/ietf-interfaces:interfaces/interface\ | netops-if-interfaces-interface\
+/oper-status                           | -oper-status 
+/ietf-system:system/clock              | netops-sys-system-clock
 ]]></sourcecode></figure>
 
         </section>
@@ -1444,6 +1454,8 @@ try (Admin admin = Admin.create(props)) {
         <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.8342.xml"/>
 
         <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.8641.xml"/>
+
+        <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.8792.xml"/>
 
         <xi:include href="https://bib.ietf.org/public/rfc/bibxml3/reference.I-D.ietf-nmop-message-broker-telemetry-message.xml"/>
 
