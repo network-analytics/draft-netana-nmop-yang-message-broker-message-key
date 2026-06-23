@@ -1409,6 +1409,23 @@ try (Admin admin = Admin.create(props)) {
       target="I-D.wilton-netconf-yang-push-lite"/> this simplified in
       one subscription.</t>
     </section>
+
+    <section>
+      <name>Implementation status</name>
+      <t>This section provides pointers to existing open source
+      implementations of this draft. Note to the RFC-editor: Please
+      remove this before publishing.</t>
+
+      <section>
+        <name>yang-push-key</name>
+        <t>A prove of concept implementing the three-phase algorithm
+				described in <xref
+				target="YANG_Message_Broker_Producer_Key_Solution"/>.</t>
+
+        <t>The open source code can be accessed here: <xref
+        target="yang-push-key"/>.</t>
+      </section>
+    </section>
   </middle>
 
   <back>
@@ -1564,7 +1581,7 @@ try (Admin admin = Admin.create(props)) {
           <front>
             <title>Confluent Schema Registry Documentation</title>
 
-            <author fullname="Robert Yokota " initials="R." surname="Yokota"/>
+            <author fullname="Robert Yokota" initials="R." surname="Yokota"/>
 
             <date month="December" year="2018"/>
           </front>
@@ -1572,6 +1589,19 @@ try (Admin admin = Admin.create(props)) {
           <refcontent>Confluent Community and Apache Software
           Foundation</refcontent>
         </reference>
+
+        <reference anchor="yang-push-key"
+                   target="https://github.com/ahassany/yang-push-key">
+          <front>
+            <title>yang-push-key</title>
+   
+            <author fullname="Ahmed Elhassany" initials="A."
+						surname="Elhassany"/>
+   
+            <date/>
+          </front>
+        </reference>
+
       </references>
     </references>
 

@@ -95,14 +95,14 @@ Table of Contents
    6.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  24
    7.  Security Considerations . . . . . . . . . . . . . . . . . . .  24
    8.  Operational Considerations  . . . . . . . . . . . . . . . . .  24
-   9.  References  . . . . . . . . . . . . . . . . . . . . . . . . .  25
-     9.1.  Normative References  . . . . . . . . . . . . . . . . . .  25
-     9.2.  Informative References  . . . . . . . . . . . . . . . . .  26
-   Acknowledgements  . . . . . . . . . . . . . . . . . . . . . . . .  27
+   9.  Implementation status . . . . . . . . . . . . . . . . . . . .  25
+     9.1.  yang-push-key . . . . . . . . . . . . . . . . . . . . . .  25
+   10. References  . . . . . . . . . . . . . . . . . . . . . . . . .  25
+     10.1.  Normative References . . . . . . . . . . . . . . . . . .  25
+     10.2.  Informative References . . . . . . . . . . . . . . . . .  26
+   Acknowledgements  . . . . . . . . . . . . . . . . . . . . . . . .  28
    Contributors  . . . . . . . . . . . . . . . . . . . . . . . . . .  28
    Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  28
-
-
 
 
 
@@ -1354,9 +1354,22 @@ Internet-Draft              YANG Message Keys                  June 2026
    defined in Section 7.6 of [I-D.wilton-netconf-yang-push-lite] this
    simplified in one subscription.
 
-9.  References
+9.  Implementation status
 
-9.1.  Normative References
+   This section provides pointers to existing open source
+   implementations of this draft.  Note to the RFC-editor: Please remove
+   this before publishing.
+
+9.1.  yang-push-key
+
+   A prove of concept implementing the three-phase algorithm described
+   in Section 3.1.2.
+
+   The open source code can be accessed here: [yang-push-key].
+
+10.  References
+
+10.1.  Normative References
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
@@ -1381,6 +1394,14 @@ Internet-Draft              YANG Message Keys                  June 2026
               (NMDA)", RFC 8342, DOI 10.17487/RFC8342, March 2018,
               <https://www.rfc-editor.org/info/rfc8342>.
 
+
+
+
+Graf, et al.            Expires 25 December 2026               [Page 25]
+
+Internet-Draft              YANG Message Keys                  June 2026
+
+
    [RFC8641]  Clemm, A. and E. Voit, "Subscription to YANG Notifications
               for Datastore Updates", RFC 8641, DOI 10.17487/RFC8641,
               September 2019, <https://www.rfc-editor.org/info/rfc8641>.
@@ -1393,15 +1414,6 @@ Internet-Draft              YANG Message Keys                  June 2026
               <https://datatracker.ietf.org/doc/html/draft-ietf-nmop-
               message-broker-telemetry-message-04>.
 
-
-
-
-
-Graf, et al.            Expires 25 December 2026               [Page 25]
-
-Internet-Draft              YANG Message Keys                  June 2026
-
-
    [I-D.ietf-netconf-notif-envelope]
               Feng, A. H., Francois, P., Graf, T., and B. Claise,
               "Extensible YANG Model for YANG-Push Notifications", Work
@@ -1410,7 +1422,7 @@ Internet-Draft              YANG Message Keys                  June 2026
               <https://datatracker.ietf.org/doc/html/draft-ietf-netconf-
               notif-envelope-05>.
 
-9.2.  Informative References
+10.2.  Informative References
 
    [RFC8340]  Bjorklund, M. and L. Berger, Ed., "YANG Tree Diagrams",
               BCP 215, RFC 8340, DOI 10.17487/RFC8340, March 2018,
@@ -1433,6 +1445,19 @@ Internet-Draft              YANG Message Keys                  June 2026
               <https://datatracker.ietf.org/doc/html/draft-ietf-nmop-
               terminology-23>.
 
+
+
+
+
+
+
+
+
+Graf, et al.            Expires 25 December 2026               [Page 26]
+
+Internet-Draft              YANG Message Keys                  June 2026
+
+
    [I-D.ietf-nmop-yang-message-broker-integration]
               Graf, T. and A. Elhassany, "An Architecture for YANG-Push
               to Message Broker Integration", Work in Progress,
@@ -1448,15 +1473,6 @@ Internet-Draft              YANG Message Keys                  June 2026
               netconf-yang-push-lite-02, 20 October 2025,
               <https://datatracker.ietf.org/doc/html/draft-wilton-
               netconf-yang-push-lite-02>.
-
-
-
-
-
-Graf, et al.            Expires 25 December 2026               [Page 26]
-
-Internet-Draft              YANG Message Keys                  June 2026
-
 
    [Mar24]    Martinez-Casanueva, I. D., Gonzalez-Sanchez, D., Bellido,
               L., Fernandez, D., and D. R. Lopez, "Toward Building a
@@ -1491,11 +1507,22 @@ Internet-Draft              YANG Message Keys                  June 2026
    [Pul16]    Guo, S. and M. Merli, "Apache Pulsar", Apache Software
               Foundation, January 2016, <https://pulsar.apache.org/>.
 
+
+
+Graf, et al.            Expires 25 December 2026               [Page 27]
+
+Internet-Draft              YANG Message Keys                  June 2026
+
+
    [ConDoc18] Yokota, R., "Confluent Schema Registry Documentation",
               Confluent Community and Apache Software Foundation,
               December 2018,
               <https://docs.confluent.io/platform/current/schema-
               registry/>.
+
+   [yang-push-key]
+              Elhassany, A., "yang-push-key",
+              <https://github.com/ahassany/yang-push-key>.
 
 Acknowledgements
 
@@ -1506,14 +1533,6 @@ Acknowledgements
    We also like to thank Victor Lopez for the initial idea on the
    network controller use case.  Ashley Woods, Sivakumar Sundaravadivel
    and Rafael Julio for the idea of grouping topics by YANG-Push
-
-
-
-Graf, et al.            Expires 25 December 2026               [Page 27]
-
-Internet-Draft              YANG Message Keys                  June 2026
-
-
    subscription type and insisting that Topic Compaction is a key
    enabler for inventory metrics and YANG data consumer integration and
    should be supported day 1.  Nigel Davis for confirming that Topic
@@ -1543,6 +1562,14 @@ Authors' Addresses
    Binzring 17
    CH-8045 Zurich
    Switzerland
+
+
+
+Graf, et al.            Expires 25 December 2026               [Page 28]
+
+Internet-Draft              YANG Message Keys                  June 2026
+
+
    Email: thomas.graf@swisscom.com
 
 
@@ -1561,15 +1588,6 @@ Authors' Addresses
    Email: alex.huang-feng@insa-lyon.fr
 
 
-
-
-
-
-Graf, et al.            Expires 25 December 2026               [Page 28]
-
-Internet-Draft              YANG Message Keys                  June 2026
-
-
    Benoît Claise
    Everything OPS
    Liege
@@ -1583,24 +1601,6 @@ Internet-Draft              YANG Message Keys                  June 2026
    3771 Barneveld
    Netherlands
    Email: paolo@ntt.net
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
