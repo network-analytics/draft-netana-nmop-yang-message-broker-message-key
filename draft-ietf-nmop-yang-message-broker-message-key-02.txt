@@ -6,7 +6,7 @@ NMOP                                                            TG. Graf
 Internet-Draft                                             AE. Elhassany
 Intended status: Standards Track                                Swisscom
 Expires: 25 December 2026                                AHF. Huang Feng
-                                                               INSA-Lyon
+                                                        Deutsche Telekom
                                                               BC. Claise
                                                           Everything OPS
                                                              PL. Lucente
@@ -1604,10 +1604,10 @@ Authors' Addresses
 
 
    Alex Huang Feng
-   INSA-Lyon
-   Lyon
-   France
-   Email: alex.huang-feng@insa-lyon.fr
+   Deutsche Telekom
+   Barcelona
+   Spain
+   Email: alex.huang-feng@t-systems.com
 
 
    Benoît Claise
