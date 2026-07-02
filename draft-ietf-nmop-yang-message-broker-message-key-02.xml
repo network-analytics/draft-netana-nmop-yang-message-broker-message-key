@@ -917,7 +917,7 @@ NOTE: The Key is a two-line byte string; the line break between the
 Key:
   router-nyc-01
   1042
-	/ietf-interfaces:interfaces/interface[name='eth0']
+  /ietf-interfaces:interfaces/interface[name='eth0']
 
 Headers:
   schema-id:     1
