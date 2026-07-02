@@ -5,13 +5,13 @@
 NMOP                                                            TG. Graf
 Internet-Draft                                             AE. Elhassany
 Intended status: Standards Track                                Swisscom
-Expires: 28 December 2026                                AHF. Huang Feng
+Expires: 3 January 2027                                  AHF. Huang Feng
                                                         Deutsche Telekom
                                                               BC. Claise
                                                           Everything OPS
                                                              PL. Lucente
                                                                      NTT
-                                                            26 June 2026
+                                                             2 July 2026
 
 
             YANG Message Keys for Message Broker Integration
@@ -44,7 +44,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 28 December 2026.
+   This Internet-Draft will expire on 3 January 2027.
 
 Copyright Notice
 
@@ -53,9 +53,9 @@ Copyright Notice
 
 
 
-Graf, et al.            Expires 28 December 2026                [Page 1]
+Graf, et al.             Expires 3 January 2027                 [Page 1]
 
-Internet-Draft              YANG Message Keys                  June 2026
+Internet-Draft              YANG Message Keys                  July 2026
 
 
    This document is subject to BCP 78 and the IETF Trust's Legal
@@ -78,7 +78,7 @@ Table of Contents
        3.1.2.  YANG Message Broker Producer  . . . . . . . . . . . .   9
        3.1.3.  YANG Message Broker Consumer  . . . . . . . . . . . .  18
        3.1.4.  Time Series Database  . . . . . . . . . . . . . . . .  18
-     3.2.  YANG-Push Message Broker Topic Naming . . . . . . . . . .  18
+     3.2.  YANG-Push Message Broker Topic Naming . . . . . . . . . .  19
        3.2.1.  Topic Name Derivation Algorithm . . . . . . . . . . .  19
        3.2.2.  Properties  . . . . . . . . . . . . . . . . . . . . .  21
        3.2.3.  YANG Message Broker Producer  . . . . . . . . . . . .  21
@@ -86,11 +86,11 @@ Table of Contents
    4.  Message Broker Implementations  . . . . . . . . . . . . . . .  22
      4.1.  Apache Kafka  . . . . . . . . . . . . . . . . . . . . . .  22
      4.2.  Apache Pulsar . . . . . . . . . . . . . . . . . . . . . .  23
-   5.  Time Series Database Implementations  . . . . . . . . . . . .  23
-     5.1.  ClickHouse  . . . . . . . . . . . . . . . . . . . . . . .  23
+   5.  Time Series Database Implementations  . . . . . . . . . . . .  24
+     5.1.  ClickHouse  . . . . . . . . . . . . . . . . . . . . . . .  24
        5.1.1.  Data Model  . . . . . . . . . . . . . . . . . . . . .  24
        5.1.2.  Message Broker Integration  . . . . . . . . . . . . .  24
-       5.1.3.  Message Formats . . . . . . . . . . . . . . . . . . .  25
+       5.1.3.  Message Formats . . . . . . . . . . . . . . . . . . .  26
        5.1.4.  Schema Registry . . . . . . . . . . . . . . . . . . .  26
    6.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  26
    7.  Security Considerations . . . . . . . . . . . . . . . . . . .  26
@@ -109,9 +109,9 @@ Table of Contents
 
 
 
-Graf, et al.            Expires 28 December 2026                [Page 2]
+Graf, et al.             Expires 3 January 2027                 [Page 2]
 
-Internet-Draft              YANG Message Keys                  June 2026
+Internet-Draft              YANG Message Keys                  July 2026
 
 
 1.  Introduction
@@ -165,9 +165,9 @@ Internet-Draft              YANG Message Keys                  June 2026
 
 
 
-Graf, et al.            Expires 28 December 2026                [Page 3]
+Graf, et al.             Expires 3 January 2027                 [Page 3]
 
-Internet-Draft              YANG Message Keys                  June 2026
+Internet-Draft              YANG Message Keys                  July 2026
 
 
    Due to this missing dimensional indexing for Message Broker stored
@@ -221,9 +221,9 @@ Internet-Draft              YANG Message Keys                  June 2026
 
 
 
-Graf, et al.            Expires 28 December 2026                [Page 4]
+Graf, et al.             Expires 3 January 2027                 [Page 4]
 
-Internet-Draft              YANG Message Keys                  June 2026
+Internet-Draft              YANG Message Keys                  July 2026
 
 
    *  Network Analytics
@@ -277,9 +277,9 @@ Internet-Draft              YANG Message Keys                  June 2026
 
 
 
-Graf, et al.            Expires 28 December 2026                [Page 5]
+Graf, et al.             Expires 3 January 2027                 [Page 5]
 
-Internet-Draft              YANG Message Keys                  June 2026
+Internet-Draft              YANG Message Keys                  July 2026
 
 
    *  Message Key: Message Key: Metadata associated with a message to
@@ -333,9 +333,9 @@ Internet-Draft              YANG Message Keys                  June 2026
 
 
 
-Graf, et al.            Expires 28 December 2026                [Page 6]
+Graf, et al.             Expires 3 January 2027                 [Page 6]
 
-Internet-Draft              YANG Message Keys                  June 2026
+Internet-Draft              YANG Message Keys                  July 2026
 
 
    *  Schema Node Identifier
@@ -389,9 +389,9 @@ Internet-Draft              YANG Message Keys                  June 2026
 
 
 
-Graf, et al.            Expires 28 December 2026                [Page 7]
+Graf, et al.             Expires 3 January 2027                 [Page 7]
 
-Internet-Draft              YANG Message Keys                  June 2026
+Internet-Draft              YANG Message Keys                  July 2026
 
 
    The following sections describe the Message Key format, the
@@ -445,9 +445,9 @@ Internet-Draft              YANG Message Keys                  June 2026
 
 
 
-Graf, et al.            Expires 28 December 2026                [Page 8]
+Graf, et al.             Expires 3 January 2027                 [Page 8]
 
-Internet-Draft              YANG Message Keys                  June 2026
+Internet-Draft              YANG Message Keys                  July 2026
 
 
    Figure 3 shows a Message Key for a container target (no list
@@ -501,9 +501,9 @@ Internet-Draft              YANG Message Keys                  June 2026
 
 
 
-Graf, et al.            Expires 28 December 2026                [Page 9]
+Graf, et al.             Expires 3 January 2027                 [Page 9]
 
-Internet-Draft              YANG Message Keys                  June 2026
+Internet-Draft              YANG Message Keys                  July 2026
 
 
 3.1.2.1.  Phase 1: Subtree Filter Normalization
@@ -557,9 +557,9 @@ Internet-Draft              YANG Message Keys                  June 2026
 
 
 
-Graf, et al.            Expires 28 December 2026               [Page 10]
+Graf, et al.             Expires 3 January 2027                [Page 10]
 
-Internet-Draft              YANG Message Keys                  June 2026
+Internet-Draft              YANG Message Keys                  July 2026
 
 
                Figure 6: Normalized XPath from Subtree Filter
@@ -613,9 +613,9 @@ Internet-Draft              YANG Message Keys                  June 2026
 
 
 
-Graf, et al.            Expires 28 December 2026               [Page 11]
+Graf, et al.             Expires 3 January 2027                [Page 11]
 
-Internet-Draft              YANG Message Keys                  June 2026
+Internet-Draft              YANG Message Keys                  July 2026
 
 
    *  [module:key='value']: module prefix stripped, literal value
@@ -669,9 +669,9 @@ Internet-Draft              YANG Message Keys                  June 2026
 
 
 
-Graf, et al.            Expires 28 December 2026               [Page 12]
+Graf, et al.             Expires 3 January 2027                [Page 12]
 
-Internet-Draft              YANG Message Keys                  June 2026
+Internet-Draft              YANG Message Keys                  July 2026
 
 
    1.  The open placeholders in the key template are filled with the
@@ -725,9 +725,9 @@ Internet-Draft              YANG Message Keys                  June 2026
 
 
 
-Graf, et al.            Expires 28 December 2026               [Page 13]
+Graf, et al.             Expires 3 January 2027                [Page 13]
 
-Internet-Draft              YANG Message Keys                  June 2026
+Internet-Draft              YANG Message Keys                  July 2026
 
 
    =============== NOTE: '\' line wrapping per RFC 8792 ================
@@ -781,9 +781,9 @@ Internet-Draft              YANG Message Keys                  June 2026
 
 
 
-Graf, et al.            Expires 28 December 2026               [Page 14]
+Graf, et al.             Expires 3 January 2027                [Page 14]
 
-Internet-Draft              YANG Message Keys                  June 2026
+Internet-Draft              YANG Message Keys                  July 2026
 
 
    open placeholder against the notification data, expanding the single
@@ -837,9 +837,9 @@ Internet-Draft              YANG Message Keys                  June 2026
 
 
 
-Graf, et al.            Expires 28 December 2026               [Page 15]
+Graf, et al.             Expires 3 January 2027                [Page 15]
 
-Internet-Draft              YANG Message Keys                  June 2026
+Internet-Draft              YANG Message Keys                  July 2026
 
 
        <component>
@@ -868,102 +868,109 @@ Internet-Draft              YANG Message Keys                  June 2026
    [I-D.ietf-nmop-message-broker-telemetry-message].  The concrete XPath
    expressions are derived from the subscription filter and the YANG
    Schema Path as described above, and then instantiated with values
-   from each notification data path.  Figure 11 represent the wireformat
-   including the Message Key and the Message Broker headers with the
-   Schema ID and contend type of the Message.
+   from each notification data path.  Figure 11 represent the Message
+   Key and and the Message Broker headers with the Schema ID and contend
+   type of the Message and Figure 12 the Message itself.
 
-   =============== NOTE: '\' line wrapping per RFC 8792 ================
-   ===== NOTE: '|' represents single newline character (LF, U+000A) ====
+   NOTE: The Key is a two-line byte string; the line break between the
+         node hostname and the YANG path is a literal LF (U+000A).
+
+   Key:
+     router-nyc-01
+     1042
+           /ietf-interfaces:interfaces/interface[name='eth0']
+
+   Headers:
+     schema-id:     1
+     content-type:  application/yang-data+json
+
+         Figure 11: Telemetry Message Broker Key and Header Example
+
+
+
+
+
+
+
+
+Graf, et al.             Expires 3 January 2027                [Page 16]
+
+Internet-Draft              YANG Message Keys                  July 2026
+
+
    {
-     "key": "router-nyc-01|1042|/ietf-interfaces:interfaces\
-           /interface[name='eth0']",
-     "value": {
-     "ietf-telemetry-message:message": {
-       "network-node-manifest": {
-         "name": "pe1",
-         "vendor": "open source",
-         "software-version": "1.1.2"
+    "ietf-telemetry-message:message": {
+      "network-node-manifest": {
+        "name": "pe1",
+        "vendor": "open source",
+        "software-version": "1.1.2"
+      },
+       "telemetry-message-metadata": {
+         "node-export-timestamp": "2024-02-14T12:10:10.10+01:00",
+         "collection-timestamp": "2024-02-14T12:10:10.12+01:00",
+         "session-protocol": "yang-push",
+         "notification-event": "log",
+         "export-address": "192.168.1.100",
+         "export-port": 123,
+         "collection-address": "192.168.1.1",
+         "collection-port": 9991,
+         "ietf-yang-push-telemetry-message:yang-push-subscription": {
+           "id": 89,
+           "xpath-filter": "/ietf-interfaces:interfaces",
+           "datastore": "ietf-datastores:operational",
+           "transport": "ietf-udp-notif-transport:udp-notif",
+           "encoding": "ietf-subscribed-notifications:encode-json",
+           "module": [
+             {
+               "module": "ietf-interfaces",
+               "revision": "2018-02-20",
+               "version": "2.0.0"
+             }
+           ],
+           "yang-library-content-id": "abc"
+         }
        },
-        "telemetry-message-metadata": {
-          "node-export-timestamp": "2024-02-14T12:10:10.10+01:00",
-          "collection-timestamp": "2024-02-14T12:10:10.12+01:00",
-          "session-protocol": "yang-push",
-          "notification-event": "log",
-          "export-address": "192.168.1.100",
+       "data-collection-manifest": {
+         "name": "collector-1",
+         "vendor": "open source",
+         "software-version": "2.1.0"
+       },
+       "network-operator-metadata": {
+         "labels": [
+           {
+             "name": "platform-name",
+             "string-value": "name"
+           }
+         ]
+       },
+       "payload": {
+         "ietf-yang-push:push-update": {
+           "id": 1042,
 
 
 
-Graf, et al.            Expires 28 December 2026               [Page 16]
+Graf, et al.             Expires 3 January 2027                [Page 17]
 
-Internet-Draft              YANG Message Keys                  June 2026
+Internet-Draft              YANG Message Keys                  July 2026
 
 
-          "export-port": 123,
-          "collection-address": "192.168.1.1",
-          "collection-port": 9991,
-          "ietf-yang-push-telemetry-message:yang-push-subscription": {
-            "id": 89,
-            "xpath-filter": "/ietf-interfaces:interfaces",
-            "datastore": "ietf-datastores:operational",
-            "transport": "ietf-udp-notif-transport:udp-notif",
-            "encoding": "ietf-subscribed-notifications:encode-json",
-            "module": [
-              {
-                "module": "ietf-interfaces",
-                "revision": "2018-02-20",
-                "version": "2.0.0"
-              }
-            ],
-            "yang-library-content-id": "abc"
-          }
-        },
-        "data-collection-manifest": {
-          "name": "collector-1",
-          "vendor": "open source",
-          "software-version": "2.1.0"
-        },
-        "network-operator-metadata": {
-          "labels": [
-            {
-              "name": "platform-name",
-              "string-value": "name"
-            }
-          ]
-        },
-        "payload": {
-          "ietf-yang-push:push-update": {
-            "id": 1042,
-            "datastore-contents": {
-              "ietf-interfaces:interfaces": {
-                "interface": [
-                  {
-                    "name": "eth0",
-                    "oper-status": "down"
-                  }
-                ]
-              }
-            }
-          }
-        }
-      }
-
-
-
-Graf, et al.            Expires 28 December 2026               [Page 17]
-
-Internet-Draft              YANG Message Keys                  June 2026
-
-
-     },
-     "headers": [
-       {
-         "schema-id": 1,
-         "content-type": "application/yang-data+json"
+           "datastore-contents": {
+             "ietf-interfaces:interfaces": {
+               "interface": [
+                 {
+                   "name": "eth0",
+                   "oper-status": "down"
+                 }
+               ]
+             }
+           }
+         }
        }
-     ]
+     }
+    }
    }
 
-              Figure 11: Message Key Telemetry Message Example
+                    Figure 12: Telemetry Message Example
 
 3.1.3.  YANG Message Broker Consumer
 
@@ -992,6 +999,17 @@ Internet-Draft              YANG Message Keys                  June 2026
    secondary keys in a time series database.  Implementation examples
    can be found under Section 5.
 
+
+
+
+
+
+
+Graf, et al.             Expires 3 January 2027                [Page 18]
+
+Internet-Draft              YANG Message Keys                  July 2026
+
+
 3.2.  YANG-Push Message Broker Topic Naming
 
    Each YANG-Push subscription requires a deterministic, human-readable
@@ -1002,13 +1020,6 @@ Internet-Draft              YANG Message Keys                  June 2026
       (XPath vs. subtree filter, redundant module prefixes, single-
       quoted vs. double-quoted predicates), MUST always produce the same
       topic name.
-
-
-
-Graf, et al.            Expires 28 December 2026               [Page 18]
-
-Internet-Draft              YANG Message Keys                  June 2026
-
 
    *  Unique: Two subscriptions targeting different YANG schema nodes
       MUST NOT share a topic name.
@@ -1046,6 +1057,15 @@ Internet-Draft              YANG Message Keys                  June 2026
        interfaces:interfaces/interface[name='%s']" becomes "/ietf-
        interfaces:interfaces/interface".
 
+
+
+
+
+Graf, et al.             Expires 3 January 2027                [Page 19]
+
+Internet-Draft              YANG Message Keys                  July 2026
+
+
    2.  Replace Module Names with YANG Prefixes: Walk the path segments.
        Wherever a segment carries a "module-name:local-name" prefix,
        look up the module in the YANG schema context and substitute its
@@ -1055,16 +1075,6 @@ Internet-Draft              YANG Message Keys                  June 2026
        (Section 4.1 of [RFC7950]).  For example, "/ietf-
        interfaces:interfaces/interface" becomes "/if:interfaces/
        interface".
-
-
-
-
-
-
-Graf, et al.            Expires 28 December 2026               [Page 19]
-
-Internet-Draft              YANG Message Keys                  June 2026
-
 
    3.  Flatten to Topic Name: Apply three mechanical substitutions: (a)
        remove the leading "/", (b) replace every ":" with "-", (c)
@@ -1087,7 +1097,7 @@ Internet-Draft              YANG Message Keys                  June 2026
        rarely triggers — the longest realistic YANG paths produce topic
        names of 50-80 characters.
 
-   Figure 12 shows the derivation for three subscription paths.
+   Figure 13 shows the derivation for three subscription paths.
 
    =============== NOTE: '\' line wrapping per RFC 8792 ================
     Subscription XPath                    | Topic Name
@@ -1098,9 +1108,19 @@ Internet-Draft              YANG Message Keys                  June 2026
    /ietf-system:system/clock              | sys-system-clock
    /ietf-system:system/dns-resolver/server| sys-system-dns-resolver-server
 
-                 Figure 12: Topic Name Derivation Examples
+                 Figure 13: Topic Name Derivation Examples
 
-   Figure 13 shows the same paths with an organization prefix "netops".
+   Figure 14 shows the same paths with an organization prefix "netops".
+
+
+
+
+
+
+Graf, et al.             Expires 3 January 2027                [Page 20]
+
+Internet-Draft              YANG Message Keys                  July 2026
+
 
     Subscription XPath                    | Topic Name
    ---------------------------------------+--------------------------------
@@ -1109,18 +1129,7 @@ Internet-Draft              YANG Message Keys                  June 2026
    /oper-status                           | -oper-status
    /ietf-system:system/clock              | netops-sys-system-clock
 
-              Figure 13: Topic Names with Organization Prefix
-
-
-
-
-
-
-
-Graf, et al.            Expires 28 December 2026               [Page 20]
-
-Internet-Draft              YANG Message Keys                  June 2026
-
+              Figure 14: Topic Names with Organization Prefix
 
 3.2.2.  Properties
 
@@ -1161,6 +1170,14 @@ Internet-Draft              YANG Message Keys                  June 2026
 
    *  All interface data: "^if-interfaces-interface.*"
 
+
+
+
+Graf, et al.             Expires 3 January 2027                [Page 21]
+
+Internet-Draft              YANG Message Keys                  July 2026
+
+
    *  All data from a specific module: "^if-.*" (ietf-interfaces) or
       "^sys-.*" (ietf-system)
 
@@ -1168,15 +1185,6 @@ Internet-Draft              YANG Message Keys                  June 2026
 
    *  All current-state data from an organization: "^netops-current-
       state-.*"
-
-
-
-
-
-Graf, et al.            Expires 28 December 2026               [Page 21]
-
-Internet-Draft              YANG Message Keys                  June 2026
-
 
    The YANG data is then ingested into tables according to topic names
    and indexed per Message Key. If Topic Compaction is enabled, only the
@@ -1217,6 +1225,15 @@ try (Admin admin = Admin.create(props)) {
  // underlying cause. future.get();
 }
 
+
+
+
+
+Graf, et al.             Expires 3 January 2027                [Page 22]
+
+Internet-Draft              YANG Message Keys                  July 2026
+
+
    The most important configuration items from
    https://kafka.apache.org/41/configuration/topic-configs/ are
    "topicName" defines the Topic name, "partitions" the amount of
@@ -1226,14 +1243,6 @@ try (Admin admin = Admin.create(props)) {
    With "compact" in "cleanup.policy" the log compaction can be turned
    on per topic.  With "min.cleanable.dirty.ratio" and
    "delete.retention.ms" how often and when Log Compaction should occur
-
-
-
-Graf, et al.            Expires 28 December 2026               [Page 22]
-
-Internet-Draft              YANG Message Keys                  June 2026
-
-
    per topic.  Where with "retention.bytes" and with "retention.ms" the
    topic specific compaction configurations can be limited how often the
    topics are compacted.
@@ -1269,6 +1278,18 @@ Internet-Draft              YANG Message Keys                  June 2026
    partitions are being rebalanced on Message Broker nodes when
    Partition count changed.
 
+
+
+
+
+
+
+
+Graf, et al.             Expires 3 January 2027                [Page 23]
+
+Internet-Draft              YANG Message Keys                  July 2026
+
+
 5.  Time Series Database Implementations
 
    Tables, partition and keys are generic concepts of time series
@@ -1277,18 +1298,6 @@ Internet-Draft              YANG Message Keys                  June 2026
    for indexing.
 
 5.1.  ClickHouse
-
-
-
-
-
-
-
-
-Graf, et al.            Expires 28 December 2026               [Page 23]
-
-Internet-Draft              YANG Message Keys                  June 2026
-
 
 5.1.1.  Data Model
 
@@ -1329,6 +1338,14 @@ Internet-Draft              YANG Message Keys                  June 2026
    ClickHouse integrates with Message Brokers through Integration
    Table Engines.
 
+
+
+
+Graf, et al.             Expires 3 January 2027                [Page 24]
+
+Internet-Draft              YANG Message Keys                  July 2026
+
+
    Reading (selecting) data through Kafka Table Engine follows Apache
    Kafka semantics of advancing the offset, so subsequent reads will
    start at the offset the previous read left off.
@@ -1338,13 +1355,6 @@ Internet-Draft              YANG Message Keys                  June 2026
 
    *  Use the engine to create a Kafka consumer and consider it a data
       stream.
-
-
-
-Graf, et al.            Expires 28 December 2026               [Page 24]
-
-Internet-Draft              YANG Message Keys                  June 2026
-
 
    Example:
 
@@ -1384,6 +1394,14 @@ Internet-Draft              YANG Message Keys                  June 2026
                  message
              FROM queue;
 
+
+
+
+Graf, et al.             Expires 3 January 2027                [Page 25]
+
+Internet-Draft              YANG Message Keys                  July 2026
+
+
    The Message Key and partition ID are available as virtual (read only)
    columns _key and _partition.
 
@@ -1392,15 +1410,6 @@ Internet-Draft              YANG Message Keys                  June 2026
    ClickHouse supports numerous Message formats natively.  The example
    above uses the JSON Lines format but other (binary) formats, such as
    Apache Avro or Protobuf, are supported as well.
-
-
-
-
-
-Graf, et al.            Expires 28 December 2026               [Page 25]
-
-Internet-Draft              YANG Message Keys                  June 2026
-
 
 5.1.4.  Schema Registry
 
@@ -1439,6 +1448,16 @@ Internet-Draft              YANG Message Keys                  June 2026
    Message Keys on each partition.  Where in topic distribution messages
    are randomly being distributed among partitions.
 
+
+
+
+
+
+Graf, et al.             Expires 3 January 2027                [Page 26]
+
+Internet-Draft              YANG Message Keys                  July 2026
+
+
    To accommodate for potential date loss throughout the data processing
    pipeline, periodic update of the current State for State metrics is
    RECOMMENDED.  This can be accommodated with YANG-Push as defined in
@@ -1446,17 +1465,6 @@ Internet-Draft              YANG Message Keys                  June 2026
    with "periodic" subscriptions.  Alternatively, in YANG-Push Lite
    defined in Section 7.6 of [I-D.wilton-netconf-yang-push-lite] this
    simplified in one subscription.
-
-
-
-
-
-
-
-Graf, et al.            Expires 28 December 2026               [Page 26]
-
-Internet-Draft              YANG Message Keys                  June 2026
-
 
 9.  Implementation status
 
@@ -1498,6 +1506,14 @@ Internet-Draft              YANG Message Keys                  June 2026
               (NMDA)", RFC 8342, DOI 10.17487/RFC8342, March 2018,
               <https://www.rfc-editor.org/info/rfc8342>.
 
+
+
+
+Graf, et al.             Expires 3 January 2027                [Page 27]
+
+Internet-Draft              YANG Message Keys                  July 2026
+
+
    [RFC8641]  Clemm, A. and E. Voit, "Subscription to YANG Notifications
               for Datastore Updates", RFC 8641, DOI 10.17487/RFC8641,
               September 2019, <https://www.rfc-editor.org/info/rfc8641>.
@@ -1506,13 +1522,6 @@ Internet-Draft              YANG Message Keys                  June 2026
               "Handling Long Lines in Content of Internet-Drafts and
               RFCs", RFC 8792, DOI 10.17487/RFC8792, June 2020,
               <https://www.rfc-editor.org/info/rfc8792>.
-
-
-
-Graf, et al.            Expires 28 December 2026               [Page 27]
-
-Internet-Draft              YANG Message Keys                  June 2026
-
 
    [I-D.ietf-nmop-message-broker-telemetry-message]
               Elhassany, A., Graf, T., and P. Lucente, "Extensible YANG
@@ -1553,6 +1562,14 @@ Internet-Draft              YANG Message Keys                  June 2026
               <https://datatracker.ietf.org/doc/html/draft-ietf-nmop-
               terminology-23>.
 
+
+
+
+Graf, et al.             Expires 3 January 2027                [Page 28]
+
+Internet-Draft              YANG Message Keys                  July 2026
+
+
    [I-D.ietf-nmop-yang-message-broker-integration]
               Graf, T. and A. Elhassany, "An Architecture for YANG-Push
               to Message Broker Integration", Work in Progress,
@@ -1560,15 +1577,6 @@ Internet-Draft              YANG Message Keys                  June 2026
               integration-12, 13 May 2026,
               <https://datatracker.ietf.org/doc/html/draft-ietf-nmop-
               yang-message-broker-integration-12>.
-
-
-
-
-
-Graf, et al.            Expires 28 December 2026               [Page 28]
-
-Internet-Draft              YANG Message Keys                  June 2026
-
 
    [I-D.wilton-netconf-yang-push-lite]
               Wilton, R., Keller, H., Claise, B., Aries, E., Cumming,
@@ -1611,20 +1619,18 @@ Internet-Draft              YANG Message Keys                  June 2026
    [Pul16]    Guo, S. and M. Merli, "Apache Pulsar", Apache Software
               Foundation, January 2016, <https://pulsar.apache.org/>.
 
+
+
+Graf, et al.             Expires 3 January 2027                [Page 29]
+
+Internet-Draft              YANG Message Keys                  July 2026
+
+
    [ConDoc18] Yokota, R., "Confluent Schema Registry Documentation",
               Confluent Community and Apache Software Foundation,
               December 2018,
               <https://docs.confluent.io/platform/current/schema-
               registry/>.
-
-
-
-
-
-Graf, et al.            Expires 28 December 2026               [Page 29]
-
-Internet-Draft              YANG Message Keys                  June 2026
-
 
    [yang-push-key]
               Elhassany, A., "yang-push-key",
@@ -1668,18 +1674,15 @@ Authors' Addresses
    Binzring 17
    CH-8045 Zurich
    Switzerland
-   Email: thomas.graf@swisscom.com
 
 
 
-
-
-
-
-
-Graf, et al.            Expires 28 December 2026               [Page 30]
+Graf, et al.             Expires 3 January 2027                [Page 30]
 
-Internet-Draft              YANG Message Keys                  June 2026
+Internet-Draft              YANG Message Keys                  July 2026
+
+
+   Email: thomas.graf@swisscom.com
 
 
    Ahmed Elhassany
@@ -1730,7 +1733,4 @@ Internet-Draft              YANG Message Keys                  June 2026
 
 
 
-
-
-
-Graf, et al.            Expires 28 December 2026               [Page 31]
+Graf, et al.             Expires 3 January 2027                [Page 31]
